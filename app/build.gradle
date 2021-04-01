@@ -1,0 +1,128 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId 'kr.co.metisinfo.sharingcharger'
+        minSdkVersion 28
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            resValue("string", "PORT_NUMBER", "8081")
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation "androidx.appcompat:appcompat:1.2.0"
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+
+    //
+    compile files('libs/ble_sdk_charzin_v25_jeju.aar')
+    implementation 'com.nabinbhandari.android:permissions:3.7'
+    //
+
+
+
+    // design library
+    implementation "com.google.android.material:material:1.2.1"
+
+    //lombok
+    implementation "org.projectlombok:lombok:$rootProject.lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$rootProject.lombokVersion"
+
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.7'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+
+    // 피카소 이미지 라이브러리
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    // 글리드 gif 이미지
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+
+    // Add dependency
+//    implementation 'com.crashlytics.sdk.android:crashlytics:17.2.2'
+
+    // Room components
+    implementation "androidx.room:room-runtime:2.2.5"
+    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    androidTestImplementation "androidx.room:room-testing:2.2.5"
+
+    // Lifecycle components
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.5'
+    
+
+    // network library
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    // RxJava, RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
+
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+    // androidx 리사이클러 뷰
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+/*
+
+    implementation 'com.github.jjongkwon2:BluetoothLibrary:1.1.1'
+*/
+
+    // 권한 허가
+    implementation 'gun0912.ted:tedpermission:2.0.0'
+
+    // 다음 지도
+    implementation files('libs/libDaumMapAndroid.jar')
+
+    implementation group: 'com.kakao.sdk', name: 'kakaonavi', version: project.KAKAO_SDK_VERSION
+
+//    compile files('libs/ble_sdk_charzin_v23.aar')
+}

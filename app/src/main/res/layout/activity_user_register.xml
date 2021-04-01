@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/layout_register"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white">
+
+        <include
+            android:id="@+id/include_header"
+            layout="@layout/layout_header"
+            android:layout_width="fill_parent"
+            android:layout_height="46dp" />
+
+        <TextView
+            android:id="@+id/register_text_dummy"
+            style="@style/header_dummy"
+            android:layout_below="@id/include_header"/>
+
+        <!-- 이름-->
+        <TextView
+            android:id="@+id/register_name_title"
+            android:layout_below="@id/register_text_dummy"
+            style="@style/register_title_txt"
+            android:text="@string/register_user_name"/>
+
+        <TextView
+            android:layout_toEndOf="@id/register_name_title"
+            android:layout_alignTop="@id/register_name_title"
+            style="@style/register_star_txt"/>
+
+        <EditText
+            android:id="@+id/register_name_input"
+            android:layout_below="@id/register_name_title"
+            android:hint="@string/register_name_hint"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            style="@style/register_edit_txt"/>
+
+        <!-- 전화번호-->
+        <TextView
+            android:id="@+id/register_phone_title"
+            android:layout_below="@id/register_name_input"
+            style="@style/register_title_txt"
+            android:text="@string/login_id_hint"/>
+
+        <TextView
+            android:layout_toEndOf="@id/register_phone_title"
+            android:layout_alignTop="@id/register_phone_title"
+            style="@style/register_star_txt"/>
+
+        <EditText
+            android:id="@+id/register_email_input"
+            android:layout_below="@id/register_phone_title"
+            android:hint="@string/register_email_hint"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:privateImeOptions="defaultInputmode=english"
+            style="@style/register_edit_txt"/>
+
+        <!-- 이메일-->
+        <TextView
+            android:id="@+id/register_email_title"
+            android:layout_below="@id/register_email_input"
+            style="@style/register_title_txt"
+            android:text="@string/register_user_phone"/>
+
+        <TextView
+            android:layout_toEndOf="@id/register_email_title"
+            android:layout_alignTop="@id/register_email_title"
+            style="@style/register_star_txt"/>
+
+        <EditText
+            android:id="@+id/register_phone_input"
+            android:layout_below="@id/register_email_title"
+            android:hint="@string/register_phone_hint"
+            android:maxLength="12"
+            android:inputType="number"
+            android:importantForAutofill="no"
+            style="@style/register_edit_txt"/>
+
+        <Button
+            android:id="@+id/register_certification_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/register_phone_input"
+            android:layout_alignEnd="@+id/register_phone_input"
+            android:background="@drawable/button_border_blue"
+            android:text="@string/register_certification"
+            android:textColor="@color/white"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="4dp"/>
+
+        <!-- 인증번호-->
+        <TextView
+            android:id="@+id/register_certification_title"
+            android:layout_below="@id/register_phone_input"
+            style="@style/register_title_txt"
+            android:text="@string/register_certification_number"/>
+
+        <TextView
+            android:layout_toEndOf="@id/register_certification_title"
+            android:layout_alignTop="@id/register_certification_title"
+            style="@style/register_star_txt"/>
+
+        <EditText
+            android:id="@+id/register_certification_input"
+            android:layout_below="@id/register_certification_title"
+            android:hint="@string/register_certification_hint"
+            style="@style/register_edit_txt"
+            android:maxLength="10"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:layout_marginBottom="0dp"/>
+
+        <!-- 인증요청 남은시간-->
+        <RelativeLayout
+            android:id="@+id/layout_time_remaining"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_certification_input">
+
+        <TextView
+            android:id="@+id/register_time_remaining_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_time_remaining"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/red"/>
+
+        <TextView
+            android:id="@+id/txt_count_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/register_time_remaining_txt"
+            android:layout_alignTop="@id/register_time_remaining_txt"
+            android:text="@string/time_countdown"
+            android:textColor="@color/red"/>
+
+        </RelativeLayout>
+
+<!--        <TextView-->
+<!--            android:id="@+id/password_reset_txt"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/password_txt"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_below="@+id/layout_time_remaining"-->
+<!--            android:layout_marginStart="24dp"/>-->
+
+        <!-- 비밀번호-->
+        <TextView
+            android:id="@+id/register_pw_title"
+            android:layout_below="@id/layout_time_remaining"
+            android:layout_marginTop="20dp"
+            style="@style/register_title_txt"
+            android:text="@string/register_pw"/>
+
+        <TextView
+            android:id="@+id/register_pw_title_star"
+            android:layout_toEndOf="@id/register_pw_title"
+            android:layout_alignTop="@id/register_pw_title"
+            style="@style/register_star_txt"/>
+
+        <EditText
+            android:id="@+id/register_pw_input"
+            android:layout_below="@id/register_pw_title"
+            android:inputType="textPassword"
+            android:hint="@string/register_pw_hint"
+            android:importantForAutofill="no"
+            style="@style/register_edit_txt"/>
+
+        <!-- 비밀번호 확인-->
+        <TextView
+            android:id="@+id/register_confirm_pw_title"
+            android:layout_below="@id/register_pw_input"
+            style="@style/register_title_txt"
+            android:text="@string/register_confirm_pw"/>
+
+        <TextView
+            android:id="@+id/register_confirm_pw_title_star"
+            android:layout_toEndOf="@id/register_confirm_pw_title"
+            android:layout_alignTop="@id/register_confirm_pw_title"
+            style="@style/register_star_txt"/>
+
+        <EditText
+            android:id="@+id/register_confirm_pw_input"
+            android:layout_below="@id/register_confirm_pw_title"
+            android:inputType="textPassword"
+            android:hint="@string/register_pw_hint"
+            android:importantForAutofill="no"
+            style="@style/register_edit_txt"/>
+
+        <RelativeLayout
+            android:id="@+id/register_personal_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/register_confirm_pw_input">
+        <TextView
+            android:id="@+id/register_personal_information_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="개인정보 동의여부"
+            style="@style/margin_start_end_20"
+            android:textSize="18dp"
+            android:textColor="@color/black" />
+
+         <TextView
+             android:id="@+id/register_personal_info1"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="서비스 이용약관"
+             android:textSize="13dp"
+             android:layout_below="@+id/register_personal_information_title"
+             android:layout_marginStart="20dp"
+             android:layout_marginEnd="0dp"
+             android:textColor="@color/black"
+             android:layout_marginTop="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textSize="13dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/red"
+                android:layout_below="@+id/register_personal_information_title"
+                android:layout_toEndOf="@+id/register_personal_info1"/>
+
+            <Button
+                android:id="@+id/register_personal_info1_btn"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:textSize="13dp"
+                android:layout_below="@+id/register_personal_information_title"
+                android:layout_toStartOf="@+id/register_personal_info1_txt"
+                android:background="@drawable/border_gray_5"
+                android:text="내용확인"/>
+
+            <TextView
+                android:id="@+id/register_personal_info1_txt"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="0dp"
+                android:textSize="13dp"
+                android:text="동의하지 않음"
+                android:textColor="@color/black"
+                android:layout_below="@id/register_personal_information_title"
+                android:layout_alignParentEnd="true"/>
+
+            <TextView
+                android:id="@+id/register_personal_info2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="개인정보 처리밤침 동의여부"
+                android:textSize="13dp"
+                android:layout_below="@+id/register_personal_info1"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="0dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="25dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textSize="13dp"
+                android:layout_marginTop="25dp"
+                android:textColor="@color/red"
+                android:layout_below="@+id/register_personal_info1"
+                android:layout_toEndOf="@+id/register_personal_info2"/>
+
+            <Button
+                android:id="@+id/register_personal_info2_btn"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:textSize="13dp"
+                android:layout_below="@+id/register_personal_info1"
+                android:layout_toStartOf="@+id/register_persona2_info1_txt"
+                android:background="@drawable/border_gray_5"
+                android:layout_marginTop="18dp"
+                android:text="내용확인"/>
+
+            <TextView
+                android:id="@+id/register_persona2_info1_txt"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="5dp"
+                android:textSize="13dp"
+                android:layout_marginEnd="0dp"
+                android:text="동의하지 않음"
+                android:textColor="@color/black"
+                android:layout_below="@id/register_personal_info1"
+                android:layout_alignParentEnd="true"/>
+
+        </RelativeLayout>
+
+        <!-- 완료버튼-->
+        <Button
+            android:id="@+id/register_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border_blue"
+            android:text="@string/register_confirmation"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/keyword_item_place_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="세미양 빌딩"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/keyword_item_category_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="빌딩"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="0dp"
+            android:layout_alignBaseline="@+id/keyword_item_place_name"
+            android:layout_toRightOf="@+id/keyword_item_place_name"/>
+
+        <TextView
+            android:id="@+id/keyword_item_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/keyword_item_place_name"
+            android:text="제주 제주시 첨단로 330(영평동)"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/keyword_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="064-753-1314"
+            android:layout_below="@+id/keyword_item_address"
+            android:textSize="16dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/blue_button"/>
+    </RelativeLayout>
+</layout>

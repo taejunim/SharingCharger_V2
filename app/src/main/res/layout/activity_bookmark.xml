@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white">
+
+        <include
+            android:id="@+id/include_header"
+            layout="@layout/layout_header"
+            android:layout_width="fill_parent"
+            android:layout_height="46dp" />
+
+        <TextView
+            android:id="@+id/bookmark_text_dummy"
+            style="@style/header_dummy"
+            android:layout_below="@id/include_header" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bookmark_table_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/bookmark_text_dummy" />
+
+    </RelativeLayout>
+
+</layout>

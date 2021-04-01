@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="array_dot_active">
+        <item>#3498DB</item>
+        <item>#3498DB</item>
+        <item>#3498DB</item>
+        <item>#3498DB</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>#E0E0E0</item>
+        <item>#E0E0E0</item>
+        <item>#E0E0E0</item>
+        <item>#E0E0E0</item>
+    </array>
+
+    <array name="array_distance_radius">
+        <item>전체</item>
+        <item>3 km</item>
+        <item>10 km</item>
+        <item>40 km</item>
+    </array>
+
+    <string-array name="nav_drawer_items">
+        <item>충전 이력</item>
+        <item>포인트 이력</item>
+        <item>즐겨찾기</item>
+        <item>고객센터</item>
+        <item>회원 증명서</item>
+    </string-array>
+
+    <string-array name="history_charging"/>
+
+    <string-array name="history_point"/>
+
+    <string-array name="favorite"/>
+    <string-array name="customer_center"/>
+    <string-array name="membership"/>
+
+    <string-array name="time_setting">
+        <item>1 시간</item>
+        <item>2 시간</item>
+        <item>3 시간</item>
+        <item>4 시간</item>
+        <item>5 시간</item>
+        <item>6 시간</item>
+        <item>7 시간</item>
+        <item>8 시간</item>
+    </string-array>
+
+</resources>

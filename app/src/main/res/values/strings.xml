@@ -1,0 +1,129 @@
+<resources>
+    <string name="app_name">sharingcharger</string>
+    <string name="getLottoInfo">로또 번호 가져오기</string>
+
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+
+    <string name="ble_not_supported">BLE가 지원되지 않습니다.</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+
+    <string name="label_data">Data:</string>
+    <string name="label_device_name">Device name:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+
+    <string name="tearms1">약관 동의</string>
+    <string name="tearms2">개인정보 수집, 이용동의</string>
+    <string name="tearms3">전자금융거래 약관동의</string>
+    <string name="tearms_all">전체동의</string>
+
+    <string name="charging_pay_setting">충전금액 설정</string>
+    <string name="charging_pay">충전금액</string>
+    <string name="remain_point">잔여 포인트</string>
+
+    <!-- 로그인 -->
+    <string name="login_header">로그인</string>
+    <string name="login_id_hint">아이디 또는 이메일</string>
+    <string name="login_pw_hint">비밀번호</string>
+    <string name="login_btn">로그인</string>
+    <string name="login_register">회원가입</string>
+    <string name="login_reject">가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.</string>
+    <string name="login_email">이메일을 입력하여 주시기 바랍니다.</string>
+    <string name="login_password">비밀번호를 입력하여 주시기 바랍니다.</string>
+
+
+    <!-- 회원가입 -->
+    <string name="register_user_title">회원가입</string>
+    <string name="register_user_name">이름</string>
+    <string name="register_name_hint">실명 입력</string>
+    <string name="register_user_phone">전화번호</string>
+    <string name="register_phone_hint">-제외하고 숫자만 입력</string>
+    <string name="register_email_hint">example@gmail.com</string>
+    <string name="register_certification_number">인증번호</string>
+    <string name="register_certification">인증요청</string>
+    <string name="register_certification_hint">인증번호 입력</string>
+    <string name="register_pw">비밀번호</string>
+    <string name="register_confirm_pw">비밀번호 확인</string>
+    <string name="register_time_remaining">남은 시간 : </string>
+    <string name="register_confirmation">완료</string>
+    <string name="register_star">*</string>
+    <string name="register_pw_hint">영문, 숫자, 특수 문자 포함하여 최소 6자 이상</string>
+
+    <!-- 비밀번호 찾기-->
+    <string name="password_txt">※ 입력하신 이메일로 기존 비밀번호가 전송됩니다.</string>
+    <string name="password_confirm_text">기존 비밀번호는 인증받은 메일로 전송됩니다. 진행 하시겠습니까?</string>
+
+    <!-- 비밀번호 변경-->
+    <string name="current_password">현재 비밀번호</string>
+    <string name="new_password">새 비밀번호</string>
+    <string name="new_password_confirm">새 비밀번호 확인</string>
+    <string name="change_password">비밀번호 변경</string>
+    <string name="change_password_confirm_text">비밀번호를 변경하시겠습니까?</string>
+
+    <!-- 즐겨찾기-->
+    <string name="bookmark_title">즐겨찾기</string>
+    <string name="bookmark_navigation">지도보기</string>
+    <string name="bookmark_delete">삭제</string>
+
+    <!-- 설정-->
+    <string name="setting_time">충전 시간 설정</string>
+    <string name="setting_card">결제 카드 설정</string>
+    <string name="setting_logout">로그아웃</string>
+
+    <!-- 메인-->
+    <string name="search_condition_title_total">총&#160;</string>
+    <string name="search_condition_title_charging">&#160;충전</string>
+
+    <string name="search_condition_start_date">충전 시작 일시</string>
+    <string name="search_condition_end_date">충전 시간</string>
+    <string name="search_condition_radius_range">범위</string>
+    <string name="search_condition_price_range">금액</string>
+    <string name="main_charge_amt_key">충전 요금 : 시간당&#160;</string>
+    <string name="search_condition_go_charging">즉시 충전</string>
+    <string name="search_condition_reserve_charging">예약 충전</string>
+
+    <!-- 메인 검색-->
+    <string name="search_condition_my_place">내위치중심</string>
+    <string name="search_condition_map_place">지도중심</string>
+
+    <!-- 예약-->
+    <string name="reservation_progress_title">예약 진행</string>
+    <string name="reservation_progress_completion">예약완료</string>
+    <string name="reservation_progress_precautions">※ 예약 전 주의사항</string>
+    <string name="reservation_progress_txt">예약완료 버튼 클릭 시 포인트가 차감됩니다. 포인트 부족시에는 포인트를 충전 후 예약을 진행하여 주시기 바랍니다.</string>
+
+    <!-- 포인트 -->
+    <string name="point">p</string>
+    <string name="point_charge">포인트 충전</string>
+
+    <!-- 블루투스-->
+    <string name="bluetooth_find_device">충전기 검색</string>
+
+    <!-- 이력조회-->
+    <string name="charge_history_title">충전 이력</string>
+    <string name="point_history_title">포인트 이력</string>
+
+    <!-- 기타 -->
+    <string name="map">지도</string>
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+    <string name="search_condition">검색 조건</string>
+    <string name="remark">※ 비고</string>
+    <string name="go_reserve">예약 하기</string>
+    <string name="go_charge">충전 하기</string>
+    <string name="image_description">description</string>
+    <string name="time_countdown">03:00</string>
+    <string name="from_to">&#160;~&#160;</string>
+    <string name="min_kr">분</string>
+    <string name="min_en">min</string>
+    <string name="kwh_en">kWh</string>
+
+    <!-- 기본 값 -->
+    <string name="minute30">30분</string>
+
+</resources>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_text_border">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btn_ok">
+
+            <RelativeLayout
+                android:id="@+id/layout_1"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:padding="15dp">
+
+                <include
+                    android:id="@+id/include_header"
+                    layout="@layout/layout_fragment_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/txt_charging_time_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/include_header"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/search_condition_title_total"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_charging_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/include_header"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/txt_charging_time_start"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:textStyle="bold"
+                    tools:text="@string/minute30" />
+
+                <TextView
+                    android:id="@+id/txt_charging_time_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/include_header"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/txt_charging_time"
+                    android:text="@string/search_condition_title_charging"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_charging_date1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_charging_time"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    tools:text="7/24 (금) 22:30" />
+
+                <TextView
+                    android:id="@+id/txt_charging_date_middle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_charging_time"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@+id/txt_charging_date1"
+                    android:text="@string/from_to"
+                    android:textColor="@color/black"
+                    android:textSize="17dp" />
+
+                <TextView
+                    android:id="@+id/txt_charging_date2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_charging_time"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@+id/txt_charging_date_middle"
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    tools:text="23:00" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/border_gray"
+                    android:layout_below="@+id/txt_charging_date1">
+
+                    <TextView
+                        android:id="@+id/go_charging"
+                        style="@style/history_selected_selected"
+                        android:background="@color/blue_button"
+                        android:text="@string/search_condition_go_charging"
+                        android:onClick="chargeBtnClick" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#D5D5D5" />
+
+                    <TextView
+                        android:id="@+id/reserve_charging"
+                        style="@style/history_selected_none"
+                        android:text="@string/search_condition_reserve_charging"
+                        android:onClick="chargeBtnClick" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/border_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layout_1"
+                android:background="@color/whitegray" />
+
+            <RelativeLayout
+                android:id="@+id/layout_start_charging"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/border_1"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/txt_charging_s_key"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/search_condition_start_date"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <RelativeLayout
+                    android:id="@+id/layout_s_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@+id/txt_charging_s_key">
+
+                    <TextView
+                        android:id="@+id/txt_s_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_toStartOf="@+id/dropdown_1"
+                        android:textColor="@color/black"
+                        android:textSize="17dp"
+                        android:textStyle="bold"
+                        tools:text="07/24  20:30" />
+
+                    <ImageView
+                        android:id="@+id/dropdown_1"
+                        android:layout_width="18dp"
+                        android:layout_height="10dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:rotationX="180"
+                        android:background="@mipmap/btn_dropdown"
+                        android:button="@android:color/transparent"
+                        android:contentDescription="@string/image_description"
+                        android:padding="15dp" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/border_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/layout_start_charging"
+                android:background="@color/whitegray" />
+
+            <RelativeLayout
+                android:id="@+id/layout_end_charging"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/border_2"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/txt_charging_e_key"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/search_condition_end_date"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <RelativeLayout
+                    android:id="@+id/layout_e_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@+id/txt_charging_e_key">
+
+                    <TextView
+                        android:id="@+id/txt_e_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_toStartOf="@+id/dropdown_2"
+                        android:textColor="@color/black"
+                        android:textSize="17dp"
+                        android:textStyle="bold"
+                        tools:text="30분" />
+
+                    <Spinner
+                        android:id="@+id/spinner_time_range"
+                        android:layout_width="100dp"
+                        android:layout_height="1dp"
+                        android:layout_toStartOf="@+id/dropdown_2"
+                        android:spinnerMode="dialog"
+                        android:textSize="17dp"
+                        android:textStyle="bold"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/dropdown_2"
+                        android:layout_width="18dp"
+                        android:layout_height="10dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:rotationX="180"
+                        android:background="@mipmap/btn_dropdown"
+                        android:button="@android:color/transparent"
+                        android:contentDescription="@string/image_description"
+                        android:padding="15dp" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/txt_search_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_end_charging"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="70dp"
+                android:layout_marginBottom="40dp"
+                android:text="@string/search_condition"
+                android:textColor="@color/black"
+                android:textSize="22dp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/border_3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/txt_search_condition"
+                android:background="@color/whitegray" />
+
+            <RelativeLayout
+                android:id="@+id/layout_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/border_3"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/search_condition_radius_range"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/txt_km"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toStartOf="@+id/dropdown_3"
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    tools:text="1 km" />
+
+                <Spinner
+                    android:id="@+id/spinner_length_range"
+                    android:layout_width="100dp"
+                    android:layout_height="1dp"
+                    android:layout_toStartOf="@+id/dropdown_3"
+                    android:entries="@array/array_distance_radius"
+                    android:spinnerMode="dialog"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/dropdown_3"
+                    android:layout_width="18dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:rotationX="180"
+                    android:background="@mipmap/btn_dropdown"
+                    android:button="@android:color/transparent"
+                    android:contentDescription="@string/image_description"
+                    android:padding="15dp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_border_blue"
+            android:text="@string/ok"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</layout>

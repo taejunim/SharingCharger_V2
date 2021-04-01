@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="232dp"
+    android:background="@color/white"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <RelativeLayout
+        android:id="@+id/nav_top"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:id="@+id/txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="질문머신"
+            android:textColor="@color/black"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_name"
+            android:layout_marginTop="13dp"
+            android:text="clghd0602@naver.com"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/image_description"
+            android:onClick="show_settings"
+            android:src="@mipmap/ico_edit2" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_top"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/nav_top"
+        android:background="@color/gray" />
+
+    <RelativeLayout
+        android:id="@+id/nav_middle"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_below="@+id/view_top"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp">
+
+        <RelativeLayout
+            android:id="@+id/layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txt_remain_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="잔여 포인트"
+                android:textColor="@color/black"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/txt_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txt_remain_point"
+                android:layout_toStartOf="@+id/txt_p"
+                android:text="46,745"
+                android:textColor="@color/blue_button"
+                android:textSize="24dp" />
+
+            <TextView
+                android:id="@+id/txt_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txt_remain_point"
+                android:layout_marginEnd="20dp"
+                android:layout_toStartOf="@+id/go_charging"
+                android:text="p"
+                android:textColor="@color/gray" />
+
+            <Button
+                android:id="@+id/go_charging"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:background="@color/blue_button"
+                android:text="@string/go_charge" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/layout_1">
+
+            <TextView
+                android:id="@+id/txt_reserve_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="예약 상태"
+                android:textColor="@color/black"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/txt_reserve"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="right"
+                android:textSize="15dp"
+                android:text="2020년 08월 04일 10시 46분"
+                android:textColor="@color/red"/>
+
+            <TextView
+                android:id="@+id/txt_reserve_spot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="right"
+                android:textSize="15dp"
+                android:text="미래실내수영장 주차장"
+                android:layout_below="@+id/txt_reserve"
+                android:layout_alignStart="@+id/txt_reserve"
+                android:textColor="@color/red"/>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/nav_middle"
+        android:background="@color/gray" />
+
+</RelativeLayout>
