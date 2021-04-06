@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="포인트 충전"
+            android:text="@string/point_charge"
             android:textColor="@color/black"
             android:textSize="22dp"
             android:textStyle="bold" />
@@ -81,7 +81,7 @@
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_border_blue"
-                android:text="포인트 충전"
+                android:text="@string/point_charge"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
 

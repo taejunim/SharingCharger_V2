@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/password_confirm_text"
+            android:text="@string/change_password_confirm_text"
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             android:textSize="16dp"/>

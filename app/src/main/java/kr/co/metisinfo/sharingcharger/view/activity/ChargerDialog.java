@@ -73,7 +73,7 @@ public class ChargerDialog extends BaseActivity implements MasterBaseView {
                 finish();
 
             } else {
-                Toast.makeText(this, "충전기 목록을 선택하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.m_choice_charger_list, Toast.LENGTH_LONG).show();
             }
         });
 

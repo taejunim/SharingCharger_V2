@@ -71,11 +71,11 @@ public class PasswordResetActivity extends BaseActivity {
                         binding.layoutTimeRemaining.setVisibility(View.VISIBLE);
                         countDown("0300");
                     } else {
-                        Toast.makeText(PasswordResetActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(PasswordResetActivity.this, R.string.m_fail_certificate_no, Toast.LENGTH_LONG).show();
                     }
 
                 } catch (Exception e) {
-                    Toast.makeText(PasswordResetActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PasswordResetActivity.this, R.string.m_fail_certificate_no, Toast.LENGTH_LONG).show();
                     Log.e(TAG, "registerCertificationBtn Exception: " + e);
                 }
 
@@ -90,7 +90,7 @@ public class PasswordResetActivity extends BaseActivity {
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
 
         binding.registerPersonalInfoLayout.setVisibility(View.INVISIBLE);
-        binding.registerBtn.setText("비밀번호 변경하기");
+        binding.registerBtn.setText(R.string.change_password_btn);
         binding.registerPwTitle.setVisibility(View.INVISIBLE);
         binding.registerPwTitleStar.setVisibility(View.INVISIBLE);
         binding.registerPwInput.setVisibility(View.INVISIBLE);
@@ -125,7 +125,7 @@ public class PasswordResetActivity extends BaseActivity {
 
             binding.registerEmailInput.setText("");
             binding.registerEmailInput.requestFocus();
-            Toast.makeText(this, "아이디; 또는 이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "아이디 또는 이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
         }

@@ -228,7 +228,7 @@ public class MainPersonalActivity extends BaseActivity implements FragmentDialog
     @Override
     public void initViewModel() {
 
-        binding.includeHeader.txtTitle.setText("내 충전기 사용");
+        binding.includeHeader.txtTitle.setText(R.string.personal_use_charger);
         binding.includeHeader.layoutHeaderMenu.setBackground(getDrawable(R.mipmap.ico_edit2));
         binding.includeHeader.layoutHeaderMenu.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 23, getResources().getDisplayMetrics());
 
@@ -430,7 +430,7 @@ public class MainPersonalActivity extends BaseActivity implements FragmentDialog
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                builder.setTitle("충전기 검색");
+                builder.setTitle(R.string.bluetooth_find_device);
                 builder.setMessage("연결 가능한 충전기를 찾지 못했습니다.\n다시 검색하시겠습니까?");
 
                 builder.setPositiveButton("확인", (dialog, which) -> {

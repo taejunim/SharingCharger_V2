@@ -108,7 +108,7 @@ public class BookmarkActivity extends BaseActivity implements MasterBaseView {
     @Override
     public void onClickMasterSeq(Object obj, int getId, boolean isClick) {
 
-        bookmarkDialog = new CustomDialog(this, "삭제하시겠습니까?");
+        bookmarkDialog = new CustomDialog(this, getString(R.string.m_delete));
 
         bookmarkDialog.show();
 

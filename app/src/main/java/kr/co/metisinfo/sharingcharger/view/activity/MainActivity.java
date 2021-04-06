@@ -211,10 +211,24 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     reserveRadius = data.getStringExtra("reserveRadius");
 
+
+                    Log.e(TAG, "chargingStartYYYY: " + chargingStartYYYY);
+                    Log.e(TAG, "chargingStartMM: " + chargingStartMM);
+                    Log.e(TAG, "chargingStartDD: " + chargingStartDD);
+                    Log.e(TAG, "chargingStartHH: " + chargingStartHH);
+                    Log.e(TAG, "chargingStartII: " + chargingStartII);
+                    Log.e(TAG, "chargingEndYYYY: " + chargingEndYYYY);
+                    Log.e(TAG, "chargingEndMM: " + chargingEndMM);
+                    Log.e(TAG, "chargingEndDD: " + chargingEndDD);
+                    Log.e(TAG, "chargingEndHH: " + chargingEndHH);
+                    Log.e(TAG, "chargingEndII: " + chargingEndII);
+
+
                     String temp = data.getStringExtra("checkChange");
                     Log.e(TAG, "checkChange temp: " + temp);
                     checkChange = Boolean.valueOf(temp);
 
+                    Log.e(TAG, "reserveChargingMinute : " + reserveChargingMinute);
                     Log.e(TAG, "checkChange : " + checkChange);
                     Log.e(TAG, "reserveRadius : " + reserveRadius);
 
@@ -701,7 +715,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     private void showReservationDialog() {
 
-        reservationCancelDialog = new CustomDialog(this, "해당 예약건을 취소하시겠습니까?");
+        reservationCancelDialog = new CustomDialog(this, getString(R.string.m_cancel_reservation));
 
         reservationCancelDialog.show();
 
@@ -817,19 +831,19 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         try {
 
-            binding.layoutReservationInfoRechargeTxt.setText("예약");
+            binding.layoutReservationInfoRechargeTxt.setText(R.string.reservation);
             binding.mainRechargingTxt.setVisibility(View.INVISIBLE);
             binding.chgrDetailCancel.setVisibility(View.VISIBLE);
-            binding.chgrDetailStart.setText("충전 시작");
+            binding.chgrDetailStart.setText(R.string.start_charger);
 
             Log.e(TAG, " gerUserType is " + gerUserType);
 
             //현재시간이 예약 start,end Date 범위안에 있고 예약상태가 KEEP일경우 (충전중)
             if (cu.checkRechargeTime(reservationModel) && reservationModel.state.equals("KEEP")) {
-                binding.layoutReservationInfoRechargeTxt.setText("충전중");
+                binding.layoutReservationInfoRechargeTxt.setText(R.string.charging);
                 binding.mainRechargingTxt.setVisibility(View.VISIBLE);
                 binding.chgrDetailCancel.setVisibility(View.GONE);
-                binding.chgrDetailStart.setText("충전기 연결");
+                binding.chgrDetailStart.setText(R.string.charger_connect);
 
                 SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
 

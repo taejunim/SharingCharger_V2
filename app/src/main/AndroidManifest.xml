@@ -5,8 +5,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--블루투스 사용-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <!--앱 위치 허용-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -149,7 +153,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
-        <!-- 충전기 찾기 -->
+        <!-- MainActivity -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.MainActivity"
             android:screenOrientation="portrait"

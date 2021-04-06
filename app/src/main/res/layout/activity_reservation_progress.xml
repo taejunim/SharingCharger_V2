@@ -38,7 +38,7 @@
             android:layout_marginStart="0dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/button_border_red"
-            android:text="포인트 충전"
+            android:text="@string/point_charge"
             android:textStyle="bold"
             android:textColor="@color/white"/>
 

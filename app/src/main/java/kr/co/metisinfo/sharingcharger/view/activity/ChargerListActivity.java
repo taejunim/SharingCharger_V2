@@ -156,7 +156,7 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
 
             } else {
                 checkStart = false;
-                Toast.makeText(ChargerListActivity.this, "충전기를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChargerListActivity.this, R.string.m_check_charger, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -167,7 +167,7 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
                 BLEStop(mCurData);
 
             } else {
-                Toast.makeText(ChargerListActivity.this, "충전기를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChargerListActivity.this, R.string.m_check_charger, Toast.LENGTH_SHORT).show();
             }
 
             chargingTimer.cancel();                                                                 //Timer 종료
@@ -178,10 +178,10 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setTitle("충전기 검색");
-            builder.setMessage("충전기를 다시 검색하시겠습니까?");
+            builder.setTitle(R.string.bluetooth_find_device);
+            builder.setMessage(R.string.m_reload_charger_list);
 
-            builder.setPositiveButton("확인", (dialog, which) -> {
+            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
 
                 Intent intent = new Intent(this, SearchBluetoothActivity.class);
 
@@ -194,7 +194,7 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
                 finish();
             });
 
-            builder.setNegativeButton("취소", (dialog, which) -> {
+            builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
             });
             builder.show();
         });
@@ -203,7 +203,7 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
     @Override
     public void init() {
 
-        binding.includeHeader.txtTitle.setText("충전");
+        binding.includeHeader.txtTitle.setText(R.string.charge);
 
         //사용자 화면에서는 필요없음, 소유주 화면 같이 사용함
         binding.listTextDummy2.setVisibility(View.GONE);
@@ -486,8 +486,8 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
                         //다이얼로그로 추가
                         AlertDialog.Builder builder = new AlertDialog.Builder(ChargerListActivity.this);
 
-                        builder.setTitle("충전기 연결 성공");
-                        builder.setMessage("충전기와 연결되었습니다.");
+                        builder.setTitle(R.string.m_success_connect);
+                        builder.setMessage(R.string.m_success_charger_connect);
 
                         builder.setPositiveButton("확인", (dialog, which) -> dialog.dismiss());
 

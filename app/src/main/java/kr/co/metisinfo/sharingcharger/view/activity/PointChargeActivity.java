@@ -65,7 +65,7 @@ public class PointChargeActivity extends BaseActivity {
     @Override
     public void init() {
 
-        binding.includeHeader.txtTitle.setText("포인트 충전");
+        binding.includeHeader.txtTitle.setText(R.string.point_charge);
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
 
         getCurrentPoint();

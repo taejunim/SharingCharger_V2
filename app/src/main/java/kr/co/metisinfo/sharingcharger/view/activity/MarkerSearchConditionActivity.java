@@ -148,7 +148,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
                 intent.putExtra("chargingStartMM", Integer.parseInt(selectStartFullDate.substring(4, 6)));
                 intent.putExtra("chargingStartDD", Integer.parseInt(selectStartFullDate.substring(6, 8)));
                 intent.putExtra("chargingStartHH", Integer.parseInt(selectStartFullDate.substring(8, 10)));
-                intent.putExtra("chargingStartII", Integer.parseInt(selectEndFullDate.substring(10, 12)));
+                intent.putExtra("chargingStartII", Integer.parseInt(selectStartFullDate.substring(10, 12)));
 
                 intent.putExtra("chargingEndWeek", chargingEndWeek);
                 intent.putExtra("chargingEndYYYY", Integer.parseInt(selectEndFullDate.substring(0, 4)));

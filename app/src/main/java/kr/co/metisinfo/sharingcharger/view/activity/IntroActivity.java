@@ -153,7 +153,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
                     startActivityForResult(gpsOptionsIntent, Constants.PAGE_SETTING_GPS);
                 });
 
-                builder.setNegativeButton("취소", (dialog, which) -> {
+                builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
                     IntroActivity.BackgroundTask task = new IntroActivity.BackgroundTask();
                     task.execute();
                 });

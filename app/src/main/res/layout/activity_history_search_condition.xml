@@ -198,7 +198,7 @@
                 <TextView
                     android:id="@+id/history_search_second_type"
                     style="@style/history_selected_none"
-                    android:text="포인트 충전"
+                    android:text="@string/point_charge"
                     android:onClick="setHistoryTextClick" />
 
                 <View

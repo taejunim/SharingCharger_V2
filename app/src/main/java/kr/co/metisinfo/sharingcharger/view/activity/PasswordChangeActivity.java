@@ -82,13 +82,13 @@ public class PasswordChangeActivity extends BaseActivity {
             if(!Pattern.matches(pwPattern, newPw)){
 
                 binding.newPwInput.requestFocus();
-                Toast.makeText(this, "비밀번호는 영문, 숫자, 특수 문자 포함하여 최소 6자 이상 16자리 이하로 설정하셔야합니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.m_register_pw_hint, Toast.LENGTH_LONG).show();
 
                 checkPw = false;
             }else if(!newPw.equals(newPwCheck)){
 
                 binding.newPwConfirmInput.requestFocus();
-                Toast.makeText(this, "새 비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.m_check_pw, Toast.LENGTH_LONG).show();
 
                 checkPw = false;
             }
@@ -142,22 +142,22 @@ public class PasswordChangeActivity extends BaseActivity {
                 BackgroundTask task= new BackgroundTask(model);
                 task.execute();
 
-                Toast.makeText(this, "비밀번호 변경에 성공하였습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.m_success_pw, Toast.LENGTH_LONG).show();
 
                 finish();
 
             }
             //사용자 정보 확인
             else if(response.code() == 204){
-                Toast.makeText(this, "아이디 또는 이메일을 다시 확인해 주세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.m_check_email, Toast.LENGTH_LONG).show();
             }
             //실패
             else{
-                Toast.makeText(this, "비밀번호 변경에 실패하였습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.m_fail_pw, Toast.LENGTH_LONG).show();
             }
 
         }catch (Exception e){
-            Toast.makeText(this, "비밀번호 변경에 실패하였습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.m_fail_pw, Toast.LENGTH_LONG).show();
             Log.e(TAG, " changePw Exception : "+ e);
         }
 
@@ -175,19 +175,19 @@ public class PasswordChangeActivity extends BaseActivity {
         if(!oldPw.equals(oldPwCheck)){
 
             binding.currentPwInput.requestFocus();
-            Toast.makeText(this, "현재 비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.m_check_old_pw, Toast.LENGTH_LONG).show();
             return false;
 
         }else if(!Pattern.matches(pwPattern, newPw)){
 
             binding.newPwInput.requestFocus();
-            Toast.makeText(this, "비밀번호는 영문, 숫자, 특수 문자 포함하여 최소 6자 이상 16자리 이하로 설정하셔야합니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.m_register_pw_hint, Toast.LENGTH_LONG).show();
             return false;
 
         }else if(!newPw.equals(newPwCheck)){
 
             binding.newPwConfirmInput.requestFocus();
-            Toast.makeText(this, "새 비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.m_check_pw, Toast.LENGTH_LONG).show();
             return false;
 
         }

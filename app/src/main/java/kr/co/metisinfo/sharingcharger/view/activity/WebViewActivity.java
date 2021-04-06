@@ -24,8 +24,7 @@ public class WebViewActivity extends BaseActivity {
 
     private String getTagName = "";
 
-    private String url = "http://211.43.13.173";                                                  //실서버
-    //private String url = "http://211.253.37.97:8101";                                               //테스트 서버
+    private String url = "";
 
     private boolean chkScroll = false;
 
