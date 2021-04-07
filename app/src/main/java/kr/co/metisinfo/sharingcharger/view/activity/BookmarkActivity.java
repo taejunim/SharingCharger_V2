@@ -50,32 +50,8 @@ public class BookmarkActivity extends BaseActivity implements MasterBaseView {
 
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
 
-        bookmarkViewModel.selectAllBookmark(ThisApplication.staticUserModel.id).observe(this, bookmarkResponse -> {
-
-            if(bookmarkResponse != null) {
-
-                List<ChargerModel> list = new ArrayList<>();
-
-                try{
-
-                    for(int i = 0 ; i < bookmarkResponse.size(); i++){
-
-                        ChargerModel vo = apiUtils.getChargerInfo(bookmarkResponse.get(i).chargerId);
-
-                        if(vo != null){
-                            list.add(vo);
-                        }
-
-                    }
-
-                    bookmarkAdapter.setList(list);
-                }catch (Exception e ){
-
-                    Log.e(TAG,"getChargerInfo Exception : " + e);
-                }
-
-            }
-        });
+        //bookmarkAdapter.setList 해주는 부분
+        //bookmarkAdapter.setList(list);
 
     }
 

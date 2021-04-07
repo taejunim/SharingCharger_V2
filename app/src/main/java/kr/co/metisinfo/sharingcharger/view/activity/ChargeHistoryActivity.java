@@ -184,16 +184,8 @@ public class ChargeHistoryActivity extends BaseActivity {
 
         try {
 
-            Map<String, Object> map = apiUtils.getRecharges(startDate, endDate, getType, index, list);
-
-            chkList = (boolean) map.get("chkList");
-
-            list = (List) map.get("list");
-
-            Log.e(TAG, "chkList : " + chkList);
-            Log.e(TAG, "List : " + list);
-
-            historyAdapter.setList(list);
+           //historyAdapter.setList 부분
+            //historyAdapter.setList(list);
 
         } catch (Exception e) {
             Log.e(TAG, "getChargeHistoryList Exception : " + e);

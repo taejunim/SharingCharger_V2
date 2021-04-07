@@ -312,64 +312,14 @@ public class MainPersonalActivity extends BaseActivity implements FragmentDialog
         mEBS = new EvzBLEScan(MainPersonalActivity.this);
         mEB = new EvzBLE(MainPersonalActivity.this);
 
-        //충전중인지 아닌지 확인
-        reservationModel = apiUtils.getReservationStatus();
-
-        try {
-            //충전 중일때
-            if (reservationModel != null && reservationModel.state.equals("KEEP")) {
-                SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
-                ChargerTime = pref.getInt("ChargerTime", 480);
-
-                String oldTime = pref.getString("time", "");
-
-                isRecharging = true;
-
-                //현재시간이 예약 start,end Date 범위안에 있다면
-                if (cu.checkRechargeTime(reservationModel)) {
-
-                    if (!oldTime.equals("")) {
-
-                        //충전 중이라면 충전 할때의 시간을 넣어줘야함
-                        String prefTime = pref.getString("reservationTime", "");
-
-                        sec = cu.getSecond(oldTime, prefTime);
-
-                        if (sec >= 0) {
-                            ChargingTimerStart();
-                        }
-
-                        Log.e(TAG, "sec : " + sec);
-
-                    }
-
-                    rechargeId = pref.getInt("rechargeId", 0);
-
-                    setReservationDetailInfo();
-
-                    stChargingTime = pref.getString("time", null);
-                    Log.e(TAG, "pref rechargeId: " + rechargeId);
-
-                }
-            }
-
-        } catch (Exception e) {
-            Log.e(TAG, "init Exception : " + e);
-        }
+        //
+        /*
+        * 1. 충전중인지 아닌지 확인
+        * 2. 소유주가 충전기를 가지고있는지 확인
+        * */
 
         disableBtn();
 
-        //소유주가 충전기를 가지고있는지 확인
-        chargerList = apiUtils.getChargersOwner();
-
-        if (chargerList.size() != 0) {
-            // 충전중
-            if (isRecharging) {
-                chargerFrameClick(binding.frameEnd);
-            } else {
-                chargerFrameClick(binding.frameStart);
-            }
-        }
 
         //로딩
         showLoading();
@@ -524,197 +474,9 @@ public class MainPersonalActivity extends BaseActivity implements FragmentDialog
 
         showLoading();
 
-        try {
+        removeLoading();
 
-            List<ReservationModel> reservationList = new ArrayList<>();
-
-            Response<Object> response = apiUtils.getReservationsChargersList(String.valueOf(chargerId));
-
-            if (response.code() == 200) {
-
-                //예약 이용가능 시간
-                JSONObject json = new JSONObject((Map) response.body());
-
-                JSONObject obj = json.getJSONObject("reservations");
-
-                JSONArray contentArray = obj.getJSONArray("content");
-
-                for (int i = 0; i < contentArray.length(); i++) {
-                    Log.e(TAG, contentArray.get(i).toString());
-
-                    Gson gson = new Gson();
-                    ReservationModel reservationModel = gson.fromJson(contentArray.get(i).toString(), ReservationModel.class);
-                    reservationList.add(reservationModel);
-                }
-
-                Log.e(TAG, "reservationList : " + reservationList);
-
-                //충전 가능 확인
-                checkReservationList(reservationList);
-            }
-
-        } catch (Exception e) {
-
-            removeLoading();
-            Log.e(TAG, "checkChargerState Exception : " + e);
-        }
-
-    }
-
-    private void checkReservationList(List<ReservationModel> list) {
-
-        list = cu.dateSort(list);
-
-        Log.e(TAG, "sort");
-        Log.e(TAG, list.toString());
-
-        //시간 계산
-        try {
-
-            Calendar startCal = Calendar.getInstance();
-            Date curDt = new Date(startCal.getTimeInMillis());
-            Log.e(TAG, "for start:" + format.format(curDt));
-
-            Calendar tempCal = Calendar.getInstance();
-
-            String startTime = "";
-
-            String sDate = formatT.format(curDt);
-            String eDate = "";
-
-            boolean checkCharge = false;
-
-            //바로 충전 가능
-            if (list.size() == 0) {
-
-                checkCharge = true;
-                startCal.add(Calendar.MINUTE, ChargerTime);
-                eDate = formatT.format(startCal.getTime());
-
-            }
-            //충전이 가능한지 확인
-            else {
-
-                for (int i = 0; i < list.size(); i++) {
-
-                    ReservationModel model = list.get(i);
-                    Date startDt = format.parse(model.getStartDate().replaceAll("T", " "));
-                    Log.e(TAG, "for tempDt:" + format.format(startDt));
-
-                    long diff = curDt.getTime() - startDt.getTime();
-                    Log.e(TAG, "availableList diff:" + diff);
-
-                    //현재시간 보다 앞에 예약이 있음
-                    //지금 충전 X
-                    if (diff >= 0) {
-                        Date endDt = format.parse(model.getEndDate().replaceAll("T", " "));
-
-                        tempCal.setTime(endDt);
-                        Log.e(TAG, "for tempDt:" + format.format(endDt));
-                        tempCal.add(Calendar.MINUTE, 30);
-
-                        startTime = setTime(tempCal);
-
-                        Log.e(TAG, "startTime:" + startTime);
-
-                        break;
-
-                    }
-                    //현재시간 보다 뒤에 예약이 있음
-                    else {
-
-                        //예약 시작시간 - 30
-                        Calendar reservationCal = Calendar.getInstance();
-                        reservationCal.setTime(startDt);
-                        reservationCal.add(Calendar.MINUTE, -30);
-
-                        startDt = new Date(reservationCal.getTimeInMillis());
-
-                        Log.e(TAG, "curDt  : " + format.format(curDt));
-                        Log.e(TAG, "reservation : " + format.format(startDt));
-
-                        // 예약 시작시간    //현재 시간
-                        diff = startDt.getTime() - curDt.getTime();
-
-                        long min = diff / (60 * 1000);
-                        Log.e(TAG, "min : " + min);
-
-                        //최소 충전 가능시간 30분
-                        if (min >= 0 && (int) min >= 30) {
-
-                            checkCharge = true;
-
-                            //실제 예약 가능시간
-                            long timeMin = diff / (60 * 1000);
-                            int getMin = (int) (timeMin * -1);
-                            Log.e(TAG, "getMin : " + getMin);
-
-                            //원하는 충전 시작보다 충전할 수 있는 시작이 작음
-                            if (getMin <= ChargerTime) {
-
-                                String tempStr = format.format(reservationCal.getTime());
-                                Log.e(TAG, "tempStr:" + tempStr);
-
-                                eDate = formatT.format(reservationCal.getTime());
-
-                                ChargerTime = (int) min;
-
-                                Toast.makeText(this, tempStr + " 까지 충전 가능합니다.", Toast.LENGTH_LONG).show();
-                                break;
-                            }
-                            //원하는 시작동안 충전 가능
-                            else {
-
-                                tempCal.add(Calendar.MINUTE, ChargerTime);
-                                eDate = formatT.format(reservationCal.getTime());
-                                break;
-                            }
-                        }
-
-                        //최소 충전 불가능
-                        else {
-                            Date endDt = format.parse(model.getEndDate().replaceAll("T", " "));
-
-                            tempCal.setTime(endDt);
-                            Log.e(TAG, "for tempDt:" + format.format(endDt));
-                            tempCal.add(Calendar.MINUTE, 30);
-
-                            startTime = setTime(tempCal);
-
-                            Log.e(TAG, "startTime:" + startTime);
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (!startTime.equals("")) {
-
-                removeLoading();
-
-                CustomDialog dialog = new CustomDialog(this, startTime + " 이후부터 충전 가능합니다.");
-
-                dialog.show();
-
-                dialog.findViewById(R.id.dialog_no_btn).setVisibility(View.GONE);
-
-                dialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
-
-                    BLEUserDis();
-                    dialog.dismiss();
-
-                });
-            }
-
-            if (checkCharge) {
-                //예약 및 충전 시작
-                startCharge(sDate, eDate);
-            }
-
-        } catch (Exception e) {
-            Log.e(TAG, "checkReservationList Exception:" + e);
-        }
+        //예약하기
     }
 
     /*
@@ -732,39 +494,6 @@ public class MainPersonalActivity extends BaseActivity implements FragmentDialog
 
         });
 
-    }
-
-    private void startCharge(String startDate, String endDate) {
-
-        Log.e(TAG, "startCharge : " + startDate + " , " + endDate);
-
-        ReservationModel model = new ReservationModel();
-//        model.startDate = "2021-02-24T14:15:00";
-        model.startDate = startDate;
-        model.endDate = endDate;
-        model.reservationType = "RESERVE";
-        model.chargerId = chargerId;
-        model.userId = ThisApplication.staticUserModel.getId();
-        model.expectPoint = 0;
-
-        try {
-
-            reservationModel = apiUtils.goReservation(model);
-
-            if (reservationModel != null) {
-
-                setSharedPreferences(true);
-                Log.e(TAG, "예약완료 : " + reservationModel);
-
-                BLEStart(mCurData);
-
-            } else {
-                Toast.makeText(MainPersonalActivity.this, "예약에 실패하였습니다1.", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-
-            Log.e(TAG, "startCharge Exception : " + e);
-        }
     }
 
     public void getTag() {
@@ -806,27 +535,7 @@ public class MainPersonalActivity extends BaseActivity implements FragmentDialog
                                 Log.e(TAG, "rechargeId is " + model.rechargeId);
                                 Log.e(TAG, "chargerId " + chargerId);
 
-                                if (_tag.Number != null && _tag.Number.equals(String.format(Locale.KOREA, "%013d", rechargeId))) {
-                                    Log.e(TAG, "endAuthenticateCharger get reservationModel is " + reservationModel);
-
-                                    RechargeModel rechargeEndModel = apiUtils.endAuthenticateCharger(chargerId, model, stChargingTime);
-
-                                    if (rechargeEndModel != null) {
-
-                                        //충전 결과 표시
-                                        isStop = true;
-                                        showChargerFinishDialog(rechargeEndModel);
-                                        BLEDelOneTag();
-                                    }
-
-                                } else {                                                                   //비정상 종료 일때
-
-                                    boolean result = apiUtils.endAuthenticateChargerUnplanned(chargerId, model);
-
-                                    if (result) {
-                                        BLEDelOneTag();
-                                    }
-                                }
+                                //종료 api
 
                             } catch (Exception e) {
 
@@ -1009,50 +718,9 @@ public class MainPersonalActivity extends BaseActivity implements FragmentDialog
                     model.reservationId = reservationModel.id;
                     model.userId = reservationModel.userId;
 
-                    try {
-                        Log.e(TAG, " getAuthenticateCharger ()");
 
-                        //충전 시작 전 인증
-                        boolean result = apiUtils.getAuthenticateCharger(reservationModel.chargerId, model);
+                        //충전 인증 api
 
-                        if (result) {
-                            chk = true;
-
-                            //충전 시작 인증
-                            rechargeId = apiUtils.startAuthenticateCharger(reservationModel.chargerId, model);
-
-                            if (rechargeId != -1) {
-                                chk = true;
-
-                                setReservationDetailInfo();
-
-                                Log.e(TAG, "start rechargeId : " + rechargeId);
-                                mCurData.setTag = String.format(Locale.KOREA, "%013d", rechargeId);
-
-                                setSharedPreferences(true);
-
-                                Log.e(TAG, "BLEStart Success");
-                                isSetTag = true;
-                                BLESetTag();
-                            }
-                        }
-
-                        Log.e(TAG, "chk : " + chk);
-                        if (!chk) {
-
-                            isStart = false;
-                            BLEStop(mCurData);
-                            Toast.makeText(MainPersonalActivity.this, "인증에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } catch (Exception e) {
-                        Log.e(TAG, "start Exception : " + e);
-                        checkStart = false;
-
-                        isStart = false;
-                        BLEStop(mCurData);
-                        Toast.makeText(MainPersonalActivity.this, "인증에 실패하였습니다1.", Toast.LENGTH_SHORT).show();
-                    }
 
                     checkStart = false;
                     removeLoading();

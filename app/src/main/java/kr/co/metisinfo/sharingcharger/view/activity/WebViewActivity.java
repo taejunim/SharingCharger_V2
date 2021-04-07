@@ -142,28 +142,7 @@ public class WebViewActivity extends BaseActivity {
         //개인정보 동의여부
         else {
 
-            try {
-
-                String getText = apiUtils.getPolicy(getTagName);
-
-                //정보 가져오기 성공
-                if(getText != null){
-                    System.out.println(getText);
-
-                    String base64 = android.util.Base64.encodeToString(getText.getBytes("UTF-8"), android.util.Base64.DEFAULT);
-                    binding.personalWebView.loadData(base64, "text/html; charset=utf-8", "base64");
-                }
-                //실패
-                else{
-                    Toast.makeText(WebViewActivity.this, "약관 불러오기에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
-                }
-
-            } catch (Exception e) {
-                Toast.makeText(WebViewActivity.this, "약관 불러오기에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
-                Log.e(TAG, "PersonalInfo1 Exception: " + e);
-
-            }
-
+            //개인정보 동의여부 api
         }
 
     }

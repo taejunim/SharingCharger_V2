@@ -113,18 +113,7 @@ public class PointHistoryActivity extends BaseActivity {
     @Override
     public void initViewModel() {
 
-        try {
-
-            int getPoint = apiUtils.getUserPoint();
-            binding.currentPointTxt.setText(NumberFormat.getInstance(Locale.KOREA).format(getPoint) + "p");
-
-            if (getPoint < 0) {
-                binding.currentPointTxt.setBackground(ContextCompat.getDrawable(PointHistoryActivity.this, R.drawable.border_red_30));
-            }
-
-        } catch (Exception e) {
-            Log.e(TAG, "point Exception : " + e);
-        }
+        //실시간 포인트 api
 
     }
 
@@ -210,22 +199,8 @@ public class PointHistoryActivity extends BaseActivity {
 
     private void getPointHistoryList(String startDate, String endDate, String sort, String getType, int pageIndex) {
 
-        try {
-
-            Map<String, Object> map = apiUtils.getPoints(startDate, endDate, sort, getType, pageIndex, list);
-
-            chkList = (boolean) map.get("chkList");
-
-            list = (List) map.get("list");
-
-            Log.e(TAG, "chkList : " + chkList);
-            Log.e(TAG, "List : " + list);
-
-            historyAdapter.setList(list);
-
-        } catch (Exception e) {
-            Log.e(TAG, "getPointHistoryList Exception : " + e);
-        }
+        // historyAdapter.setList 부분
+        // historyAdapter.setList(list);
 
     }
 

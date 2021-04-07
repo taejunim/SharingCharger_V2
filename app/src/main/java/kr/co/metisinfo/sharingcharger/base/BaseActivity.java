@@ -542,8 +542,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             TextView txtEmail = drawerLayout.findViewById(R.id.txt_email);
             TextView txtPoint = drawerLayout.findViewById(R.id.txt_point);
 
-            txtName.setText(ThisApplication.staticUserModel.getName());
-            txtEmail.setText(ThisApplication.staticUserModel.getEmail());
+//            txtName.setText(ThisApplication.staticUserModel.getName());
+//            txtEmail.setText(ThisApplication.staticUserModel.getEmail());
 
             TextView txtReserveTime = drawerLayout.findViewById(R.id.txt_reserve);
             TextView txtReserveSpot = drawerLayout.findViewById(R.id.txt_reserve_spot);
@@ -551,24 +551,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             try {
 
                 //사용자 예약 상태 가져오기
-                ReservationModel model = apiUtils.getReservationStatus();
-
-                if (model != null) {
-                    String getStartTime = model.startDate;
-
-                    getStartTime = getStartTime.substring(0, 4) + "년 " + getStartTime.substring(5, 7) + "월 " + getStartTime.substring(8, 10) + "일 " + getStartTime.substring(11, 13) + "시 " + getStartTime.substring(14, 16) + "분";
-
-                    txtReserveTime.setText(getStartTime);
-                    txtReserveSpot.setText(model.chargerName);
-                } else {
-                    txtReserveTime.setText("");
-                    txtReserveSpot.setText("");
-                }
+//                txtReserveTime.setText("");
+//                txtReserveSpot.setText("");
 
                 //실시간 포인트 가져오기
-                int getPoint = apiUtils.getUserPoint();
+//                txtPoint.setText("");
 
-                txtPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(getPoint));
 
             } catch (Exception e) {
                 Log.e(TAG, "Exception : " + e);

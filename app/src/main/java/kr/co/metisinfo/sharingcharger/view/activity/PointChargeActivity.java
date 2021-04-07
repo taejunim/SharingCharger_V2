@@ -113,29 +113,7 @@ public class PointChargeActivity extends BaseActivity {
             pointModel.pointUsedType = "PURCHASE";
             pointModel.userId = ThisApplication.staticUserModel.getId();
 
-            try {
-
-                boolean insertPoint = apiUtils.insertPoint(pointModel);
-
-                if(insertPoint){
-                    int tempPoint = Integer.parseInt(binding.chargingPointEdit.getText().toString());
-
-                    Toast.makeText(this, NumberFormat.getInstance(Locale.KOREA).format(tempPoint) + " 포인트가 충전 되었습니다.", Toast.LENGTH_SHORT).show();
-                    //금액
-                    Intent intent = new Intent();
-
-                    setResult(RESULT_OK, intent);
-
-                    finish();
-
-                }else {
-                    Toast.makeText(this, "충전에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG, "Exception : " + e);
-            }
+            //포인트 충전 api
 
         }
 
@@ -147,15 +125,6 @@ public class PointChargeActivity extends BaseActivity {
     private void getCurrentPoint() {
 
         //실시간 포인트 가져오기
-        try {
-
-            int point = apiUtils.getUserPoint();
-
-            binding.pointChargeCurrentPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(point));
-
-        } catch (Exception e) {
-            Log.e(TAG, "pointDialog Exception : " + e);
-        }
 
     }
 }

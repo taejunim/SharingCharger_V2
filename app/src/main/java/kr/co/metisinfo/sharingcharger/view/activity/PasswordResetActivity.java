@@ -54,30 +54,7 @@ public class PasswordResetActivity extends BaseActivity {
                 String phone = binding.registerPhoneInput.getText().toString().trim();
                 Log.e(TAG, "phone : " + phone);
 
-                try {
-
-                    tempCertificateNo = apiUtils.getSms(phone);
-
-                    if (tempCertificateNo != null) {
-                        Log.e(TAG, "response : " + tempCertificateNo);
-
-                        if (tempCertificateNo.contains(".")) {
-                            tempCertificateNo = tempCertificateNo.substring(0, tempCertificateNo.indexOf("."));
-                        }
-
-                        Log.e(TAG, "tempCertificateNo : " + tempCertificateNo);
-
-                        isCertificationBtn = true;
-                        binding.layoutTimeRemaining.setVisibility(View.VISIBLE);
-                        countDown("0300");
-                    } else {
-                        Toast.makeText(PasswordResetActivity.this, R.string.m_fail_certificate_no, Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (Exception e) {
-                    Toast.makeText(PasswordResetActivity.this, R.string.m_fail_certificate_no, Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "registerCertificationBtn Exception: " + e);
-                }
+                //인증번호 api
 
             }
         });

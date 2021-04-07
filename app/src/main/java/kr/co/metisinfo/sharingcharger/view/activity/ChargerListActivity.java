@@ -291,27 +291,10 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
                             Log.e(TAG, "_tag.Number is " + _tag.Number);
                             Log.e(TAG, "endAuthenticateCharger reservationModel is " + reservationModel);
 
-                            //getTagNumber == rechargeId 현재 내가 충전하고 있음 (정상종료)
-                            if (_tag.Number != null && _tag.Number.equals(String.format(Locale.KOREA, "%013d", rechargeId))) {
+                            //종료 api
 
-                                RechargeModel rechargeEndModel = apiUtils.endAuthenticateCharger(reservationModel.chargerId, model, stChargingTime);
+                             BLEDelOneTag();
 
-                                if (rechargeEndModel != null) {
-                                    //충전 결과 표시
-                                    showChargerFinishDialog(rechargeEndModel);
-                                    BLEDelOneTag();
-
-                                }
-                            }
-                            // 비정상 종료
-                            else {
-
-                                boolean result = apiUtils.endAuthenticateChargerUnplanned(reservationModel.chargerId, model);
-
-                                if (result) {
-                                    BLEDelOneTag();
-                                }
-                            }
 
                         } catch (Exception e) {
 
@@ -412,91 +395,8 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
             public void Success() {
                 Log.e(TAG, "BLE Connect Success");
 
+                getTag();
                 //충전 상태 가져오기
-                reservationModel = apiUtils.getReservationStatus();
-
-                try {
-                    String temAddr = mCurData.bleName;
-
-                    //충전 정보 text 표시
-                    binding.chargerListStartTime.setText("충전 시작 : " + sDate);
-                    binding.chargerListEndTime.setText("충전 종료 : " + eDate);
-
-                    if (reservationModel.bleNumber.equals(mCurData.bleAddr)) {
-                        binding.chargerListName.setText(reservationModel.getChargerName() + " - " + temAddr.substring(temAddr.length() - 4, temAddr.length()));
-                        binding.chargerListAddress.setText(reservationModel.getChargerAddress());
-                    } else {
-                        binding.chargerListName.setText(mCurData.bleAddr);
-                    }
-
-                    //현재 충전중
-                    if (reservationModel != null && reservationModel.state.equals("KEEP")) {
-                        SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
-                        String oldTime = pref.getString("time", "");
-
-                        Log.e(TAG, "mCurData : " + mCurData.bleName);
-
-                        //충전기 연결 버튼 비활성화
-                        searchChargerBtnEnabled();
-
-                        rechargeId = pref.getInt("rechargeId", 0);
-                        stChargingTime = oldTime;
-                        if (!oldTime.equals("")) {
-
-                            //초 계산 값 가져오기
-                            sec = cu.getSecond(oldTime, ChargerTime);
-
-                            if (sec <= 0) {
-                                BLEStop(mCurData);
-                            } else {
-                                ChargingTimerStart();
-                            }
-
-                            Log.e(TAG, "diff : " + sec);
-                        }
-
-                        Log.e(TAG, "reservationModel.bleNumber : " + reservationModel.bleNumber);
-                        Log.e(TAG, "mCurData.bleAddr : " + mCurData.bleAddr);
-
-                        binding.chargerRechargeIdTxt.setText(String.valueOf(rechargeId));
-                        binding.chargerRechargeTxt.setVisibility(View.VISIBLE);
-                        binding.chargerRechargeIdTxt.setVisibility(View.VISIBLE);
-
-                        chargerFrameClick(binding.frameEnd);
-                    }
-                    //현재 충전중 X
-                    else {
-
-                        new Handler().postDelayed(new Runnable() {// 0.5 초 후에 실행
-                            @Override
-                            public void run() {
-                                // 실행할 동작 코딩
-
-                                Message msg1 = mHandler.obtainMessage();  //사용할 핸들러를 이용해서 보낼 메시지 객체 생성
-                                Bundle b1 = new Bundle();    //메시지를 담을 번들 생성
-                                b1.putBoolean("getTag", true);    //번들에 메시지 추가
-                                msg1.setData(b1);    //메세지에 번들을 넣는다.
-
-                                getTag();
-
-                                mHandler.sendMessage(msg1);     //메세지를 핸들러로 넘긴다.
-                            }
-                        }, 4500);
-
-                        //다이얼로그로 추가
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ChargerListActivity.this);
-
-                        builder.setTitle(R.string.m_success_connect);
-                        builder.setMessage(R.string.m_success_charger_connect);
-
-                        builder.setPositiveButton("확인", (dialog, which) -> dialog.dismiss());
-
-                        builder.show();
-                    }
-
-                } catch (Exception e) {
-                    Log.e(TAG, "BLEConnect Success Exception : " + e);
-                }
 
             }
 
@@ -568,68 +468,8 @@ public class ChargerListActivity extends BaseActivity implements FragmentDialogI
             public void Success() {
                 Log.e(TAG, " start Success ()");
 
-                //충전기 연결 버튼 비활성화
-                searchChargerBtnEnabled();
-
                 //충전 인증 성공 시 충전api
-                boolean chk = false;
 
-                if (checkStart) {
-
-                    SimpleDateFormat formatT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(new Date());
-
-                    AuthenticateModel model = new AuthenticateModel();
-                    model.rechargeStartDate = formatT.format(cal.getTime());
-                    model.reservationId = reservationModel.id;
-                    model.userId = reservationModel.userId;
-
-                    try {
-                        Log.e(TAG, " getAuthenticateCharger ()");
-
-                        //충전 시작 전 인증
-                        boolean result = apiUtils.getAuthenticateCharger(reservationModel.chargerId, model);
-
-                        if (result) {
-                            chk = true;
-
-                            //충전 시작 인증
-                            rechargeId = apiUtils.startAuthenticateCharger(reservationModel.chargerId, model);
-
-                            if (rechargeId != -1) {
-                                chk = true;
-
-                                binding.chargerRechargeIdTxt.setText(String.valueOf(rechargeId));
-                                binding.chargerRechargeTxt.setVisibility(View.VISIBLE);
-                                binding.chargerRechargeIdTxt.setVisibility(View.VISIBLE);
-                                mCurData.setTag = String.format(Locale.KOREA, "%013d", rechargeId);
-
-                                setSharedPreferences(true);
-
-                                Log.e(TAG, "BLEStart Success");
-                                BLESetTag();
-                                sec = Integer.parseInt(ChargerTime) * 60;
-                                ChargingTimerStart();                                               //충전진행 경과시간 START
-                            }
-                        }
-                        Log.e(TAG, "chk : " + chk);
-                        if (!chk) {
-                            setSharedPreferences(false);
-                            BLEStop(mCurData);
-                            Toast.makeText(ChargerListActivity.this, "충전을 시작할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } catch (Exception e) {
-                        checkStart = false;
-                        setSharedPreferences(false);
-                        BLEStop(mCurData);
-                        Toast.makeText(ChargerListActivity.this, "인증에 실패하였습니다1.", Toast.LENGTH_SHORT).show();
-                    }
-
-                    checkStart = false;
-                }
 
             }
 

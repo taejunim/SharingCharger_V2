@@ -26,17 +26,17 @@ import static android.content.Context.MODE_PRIVATE;
  * @ ---------     --------
  * @ 2020.12.24.    고재훈
  * @
- * @  수정일          수정자
+ * @ 수정일          수정자
  * @ ---------    ---------
  * @
  **/
-public class InstantChargingDialog extends Dialog  {
+public class InstantChargingDialog extends Dialog {
 
     Context context;
 
-    private String chargingName     = "";
-    private String chargeTime       = "";
-    private String reservationTime  = "";
+    private String chargingName = "";
+    private String chargeTime = "";
+    private String reservationTime = "";
 
     private ReservationModel reservationModel;
 
@@ -46,11 +46,11 @@ public class InstantChargingDialog extends Dialog  {
 
     public InstantChargingDialog(@NonNull Context context, String chargingName, String chargeTime, ReservationModel reservationModel, String reservationTime) {
         super(context);
-        this.context          = context;
-        this.chargingName     = chargingName;                                                       //충전기 명
-        this.chargeTime       = chargeTime;                                                         //충전 시간
+        this.context = context;
+        this.chargingName = chargingName;                                                       //충전기 명
+        this.chargeTime = chargeTime;                                                         //충전 시간
         this.reservationModel = reservationModel;                                                   //예약 모델
-        this.reservationTime  = reservationTime;
+        this.reservationTime = reservationTime;
     }
 
     @Override
@@ -69,48 +69,17 @@ public class InstantChargingDialog extends Dialog  {
     }
 
     //충전 버튼 CLICK.
-    public void goChargingOkBtn(){
+    public void goChargingOkBtn() {
 
-       goReservation();
+        goReservation();
 
     }
 
     private void goReservation() {
 
-        // reservation api
-        try {
+        // 예약하기
 
-            ReservationModel model = apiUtils.goReservation(reservationModel);
-
-            //예약 성공
-            if(model != null){
-
-                if (ThisApplication.staticUserModel.getUserType().equals("Personal")) {
-                    SharedPreferences pref = context.getSharedPreferences("reservation", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("activity", "ChargerListActivity");
-                    editor.commit();
-                }
-
-                Intent intent = new Intent(context, SearchBluetoothActivity.class);
-                intent.putExtra("reservationModel", model);
-                intent.putExtra("reservationTime", reservationTime);
-
-                context.startActivity(intent);
-                Log.e(TAG, "예약 성공.");
-            }
-
-            //예약 실패
-            else{
-                Toast.makeText(context, "예약에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "예약에 실패하였습니다.");
-            }
-
-            this.dismiss();
-        } catch (Exception e) {
-            Log.e(TAG, "Exception : " + e);
-            this.dismiss();
-        }
+        this.dismiss();
 
     }
 

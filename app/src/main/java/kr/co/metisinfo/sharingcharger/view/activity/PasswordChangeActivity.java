@@ -126,40 +126,7 @@ public class PasswordChangeActivity extends BaseActivity {
         UserModel model = new UserModel();
         model.password = binding.newPwConfirmInput.getText().toString();
 
-        try{
-
-            Response<Object> response = apiUtils.changePassword(mail, model);
-
-            //비밀번호 변경 성공
-            if(response.code() == 200 && response.body() != null){
-
-                JSONObject json = new JSONObject((Map) response.body());
-
-                Gson gson = new Gson();
-
-                model = gson.fromJson(json.toString(), UserModel.class);
-
-                BackgroundTask task= new BackgroundTask(model);
-                task.execute();
-
-                Toast.makeText(this, R.string.m_success_pw, Toast.LENGTH_LONG).show();
-
-                finish();
-
-            }
-            //사용자 정보 확인
-            else if(response.code() == 204){
-                Toast.makeText(this, R.string.m_check_email, Toast.LENGTH_LONG).show();
-            }
-            //실패
-            else{
-                Toast.makeText(this, R.string.m_fail_pw, Toast.LENGTH_LONG).show();
-            }
-
-        }catch (Exception e){
-            Toast.makeText(this, R.string.m_fail_pw, Toast.LENGTH_LONG).show();
-            Log.e(TAG, " changePw Exception : "+ e);
-        }
+        //비밀번호 변경 api
 
     }
 

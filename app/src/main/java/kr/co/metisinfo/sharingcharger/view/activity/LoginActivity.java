@@ -91,54 +91,8 @@ public class LoginActivity extends BaseActivity implements NetworkStatusInterfac
 
         if (validationCheck()) {
 
-            UserModel userModel = new UserModel();
-
-            userModel.loginId = binding.loginId.getText().toString();
-            userModel.email = binding.loginId.getText().toString();
-            userModel.password = binding.loginPw.getText().toString();
-
-            try{
-                Response<UserModel> response = apiUtils.login(userModel);
-
-                //로그인 성공
-                if (response.code() == 200 && response.body() != null){
-
-                    UserModel user = response.body();
-
-                    if(!user.getUserType().equals("General")){
-                        user.email = user.getUsername();
-                    }
-
-                    user.autoLogin = true;
-
-                    BackgroundTask task = new BackgroundTask(user);
-                    task.execute();
-
-                }
-                //로그인정보가 맞지 않을 때
-                else if (response.code() == 204) {
-                    isRegisterBtnClick = false; // 버튼 다시 클릭 가능하도록 false로 전환
-
-                    Toast.makeText(LoginActivity.this, R.string.login_reject, Toast.LENGTH_SHORT).show();
-
-                    binding.loginId.requestFocus();
-                }
-                //로그인 실패
-                else{
-                    isRegisterBtnClick = false; // 버튼 다시 클릭 가능하도록 false로 전환
-
-                    Toast.makeText(LoginActivity.this, R.string.login_reject, Toast.LENGTH_SHORT).show();
-
-                    binding.loginId.requestFocus();
-                }
-
-                isRegisterBtnClick = false;
-            }catch (Exception e) {
-
-                isRegisterBtnClick = false;
-                Log.e(TAG,"getLogin Exception : "+ e);
-            }
-
+            BackgroundTask task = new BackgroundTask(new UserModel());
+            task.execute();
         }
     }
 
@@ -211,45 +165,10 @@ public class LoginActivity extends BaseActivity implements NetworkStatusInterfac
 
         protected Boolean doInBackground(Integer... values) {
 
-            UserModel model = userViewModel.selectGetLoginUserEmail(this.userModel.getEmail());
-
-            // 로컬디비에 이메일, 비밀번호로 조회해서 저장된 계정이 없으면 로컬 디비에 저장
-            if (model == null) {
-
-                Log.e(TAG, "Login insert UserModel : " + userModel.toString());
-
-                if(userModel.getUserType().equals("General")){
-                    userModel.loginId = userModel.getEmail();
-                }else{
-                    userModel.loginId = userModel.getUsername();
-                    userModel.email = userModel.getUsername();
-                }
-
-                userModel.autoLogin = true;
-                userViewModel.insertUser(this.userModel);
-
-                ThisApplication.staticUserModel = this.userModel;
-                return true;
-
-            } else {
-                // 로컬디비에 저장 된게 있으면 업데이트
-
-                if(userModel.getUserType().equals("General")){
-                    userModel.loginId = model.getEmail();
-                }else{
-                    userModel.loginId = model.getUsername();
-                    userModel.email = userModel.getUsername();
-                }
-
-                userModel.autoLogin = true;
-                userModel.pkId = model.getPkId();
-                Log.e(TAG, "Login update UserModel : " + userModel.toString());
-
-                userViewModel.updateUserPoint(userModel);
-                ThisApplication.staticUserModel = userModel;
-
-                return false;
-            }
+            //로컬 db 유저 정보 저장
+            //UserModel model = userViewModel.selectGetLoginUserEmail(this.userModel.getEmail());
+            
+            return false;
         }
 
         protected void onPostExecute(Boolean isInsert) {

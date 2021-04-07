@@ -91,29 +91,7 @@ public class UserRegisterActivity extends BaseActivity {
                 String phone = binding.registerPhoneInput.getText().toString().trim();
                 Log.e(TAG, "phone : " + phone);
 
-                try {
-
-                    tempCertificateNo = apiUtils.getSms(phone);
-
-                    if (tempCertificateNo != null) {
-
-                        if (tempCertificateNo.contains(".")) {
-                            tempCertificateNo = tempCertificateNo.substring(0, tempCertificateNo.indexOf("."));
-                        }
-
-                        Log.e(TAG, "tempCertificateNo : " + tempCertificateNo);
-
-                        isCertificationBtn = true;
-                        binding.layoutTimeRemaining.setVisibility(View.VISIBLE);
-                        countDown("0300");
-                    } else {
-                        Toast.makeText(UserRegisterActivity.this, R.string.m_fail_certificate_no, Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (Exception e) {
-                    Toast.makeText(UserRegisterActivity.this, R.string.m_fail_certificate_no, Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "registerCertificationBtn Exception: " + e);
-                }
+                //인증요청 api
 
             }
 
@@ -194,31 +172,7 @@ public class UserRegisterActivity extends BaseActivity {
             userModel.collectUserDataFlag = true;
             userModel.privacyPolicyFlag = true;
 
-            try{
-                UserModel model = apiUtils.join(userModel);
-
-                //회원가입 성공
-                if(model != null){
-                    Log.e(TAG, "회원가입 성공 : " + model);
-
-                    Toast.makeText(UserRegisterActivity.this, "회원가입이 완료되어 로그인 페이지으로 이동합니다.", Toast.LENGTH_LONG).show();
-
-                    finish();
-                }
-                //회원가입 실패
-                // id 중복 체크따로 해야함
-                else{
-                    Toast.makeText(UserRegisterActivity.this, "회원가입에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "회원가입 실패");
-                    isRegisterBtnClick = false;
-                }
-
-            }catch (Exception e){
-
-                Toast.makeText(UserRegisterActivity.this, "회원가입에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
-                Log.e(TAG,"userJoin Exception : "+ e);
-                isRegisterBtnClick = false;
-            }
+            //회원가입 api
 
         } else {
 

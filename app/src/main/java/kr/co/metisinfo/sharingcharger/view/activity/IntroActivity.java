@@ -256,52 +256,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
     private void getLogin(UserModel userModel) {
 
-        try {
-            Response<UserModel> response = apiUtils.login(userModel);
-
-            //로그인 성공
-            if (response.code() == 200 && response.body() != null) {
-
-                UserModel user = response.body();
-
-                user.pkId = userModel.pkId;
-                if (user.getUserType().equals("General")) {
-                    user.loginId = userModel.getEmail();
-                } else {
-                    user.loginId = userModel.getUsername();
-                    user.email = user.getUsername();
-                }
-
-                user.autoLogin = true;
-
-                Log.e(TAG, "response UserModel : " + user);
-
-                //새로운 유저정보를 로컬디비에 저장함
-                userViewModel.updateUserPoint(user);
-                ThisApplication.staticUserModel = user;
-                isLoginSuccess = true;
-
-                handler.postDelayed(m, 3000); // 2초 뒤에 Runnable 객체 수행
-
-            }
-            //로그인정보가 맞지 않을 때
-            else if (response.code() == 204) {
-                userViewModel.deleteUser(userModel.email);
-                Toast.makeText(getApplicationContext(), R.string.login_reject, Toast.LENGTH_LONG).show();
-                handler.postDelayed(r, 1000); // 1초 뒤에 Runnable 객체 수행
-            }
-            //로그인 실패
-            else {
-                Toast.makeText(getApplicationContext(), R.string.login_reject, Toast.LENGTH_LONG).show();
-                handler.postDelayed(r, 1000); // 1초 뒤에 Runnable 객체 수행
-            }
-
-        } catch (Exception e) {
-
-            Log.e(TAG, "getLogin response : " + e);
-            handler.postDelayed(r, 1000); // 1초 뒤에 Runnable 객체 수행
-            isLoginSuccess = false;
-        }
+            handler.postDelayed(m, 3000); // 2초 뒤에 Runnable 객체 수행
 
     }
 
@@ -334,35 +289,10 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
         protected Boolean doInBackground(Integer... values) {
 
-            //db에 오토로그인 된 유저가 있는지 확인
-            UserModel getUser = userViewModel.selectAutoLoginUser(true);
+            //로컬 db 유저 정보 확인
+            //UserModel getUser = userViewModel.selectAutoLoginUser(true);
 
-            //오토로그인 된 유저가 있다면 실제 서버에 로그인
-            if (getUser != null) {
-
-                if (!isLoginSuccess) {
-                    userModel = getUser;
-
-                    if (getUser.getUserType().equals("General")) {
-                        userModel.loginId = userModel.getEmail();
-                    } else {
-                        userModel.loginId = userModel.getUsername();
-                        userModel.email = userModel.getUsername();
-                    }
-
-                    Log.e(TAG, "userModel : " + getUser.toString());
-
-                    getLogin(userModel);
-                } else {
-
-                    handler.postDelayed(r, 1000); // 2초 뒤에 Runnable 객체 수행
-
-                }
-            } else {
-
-                handler.postDelayed(r, 1000); // 1초 뒤에 Runnable 객체 수행
-
-            }
+            getLogin(userModel);
             return true;
         }
 

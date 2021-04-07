@@ -48,27 +48,8 @@ public class ReservationProgressActivity extends BaseActivity {
 
                 if (resultCode == RESULT_OK) {
 
-                    try{
+                    //실시간 포인트 api
 
-                        cPoint = apiUtils.getUserPoint();
-
-                        binding.reservationProgressCurrentPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint) + "p");
-
-                        int chkPoint = cPoint - ePoint;
-                        binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(chkPoint));
-
-                        //예약가능
-                        if (chkPoint >= 0) {
-                            setPossibility();
-                        }
-                        //예약불가능
-                        else {
-                            setImpossibility();
-                        }
-
-                    }catch (Exception e){
-                        Log.e(TAG, "onActivityResult Exception : " + e);
-                    }
                 }
 
                 break;
@@ -186,40 +167,6 @@ public class ReservationProgressActivity extends BaseActivity {
         reservationModel.chargerId = chargerId;
         reservationModel.userId = ThisApplication.staticUserModel.getId();
         reservationModel.expectPoint = ePoint;
-
-        try {
-
-            ReservationModel model = apiUtils.goReservation(reservationModel);
-
-            //예약 성공
-            if(model != null){
-
-                if (ThisApplication.staticUserModel.getUserType().equals("Personal")) {
-                    SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("activity", "ChargerListActivity");
-                    editor.commit();
-                }
-
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-
-                finish();
-
-            }
-            //예약 실패
-            else{
-
-                Toast.makeText(ReservationProgressActivity.this, "예약에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-                isReservationBtnClick = false;
-                Log.e(TAG, "예약에 실패하였습니다.");
-
-            }
-
-        } catch (Exception e) {
-            isReservationBtnClick = false;
-            Log.e(TAG, "goReservation Exception : " + e);
-        }
 
     }
 }
