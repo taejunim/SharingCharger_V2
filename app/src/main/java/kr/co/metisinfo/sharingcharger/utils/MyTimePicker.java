@@ -3,10 +3,10 @@ package kr.co.metisinfo.sharingcharger.utils;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +49,9 @@ public class MyTimePicker extends TimePickerDialog {
 
         try {
 
-            Class<?> classForid = Class.forName("com.android.internal.R$id");
-            Field timePickerField = classForid.getField("timePicker");
-            mTimePicker = (TimePicker) findViewById(timePickerField.getInt(null));
-            Field field = classForid.getField("minute");
+            mTimePicker = findViewById(Resources.getSystem().getIdentifier("timePicker", "id", "android"));
+            NumberPicker minuteSpinner = findViewById(Resources.getSystem().getIdentifier("minute", "id", "android"));
 
-            NumberPicker minuteSpinner = (NumberPicker) mTimePicker.findViewById(field.getInt(null));
             minuteSpinner.setMinValue(0);
             minuteSpinner.setMaxValue((60 / TIME_PICKER_INTERVAL) - 1);
 
