@@ -108,8 +108,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     private long backKeyPressedTime = 0;
 
-    private CustomDialog reservationCancelDialog;
-
     Handler handler = new Handler();
 
     private String centerLocation;
@@ -305,8 +303,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         //예약취소 버튼 클릭
         binding.chgrDetailCancel.setOnClickListener(view -> {
 
-            showReservationDialog();
-
         });
 
         //충전기 즐겨찾기 추가
@@ -456,31 +452,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         }
     }
 
-    private void showReservationDialog() {
-
-        reservationCancelDialog = new CustomDialog(this, getString(R.string.m_cancel_reservation));
-
-        reservationCancelDialog.show();
-
-        reservationCancelDialog.findViewById(R.id.dialog_no_btn).setOnClickListener(view -> {
-
-            reservationCancelDialog.dismiss();
-        });
-
-        reservationCancelDialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
-
-            //예약취소
-
-        });
-    }
-
     @Override
     public void init() {
-
-        //가이드 수정
-//        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-//
-//        startActivity(intent);
 
         translateTop = AnimationUtils.loadAnimation(this, R.anim.translate_top);
         translateBottom = AnimationUtils.loadAnimation(this, R.anim.translate_bottom);
@@ -673,7 +646,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
 
-        int chargerId = -1;
+        int chargerId;
 
         //페이지가 오픈 안될때도 있음
         //클릭 시 마다 false 초기화 해줌

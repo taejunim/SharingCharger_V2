@@ -63,81 +63,15 @@
 
         </activity>
 
-        <!-- MainPersonalActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.MainPersonalActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
         <!-- PasswordResetActivity -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.PasswordResetActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
-        <!-- WebViewActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBarTransparent" />
-
-        <!-- PasswordChangeActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.PasswordChangeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
-        <!-- BookmarkActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.BookmarkActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
-        <!-- PointChargeActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
-        <!-- ChargeHistoryActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.ChargeHistoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
-        <!-- PointHistoryActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.PointHistoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
-        <!-- ReservationProgressActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.ReservationProgressActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
-        <!-- HistorySearchConditionActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.HistorySearchConditionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBarTransparent" />
-
-        <!-- ChargerListActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.ChargerListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
         <!-- SettingActivity -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.SettingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
-        <!-- TimeSettingActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.TimeSettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
@@ -159,13 +93,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
-        <!-- view_pager -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.WelcomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBarTransparent" />
 
-        <!-- 충전기 찾기 - 블루투스 연결 -->
+        <!-- 충전기 조건검색 -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.MarkerSearchConditionActivity"
             android:screenOrientation="portrait"
@@ -174,18 +103,6 @@
         <!-- 키워드 검색 -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.SearchKeywordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
-        <!-- 충전기 검색 다이얼로그 -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.ChargerDialog"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeDialog" />
-
-        <!-- SearchBluetoothActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.SearchBluetoothActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 

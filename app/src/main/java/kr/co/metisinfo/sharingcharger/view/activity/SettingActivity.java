@@ -61,14 +61,9 @@ public class SettingActivity extends BaseActivity {
         // 결제 카드 설정 추가해야함
         binding.settingCardLayout.setOnClickListener(view -> goCardSetting());
 
-        //시간 설정
+        //소유주 시간 설정
         binding.settingTimeLayout.setOnClickListener(view -> {
 
-            Intent intent = new Intent(this, TimeSettingActivity.class);
-
-            startActivity(intent);
-
-            finish();
 
         });
 
@@ -94,10 +89,7 @@ public class SettingActivity extends BaseActivity {
 
     private void goChangePassword() {
 
-        Intent intent = new Intent(this, PasswordChangeActivity.class);
-        intent.putExtra("activityName", this.getLocalClassName());
-
-        startActivity(intent);
+        //비밀번호 변경
 
     }
 
@@ -129,11 +121,7 @@ public class SettingActivity extends BaseActivity {
 
         protected Boolean doInBackground(Integer... values) {
 
-            userModel.autoLogin = false;
-
-            Log.e(TAG, "logout userModel : " + userModel.toString());
-
-            userViewModel.updateUserPoint(userModel);
+            //user Model update
 
             //TODO 로그아웃시 추후에 로컬디비에 지우거나 업데이트 해야할 로직이 있으면 여기에!
 
@@ -159,14 +147,6 @@ public class SettingActivity extends BaseActivity {
                                 activityList.get(i).finish();
                                 activityList.remove(i);
                                 i--;
-                            }
-
-                        } else {
-
-                            //MainPersonal
-                            MainPersonalActivity MA = (MainPersonalActivity)MainPersonalActivity.MainPersonalActivity;
-                            if(MA != null && !MA.isFinishing()){
-                                MA.finish();
                             }
 
                         }

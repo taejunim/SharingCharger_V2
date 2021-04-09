@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -30,32 +29,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
-
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.model.MenuHeaderVO;
-import kr.co.metisinfo.sharingcharger.model.ReservationModel;
-import kr.co.metisinfo.sharingcharger.network.RetrofitFactory;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
-import kr.co.metisinfo.sharingcharger.view.activity.BookmarkActivity;
-import kr.co.metisinfo.sharingcharger.view.activity.ChargeHistoryActivity;
-import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
-import kr.co.metisinfo.sharingcharger.view.activity.PointHistoryActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;
-import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
-import retrofit2.Response;
-
-import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_SEARCH_KEYWORD;
 
 /**
  * 추상화 클래스로 해당 클래스를 extends 하면 initLayout(), initViewModel(), setOnClickListener(), init() 함수들을 추가해야됨
@@ -208,70 +190,25 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             if (groupPosition == 0) {
 
-                if (startClass.getClass().equals(ChargeHistoryActivity.class)) {
-                    layoutId.closeDrawer(GravityCompat.START);
-                    return false;
-                }
-
-
-                Intent intent = new Intent(startClass, ChargeHistoryActivity.class);
-
-                startActivity(intent);
-
-                close_navi();
-                //finish();
+                //충전기 이력
 
             } else if (groupPosition == 1) {
 
-                if (startClass.getClass().equals(PointHistoryActivity.class)) {
-                    layoutId.closeDrawer(GravityCompat.START);
-                    return false;
-                }
-
-                // 임시 주석이고,
-                // 메뉴에 자식 있는거 보여주기 위함.
-                // 추후에 자식으로 구성될 수 있어서
-                Intent intent = new Intent(startClass, PointHistoryActivity.class);
-
-                startActivity(intent);
-
-                close_navi();
+                //포인트 이력
 
             } else if (groupPosition == 2) {
 
-                if (startClass.getClass().equals(BookmarkActivity.class)) {
-                    layoutId.closeDrawer(GravityCompat.START);
-                    return false;
-                }
-
-                Intent intent = new Intent(startClass, BookmarkActivity.class);
-
-                //startActivity(intent);
-                startActivityForResult(intent, PAGE_SEARCH_KEYWORD);
-
-
-                close_navi();
+                //즐겨찾기
 
             } else if (groupPosition == 3) {
 
-                Intent tt = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:0647256800"));
-                startActivity(tt);
-
-                //Toast.makeText(startClass, "고객센터 자리", Toast.LENGTH_LONG).show();
+                //고객센터
 
             } else if (groupPosition == 4) {
 
                 //회원 증명서 뷰 띄우기
-                //http://101.101.219.230/Peter
 
-                Intent intent = new Intent(startClass, WebViewActivity.class);
-
-                intent.putExtra("getTagName", "setting");
-                startActivity(intent);
-
-                close_navi();
             }
-
 
             return false;
         });
@@ -358,6 +295,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void show_settings(View view) {
 
+        //설정화면
         Intent intent = new Intent(startClass, SettingActivity.class);
 
         startActivity(intent);
@@ -402,12 +340,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             //충전하기
             goCharging.setOnClickListener(view -> {
-
-                Intent intent = new Intent(startClass, PointChargeActivity.class);
-
-                startActivity(intent);
-
-                close_navi();
 
             });
 

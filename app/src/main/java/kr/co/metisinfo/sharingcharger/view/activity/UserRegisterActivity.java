@@ -18,8 +18,6 @@ import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 
-import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_PERSONAL_INFORMATION;
-
 public class UserRegisterActivity extends BaseActivity {
 
     private static final String TAG = UserRegisterActivity.class.getSimpleName();
@@ -91,7 +89,6 @@ public class UserRegisterActivity extends BaseActivity {
                 String phone = binding.registerPhoneInput.getText().toString().trim();
                 Log.e(TAG, "phone : " + phone);
 
-                //인증요청 api
 
             }
 
@@ -99,22 +96,13 @@ public class UserRegisterActivity extends BaseActivity {
 
         binding.registerPersonalInfo1Btn.setOnClickListener(view -> {
             Log.e(TAG, "btn1");
-
-            Intent intent = new Intent(this, WebViewActivity.class);
-
-            intent.putExtra("getTagName", "PersonalInfo1");
-            intent.putExtra("titleName", "개인정보 동의여부");
-            startActivityForResult(intent, PAGE_PERSONAL_INFORMATION);
+            //개인정보
 
         });
 
         binding.registerPersonalInfo2Btn.setOnClickListener(view -> {
 
-            Intent intent = new Intent(this, WebViewActivity.class);
-
-            intent.putExtra("getTagName", "PersonalInfo2");
-            intent.putExtra("titleName", "개인정보 처리방침 동의여부");
-            startActivityForResult(intent, PAGE_PERSONAL_INFORMATION);
+            //개인정보 처리방침
 
         });
 
@@ -172,7 +160,6 @@ public class UserRegisterActivity extends BaseActivity {
             userModel.collectUserDataFlag = true;
             userModel.privacyPolicyFlag = true;
 
-            //회원가입 api
 
         } else {
 
@@ -197,7 +184,7 @@ public class UserRegisterActivity extends BaseActivity {
 
             binding.registerEmailInput.setText("");
             binding.registerEmailInput.requestFocus();
-            Toast.makeText(this, R.string.login_email, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
         } else if (!CommonUtils.isValidEmail(binding.registerEmailInput.getText().toString())) {
@@ -237,13 +224,13 @@ public class UserRegisterActivity extends BaseActivity {
         } else if (binding.registerPwInput.getText().toString().equals("")) {        // 비번 입력 하지 않았을 경우
 
             binding.registerPwInput.requestFocus();
-            Toast.makeText(this, R.string.login_password, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "비밀번호를 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
         } else if (!Pattern.matches(pwPattern, binding.registerPwInput.getText().toString())) {    // 비번 입력 하지 않았을 경우
 
             binding.registerPwInput.requestFocus();
-            Toast.makeText(this, R.string.m_register_pw_hint, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "비밀번호는 영문, 숫자, 특수 문자 포함하여 최소 6자 이상 16자리 이하로 설정하셔야합니다.", Toast.LENGTH_LONG).show();
 
             return false;
         } else if (binding.registerConfirmPwInput.getText().toString().equals("")) { // 비번 확인 입력 하지 않았을 경우

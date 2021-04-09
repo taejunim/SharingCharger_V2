@@ -6,7 +6,9 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.databinding.DataBindingUtil;
+
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityUserRegisterBinding;
@@ -54,8 +56,6 @@ public class PasswordResetActivity extends BaseActivity {
                 String phone = binding.registerPhoneInput.getText().toString().trim();
                 Log.e(TAG, "phone : " + phone);
 
-                //인증번호 api
-
             }
         });
     }
@@ -67,7 +67,7 @@ public class PasswordResetActivity extends BaseActivity {
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
 
         binding.registerPersonalInfoLayout.setVisibility(View.INVISIBLE);
-        binding.registerBtn.setText(R.string.change_password_btn);
+        binding.registerBtn.setText("비밀번호 변경하기");
         binding.registerPwTitle.setVisibility(View.INVISIBLE);
         binding.registerPwTitleStar.setVisibility(View.INVISIBLE);
         binding.registerPwInput.setVisibility(View.INVISIBLE);
@@ -102,7 +102,7 @@ public class PasswordResetActivity extends BaseActivity {
 
             binding.registerEmailInput.setText("");
             binding.registerEmailInput.requestFocus();
-            Toast.makeText(this, "아이디 또는 이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "아이디; 또는 이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
         }
@@ -133,13 +133,6 @@ public class PasswordResetActivity extends BaseActivity {
 
         if (validationCheck()) {
 
-            Intent intent = new Intent(this, PasswordChangeActivity.class);
-            intent.putExtra("activityName", this.getLocalClassName());
-
-            intent.putExtra("userEmail", binding.registerEmailInput.getText().toString());
-
-            startActivity(intent);
-            finish();
         }
 
     }
