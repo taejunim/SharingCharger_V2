@@ -53,13 +53,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-
-    //
     implementation files('libs/ble_sdk_charzin_v25_jeju.aar')
     implementation 'com.nabinbhandari.android:permissions:3.7'
-    //
-
-
 
     // design library
     implementation "com.google.android.material:material:1.2.1"
@@ -78,9 +73,6 @@ dependencies {
     // 글리드 gif 이미지
     implementation 'com.github.bumptech.glide:glide:3.7.0'
 
-    // Add dependency
-//    implementation 'com.crashlytics.sdk.android:crashlytics:17.2.2'
-
     // Room components
     implementation "androidx.room:room-runtime:2.2.5"
     annotationProcessor "androidx.room:room-compiler:2.2.5"
@@ -92,7 +84,6 @@ dependencies {
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
-    
 
     // network library
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -111,10 +102,6 @@ dependencies {
 
     // androidx 리사이클러 뷰
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-/*
-
-    implementation 'com.github.jjongkwon2:BluetoothLibrary:1.1.1'
-*/
 
     // 권한 허가
     implementation 'gun0912.ted:tedpermission:2.0.0'
@@ -124,5 +111,4 @@ dependencies {
 
     implementation group: 'com.kakao.sdk', name: 'kakaonavi', version: project.KAKAO_SDK_VERSION
 
-//    compile files('libs/ble_sdk_charzin_v23.aar')
 }

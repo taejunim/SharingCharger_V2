@@ -10,7 +10,7 @@ import kr.co.metisinfo.sharingcharger.base.DBConstants;
 import kr.co.metisinfo.sharingcharger.db.dao.UserDAO;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 
-@Database(entities = { UserModel.class}, version = 1)
+@Database(entities = { UserModel.class}, version = 1, exportSchema = false)
 
 public abstract class RoomDatabaseInfo extends RoomDatabase implements DBConstants {
 
