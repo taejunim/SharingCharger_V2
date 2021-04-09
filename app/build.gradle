@@ -55,7 +55,7 @@ dependencies {
 
 
     //
-    compile files('libs/ble_sdk_charzin_v25_jeju.aar')
+    implementation files('libs/ble_sdk_charzin_v25_jeju.aar')
     implementation 'com.nabinbhandari.android:permissions:3.7'
     //
 
