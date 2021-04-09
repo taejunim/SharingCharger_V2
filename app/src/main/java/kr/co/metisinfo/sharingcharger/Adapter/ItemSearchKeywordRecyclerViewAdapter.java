@@ -62,7 +62,7 @@ public class ItemSearchKeywordRecyclerViewAdapter extends RecyclerView.Adapter<I
 
         binding.layout.setOnClickListener(view -> {
 
-            keywordInterface.onClickAddr(model, position);
+            keywordInterface.onClickSearchKeyword(model, position);
         });
 
     }

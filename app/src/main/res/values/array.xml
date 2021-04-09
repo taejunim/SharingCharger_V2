@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <array name="array_dot_active">
-        <item>#3498DB</item>
-        <item>#3498DB</item>
-        <item>#3498DB</item>
-        <item>#3498DB</item>
-    </array>
-
-    <array name="array_dot_inactive">
-        <item>#E0E0E0</item>
-        <item>#E0E0E0</item>
-        <item>#E0E0E0</item>
-        <item>#E0E0E0</item>
-    </array>
-
     <array name="array_distance_radius">
         <item>전체</item>
         <item>3 km</item>
@@ -31,9 +17,7 @@
     </string-array>
 
     <string-array name="history_charging"/>
-
     <string-array name="history_point"/>
-
     <string-array name="favorite"/>
     <string-array name="customer_center"/>
     <string-array name="membership"/>

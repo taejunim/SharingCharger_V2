@@ -218,7 +218,7 @@ public class SearchKeywordActivity extends BaseActivity implements SearchKeyword
     }
 
     @Override
-    public void onClickAddr(Object obj, int position) {
+    public void onClickSearchKeyword(Object obj, int position) {
 
         SearchKeywordModel model = (SearchKeywordModel) obj;
 

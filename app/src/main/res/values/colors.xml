@@ -26,7 +26,6 @@
     <color name="white_gray">#EAEAEA</color>
 
     <color name="thick_blue">#0081C5</color>
-    <!--    지우기-->
 
     <style name="edit_txt2" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_width">match_parent</item>

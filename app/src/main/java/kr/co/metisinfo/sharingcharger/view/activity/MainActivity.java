@@ -47,7 +47,6 @@ import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityMainBinding;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
-import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.model.SearchKeywordModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
@@ -58,7 +57,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private List<ChargerModel> personalChargeList = new ArrayList<>();  //소유주 충전기 리스트
 
     ApiUtils apiUtils = new ApiUtils();
 
@@ -74,7 +72,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     private ChargerModel clickChargerModel;
 
     private ArrayList<ChargerModel> chargerList = new ArrayList<>();    //충전기 리스트
-    private ReservationModel reservationModel;
 
     private boolean isCurrentLocation = false;  // 현위치로 이동 여부
 

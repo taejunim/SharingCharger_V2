@@ -9,12 +9,6 @@ public class Constants {
     //검색 api 사용시 REST API 키 사용해야함
     public static final String KAKAO_SERCH_KEYWORD_KEY = "4332dce3f2f8d3ee87e31884c5c5523d";
 
-    /* 실서버 */
-//    public static final String DEV_HOST = "http://211.43.13.173";
-//    public static final String REAL_HOST = "http://211.43.13.173";
-//    public static final String DAILY_DEV_HOST = "http://211.43.13.173";
-//    public static final String DAILY_REAL_HOST = "http://211.43.13.173";
-
     /* 테스트 서버 */
     public static final String DEV_HOST = "http://211.253.37.97:8101";
     public static final String REAL_HOST = "http://211.253.37.97:8101";
