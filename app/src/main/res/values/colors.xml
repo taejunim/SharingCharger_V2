@@ -27,12 +27,4 @@
 
     <color name="thick_blue">#0081C5</color>
 
-    <style name="edit_txt2" parent="@android:style/TextAppearance.Medium">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">50dp</item>
-        <item name="android:background">@drawable/edit_text_not_border</item>
-        <item name="android:paddingStart">15dp</item>
-        <item name="android:paddingEnd">0dp</item>
-    </style>
-
 </resources>

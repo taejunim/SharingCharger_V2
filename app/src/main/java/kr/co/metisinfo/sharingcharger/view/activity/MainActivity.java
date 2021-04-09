@@ -95,8 +95,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     private double locationLat = Constants.currentLocationLat;  //위도 , Y
     private double locationLng = Constants.currentLocationLng;  //경도 , X
 
-    private String reservationTime;
-
     GlideDrawableImageViewTarget gifImage;
 
     MapPOIItem[] mapPOIItems;
@@ -160,19 +158,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     chargingEndII = data.getIntExtra("chargingEndII", -1);
 
                     reserveRadius = data.getStringExtra("reserveRadius");
-
-
-                    Log.e(TAG, "chargingStartYYYY: " + chargingStartYYYY);
-                    Log.e(TAG, "chargingStartMM: " + chargingStartMM);
-                    Log.e(TAG, "chargingStartDD: " + chargingStartDD);
-                    Log.e(TAG, "chargingStartHH: " + chargingStartHH);
-                    Log.e(TAG, "chargingStartII: " + chargingStartII);
-                    Log.e(TAG, "chargingEndYYYY: " + chargingEndYYYY);
-                    Log.e(TAG, "chargingEndMM: " + chargingEndMM);
-                    Log.e(TAG, "chargingEndDD: " + chargingEndDD);
-                    Log.e(TAG, "chargingEndHH: " + chargingEndHH);
-                    Log.e(TAG, "chargingEndII: " + chargingEndII);
-
 
                     String temp = data.getStringExtra("checkChange");
                     Log.e(TAG, "checkChange temp: " + temp);
@@ -338,16 +323,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             }
         });
 
-        /*
-         * 충전하기 클릭
-         * - 수정버전 Comment(2020.12.24. 재훈.)
-         * - 기존 예약하기 클릭에서 button txt를 충전하기로 변경.
-         * - 즉시충전/예약하기 구분에 따라 수정.
-         * - 즉시충전 -> 즉시충전 시 포인트 차감 등의 화면등을 생략하고 바로 충전기 검색 화면 이동.
-         * - 예약하기 -> 기존과 동일.
-         * - if else 문에서 if문 안에는 수정버전, else문 안에는 기존꺼 그대로.
-         */
-
         //충전하기 클릭
         binding.btnReservation.setOnClickListener(view -> {
 
@@ -488,13 +463,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     };
 
-    /*
-     * 20.12.29. 메인 시간세팅 수정.
-     * 기존에는 현재 시간이 아닌 00시 또는 30분으로 시간설정을 현재 시간으로 변경함.(기존것은 밑에 주석.)
-     */
     private void setTime() {
 
-        /*20.12.29. 현재시간으로 수정 START*/
+        /*현재시간으로 수정 START*/
         Calendar nowCal = Calendar.getInstance(Locale.getDefault());                                //시작시간을 위한 켈린더 선언
         Calendar addCal = Calendar.getInstance(Locale.getDefault());                                //이용시간 계산을 위한 켈린더 선언
 
@@ -511,7 +482,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         chargingEndDD = addCal.get(Calendar.DAY_OF_MONTH);
         chargingEndHH = addCal.get(Calendar.HOUR_OF_DAY);
         chargingEndII = addCal.get(Calendar.MINUTE);
-        /*20.12.29. 현재시간으로 수정 END*/
+        /*현재시간으로 수정 END*/
 
         //하단 시간 표시
         setTimeInit();
