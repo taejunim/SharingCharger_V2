@@ -149,16 +149,6 @@
             android:background="@drawable/dotted_line_white_20"
             android:orientation="horizontal">
 
-<!--            <ImageView
-                android:id="@+id/add_account_point"
-                android:layout_gravity="center"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginHorizontal="130dp"
-                tools:background="@mipmap/btn_point_account"
-                android:scaleType="fitXY"
-                android:contentDescription="TODO" />-->
-
             <ImageButton
                 android:id="@+id/add_account_point"
                 android:layout_gravity="center"
