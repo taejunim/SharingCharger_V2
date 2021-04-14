@@ -112,5 +112,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
+        <!-- 전자지갑 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.WalletActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
     </application>
+
 </manifest>

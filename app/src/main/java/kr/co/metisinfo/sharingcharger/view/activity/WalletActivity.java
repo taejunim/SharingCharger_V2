@@ -1,0 +1,44 @@
+package kr.co.metisinfo.sharingcharger.view.activity;
+
+import androidx.databinding.DataBindingUtil;
+
+import kr.co.metisinfo.sharingcharger.R;
+import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.databinding.ActivityWalletBinding;
+
+/**
+ * @ Class Name   : WalletActivity.java
+ * @ Modification : WALLET ACTIVITY CLASS
+ * @
+ * @ 최초 생성일      최초 생성자
+ * @ ---------    ---------
+ * @ 2021.04.14.    고재훈
+ * @
+ * @  수정일          수정자
+ * @ ---------    ---------
+ * @
+ **/
+public class WalletActivity extends BaseActivity {
+
+    ActivityWalletBinding binding;                                                                  //Databinding을 사용하기 위한 변수 선언
+
+    @Override
+    public void initLayout() {
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet);           //XML bind
+        changeStatusBarColor(false);
+    }
+
+    @Override
+    public void initViewModel() {}
+
+    @Override
+    public void setOnClickListener() {}
+
+    @Override
+    public void init() {
+
+        binding.includeHeader.txtTitle.setText("전자지갑");                                           //HEADER TXT SET
+    }
+
+}
