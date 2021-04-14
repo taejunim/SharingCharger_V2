@@ -38,6 +38,9 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.model.MenuHeaderVO;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;
+import kr.co.metisinfo.sharingcharger.view.activity.WalletActivity;
+
+import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_SEARCH_KEYWORD;
 
 /**
  * 추상화 클래스로 해당 클래스를 extends 하면 initLayout(), initViewModel(), setOnClickListener(), init() 함수들을 추가해야됨
@@ -190,11 +193,24 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             if (groupPosition == 0) {
 
-                //충전기 이력
+                //충전기 사용 이력
 
             } else if (groupPosition == 1) {
 
-                //포인트 이력
+                //전자지갑
+
+                if (startClass.getClass().equals(WalletActivity.class)) {
+                    layoutId.closeDrawer(GravityCompat.START);
+                    return false;
+                }
+
+                Intent intent = new Intent(startClass, WalletActivity.class);
+
+                //startActivity(intent);
+                startActivityForResult(intent, PAGE_SEARCH_KEYWORD);
+
+
+                close_navi();
 
             } else if (groupPosition == 2) {
 
@@ -202,11 +218,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             } else if (groupPosition == 3) {
 
-                //고객센터
+                //회원 증명서
 
             } else if (groupPosition == 4) {
 
-                //회원 증명서 뷰 띄우기
+                //고객센터
 
             }
 
@@ -260,31 +276,31 @@ public abstract class BaseActivity extends AppCompatActivity {
             listDataHeader.add(vo);
         }
 
-        // 충전 이력
+        // 충전기 사용 이력
         String[] historyCharging = getResources().getStringArray(R.array.history_charging);
         List<String> listHistoryCharging = Arrays.asList(historyCharging);
 
-        // 포인트 이력
-        String[] historyPoint = getResources().getStringArray(R.array.history_point);
-        List<String> listHistoryPoint = Arrays.asList(historyPoint);
+        // 전자지갑
+        String[] electWallet = getResources().getStringArray(R.array.elect_wallet);
+        List<String> listElectWallet = Arrays.asList(electWallet);
 
         // 즐겨찾기
         String[] favorite = getResources().getStringArray(R.array.favorite);
         List<String> listFavoriteCharger = Arrays.asList(favorite);
 
-        // 고객센터
-        String[] customerCenter = getResources().getStringArray(R.array.customer_center);
-        List<String> listCustomerCenter = Arrays.asList(customerCenter);
-
         // 회원 증명서
         String[] membership = getResources().getStringArray(R.array.membership);
         List<String> listMembership = Arrays.asList(membership);
 
+        // 고객센터
+        String[] customerCenter = getResources().getStringArray(R.array.customer_center);
+        List<String> listCustomerCenter = Arrays.asList(customerCenter);
+
         listDataChild.put(listDataHeader.get(0).getMenuHeaderNm(), listHistoryCharging);
-        listDataChild.put(listDataHeader.get(1).getMenuHeaderNm(), listHistoryPoint);
+        listDataChild.put(listDataHeader.get(1).getMenuHeaderNm(), listElectWallet);
         listDataChild.put(listDataHeader.get(2).getMenuHeaderNm(), listFavoriteCharger);
-        listDataChild.put(listDataHeader.get(3).getMenuHeaderNm(), listCustomerCenter);
-        listDataChild.put(listDataHeader.get(4).getMenuHeaderNm(), listMembership);
+        listDataChild.put(listDataHeader.get(3).getMenuHeaderNm(), listMembership);
+        listDataChild.put(listDataHeader.get(4).getMenuHeaderNm(), listCustomerCenter);
 
     }
 

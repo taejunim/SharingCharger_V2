@@ -8,19 +8,21 @@
         <item>40 km</item>
     </array>
 
+    <!-- side menu item SETTING START  -->
     <string-array name="nav_drawer_items">
-        <item>충전 이력</item>
-        <item>포인트 이력</item>
+        <item>충전기 사용 이력</item>
+        <item>전자지갑</item>
         <item>즐겨찾기</item>
-        <item>고객센터</item>
         <item>회원 증명서</item>
+        <item>고객센터</item>
     </string-array>
 
     <string-array name="history_charging"/>
-    <string-array name="history_point"/>
+    <string-array name="elect_wallet"/>
     <string-array name="favorite"/>
-    <string-array name="customer_center"/>
     <string-array name="membership"/>
+    <string-array name="customer_center"/>
+    <!-- side menu ITEM SETTING END  -->
 
     <string-array name="time_setting">
         <item>1 시간</item>
