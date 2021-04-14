@@ -43,18 +43,27 @@
     <string name="search_condition_title_charging">&#160;충전</string>
     <string name="main_charge_amt_key">충전 요금 : 시간당&#160;</string>
 
-    <!--충전기 조검검색-->
+    <!-- 예약진행-->
+    <string name="reservation_progress_title">예약 진행</string>
+    <string name="reservation_progress_precautions">※ 예약 전 주의사항</string>
+    <string name="reservation_progress_txt">예약완료 버튼 클릭 시 포인트가 차감됩니다. 포인트 부족시에는 포인트를 충전 후 예약을 진행하여 주시기 바랍니다.</string>
+
+    <!-- 충전기 조검검색-->
     <string name="search_condition_start_date">충전 시작 일시</string>
     <string name="search_condition_end_date">충전 시간</string>
     <string name="search_condition_radius_range">범위</string>
     <string name="search_condition_go_charging">즉시 충전</string>
     <string name="search_condition_reserve_charging">예약 충전</string>
 
+
+    <!-- 충전기 검색-->
+    <string name="search_device">충전기 검색</string>
+
     <!-- 메인 검색-->
     <string name="search_condition_my_place">내위치중심</string>
     <string name="search_condition_map_place">지도중심</string>
 
-    <!-- 기타 -->
+    <!-- 기타-->
     <string name="map">지도</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
@@ -64,10 +73,8 @@
     <string name="time_countdown">03:00</string>
     <string name="from_to">&#160;~&#160;</string>
     <string name="charge">충전</string>
-
-    <!-- 기본 값 -->
     <string name="minute30">30분</string>
 
-    <!-- 메세지 -->
+    <!-- 메세지-->
     <string name="m_password_confirm_text">비밀번호를 변경하시겠습니까?</string>
 </resources>

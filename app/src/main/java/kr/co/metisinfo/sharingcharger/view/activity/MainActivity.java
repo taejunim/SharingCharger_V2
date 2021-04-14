@@ -108,6 +108,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     private String centerLocation;
 
 
+    // true : 즉시충전, false : 예약충전
     private boolean checkChange = true;
 
     private String searchKeyword = "";
@@ -249,6 +250,11 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         //마커 표시
         createDefaultMarker(binding.mapView);
+
+        //test 예약 있을때
+        binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
+        binding.layoutReservationInfo.setVisibility(View.VISIBLE);
+        //test
     }
 
     @Override
@@ -271,6 +277,11 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         //충전시작 버튼 클릭
         binding.chgrDetailStart.setOnClickListener(view -> {
+
+            //test 충전기검색화면
+            Intent intent = new Intent(this, SearchChargerActivity.class);
+            startActivity(intent);
+            //test
 
             /*
              * 1. 소유주 or 사용자 확인
@@ -327,6 +338,11 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         binding.btnReservation.setOnClickListener(view -> {
 
             Log.e(TAG, "충전기 연결 : ");
+            //test
+            Intent intent = new Intent(MainActivity.this, ReservationProgressActivity.class);
+            startActivityForResult(intent, Constants.PAGE_RESERVE);
+            //test
+
             /*
              * 1. 소유주의 충전기일 경우 바로 소유주화면이동
              * 2. 즉시충전/예약하기 구분
