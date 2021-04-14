@@ -131,9 +131,19 @@ public class PasswordResetActivity extends BaseActivity {
 
     private void passwordResetConfirm(Context context) {
 
-        if (validationCheck()) {
 
-        }
+        // validationCheck 체크 하고 화면 이동
+//        if (validationCheck()) {
+//
+//        }
+
+        //test
+        Intent intent = new Intent(getApplicationContext(), PasswordChangeActivity.class);
+
+        intent.putExtra("activityName","Reset");
+        startActivity(intent);
+        finish();
+        //test
 
     }
 

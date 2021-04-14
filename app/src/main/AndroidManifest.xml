@@ -63,6 +63,12 @@
 
         </activity>
 
+        <!-- PasswordChangeActivity -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.PasswordChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
+
         <!-- PasswordResetActivity -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.PasswordResetActivity"

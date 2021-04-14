@@ -210,16 +210,6 @@
 
                     </FrameLayout>
 
-
-<!--                    <ImageView-->
-<!--                        android:id="@+id/image_battery"-->
-<!--                        android:layout_width="45dp"-->
-<!--                        android:layout_height="45dp"-->
-<!--                        android:layout_centerVertical="true"-->
-<!--                        android:layout_marginStart="15dp"-->
-<!--                        android:background="@mipmap/battery_white"-->
-<!--                        android:contentDescription="@string/image_description" />-->
-
                     <RelativeLayout
                         android:id="@+id/layout_reservation_time"
                         android:layout_width="wrap_content"
@@ -441,21 +431,6 @@
 
                         </FrameLayout>
 
-
-<!--                        <ImageButton-->
-<!--                            android:id="@+id/btn_navi_detail"-->
-<!--                            android:layout_width="48dp"-->
-<!--                            android:layout_height="48dp"-->
-<!--                            android:layout_alignBaseline="@id/txt_chgr__detail_nm"-->
-<!--                            android:layout_alignParentEnd="true"-->
-<!--                            android:layout_marginStart="0dp"-->
-<!--                            android:layout_marginTop="10dp"-->
-<!--                            android:layout_marginEnd="20dp"-->
-<!--                            android:background="@mipmap/navi_btn"-->
-<!--                            android:button="@android:color/transparent"-->
-<!--                            android:contentDescription="@string/image_description"-->
-<!--                            android:rotation="45" />-->
-
                         <TextView
                             android:id="@+id/txt_chgr_detail_amt_key"
                             android:layout_width="wrap_content"
@@ -511,9 +486,7 @@
                 </RelativeLayout>
                 <!-- 예약 클릭시-->
 
-
             </RelativeLayout>
-
 
             <!-- 마커 클릭시-->
 
@@ -577,18 +550,6 @@
                             android:layout_marginEnd="0dp"/>
 
                     </FrameLayout>
-
-<!--                    <ImageButton-->
-<!--                        android:id="@+id/btn_navi"-->
-<!--                        android:layout_width="48dp"-->
-<!--                        android:layout_height="48dp"-->
-<!--                        android:layout_alignParentEnd="true"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:background="@mipmap/navi_btn"-->
-<!--                        android:button="@android:color/transparent"-->
-<!--                        android:contentDescription="@string/image_description"-->
-<!--                        android:rotation="45" />-->
-
 
                     <TextView
                         android:id="@+id/txt_chgr_addr_nm"
