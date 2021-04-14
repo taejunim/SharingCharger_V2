@@ -13,17 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/image_description"
-            tools:background="@drawable/intro_1440"
+            tools:background="@mipmap/intro_1440"
             android:scaleType="fitXY"/>
-
-
-<!--        <ImageView-->
-<!--            android:id="@+id/image_loading"-->
-<!--            android:layout_width="252dp"-->
-<!--            android:layout_height="252dp"-->
-<!--            android:contentDescription="@string/image_description"-->
-<!--            tools:background="@drawable/intro" />-->
-
 
     </RelativeLayout>
 

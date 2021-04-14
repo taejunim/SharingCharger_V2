@@ -143,7 +143,7 @@ public class SearchChargerActivity extends BaseActivity {
 
         binding.imageLoading.setVisibility(View.VISIBLE);
         gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-        Glide.with(this).load(R.drawable.spinner_loading).into(gifImage);
+        Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
 
         //해당페이지 이벤트 막기
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

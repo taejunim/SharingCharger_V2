@@ -681,7 +681,7 @@
                 android:layout_height="64dp"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:src="@drawable/loading" />
+                android:src="@mipmap/spinner_loading" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

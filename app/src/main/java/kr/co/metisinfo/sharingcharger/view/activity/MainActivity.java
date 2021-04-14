@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     binding.editSearch.setText("");
 
                     gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-                    Glide.with(this).load(R.drawable.spinner_loading).into(gifImage);
+                    Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
 
                     reserveChargingMinute = data.getIntExtra("chargingMinute", -1);
 
@@ -855,7 +855,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         chargerList.clear();
 
         gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-        Glide.with(this).load(R.drawable.spinner_loading).into(gifImage);
+        Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
 
         SearchAddress();
 

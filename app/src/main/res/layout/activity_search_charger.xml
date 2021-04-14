@@ -163,7 +163,7 @@
             android:layout_centerVertical="true"
             android:visibility="invisible"
             android:background="@android:color/transparent"
-            android:src="@drawable/spinner_loading" />
+            android:src="@mipmap/spinner_loading" />
 
         <Button
             android:id="@+id/btn_search_device"

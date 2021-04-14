@@ -100,7 +100,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
         changeStatusBarColor(false);
 
         GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-        Glide.with(this).load(R.drawable.intro_1440).into(gifImage);
+        Glide.with(this).load(R.mipmap.intro_1440).into(gifImage);
     }
 
     @Override
