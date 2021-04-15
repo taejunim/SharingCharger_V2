@@ -89,8 +89,10 @@ public class SettingActivity extends BaseActivity {
 
     private void goChangePassword() {
 
-        //비밀번호 변경
+        Intent intent = new Intent(this, PasswordChangeActivity.class);
+        intent.putExtra("activityName", this.getLocalClassName());
 
+        startActivity(intent);
     }
 
     private void goCardSetting() {

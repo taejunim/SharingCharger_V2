@@ -80,8 +80,15 @@ public class SearchChargerActivity extends BaseActivity {
 
         binding.btnSearchDevice.setOnClickListener(view -> {
 
-            showLoading();
-            getBLEScan();
+//            showLoading();
+//            getBLEScan();
+
+            //test
+            Intent intent = new Intent(SearchChargerActivity.this, ChargingActivity.class);
+            startActivity(intent);
+
+            finish();
+            //test
 
         });
     }
