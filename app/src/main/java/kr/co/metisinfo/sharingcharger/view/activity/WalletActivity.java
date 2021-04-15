@@ -33,7 +33,10 @@ public class WalletActivity extends BaseActivity {
     public void initViewModel() {}
 
     @Override
-    public void setOnClickListener() {}
+    public void setOnClickListener() {
+
+        binding.includeHeader.btnBack.setOnClickListener(view -> finish());                         //HEADER BACK BTN
+    }
 
     @Override
     public void init() {

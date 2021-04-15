@@ -1,18 +1,17 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
-import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityWebViewBinding;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
@@ -107,6 +106,7 @@ public class WebViewActivity extends BaseActivity {
 
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void init() {
 
@@ -123,7 +123,8 @@ public class WebViewActivity extends BaseActivity {
         if (getTagName.equals("setting")) {
             binding.personalBtn.setVisibility(View.GONE);
             //http://118.67.132.235:8081/Alice
-            url = " http://118.67.132.235:8081/" + ThisApplication.staticUserModel.email;
+            //url = " http://118.67.132.235:8081/" + ThisApplication.staticUserModel.email;
+            //url = " http://118.67.132.235:8081/" + "test@email.com";
 
             binding.personalWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             binding.personalWebView.setMinimumHeight(800);
