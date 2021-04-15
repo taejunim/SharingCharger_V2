@@ -131,6 +131,7 @@
                     android:layout_marginTop="5dp"
                     android:background="#e0e0e0"
                     android:text="포인트 이력"
+                    android:onClick="go_point_history"
                     android:textColor="@color/black"/>
 
             </LinearLayout>

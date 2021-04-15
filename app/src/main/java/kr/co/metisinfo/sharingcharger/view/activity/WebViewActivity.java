@@ -124,7 +124,6 @@ public class WebViewActivity extends BaseActivity {
             binding.personalBtn.setVisibility(View.GONE);
             //http://118.67.132.235:8081/Alice
             //url = " http://118.67.132.235:8081/" + ThisApplication.staticUserModel.email;
-            //url = " http://118.67.132.235:8081/" + "test@email.com";
 
             binding.personalWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             binding.personalWebView.setMinimumHeight(800);

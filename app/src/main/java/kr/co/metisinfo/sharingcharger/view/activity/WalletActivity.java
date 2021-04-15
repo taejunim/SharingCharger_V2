@@ -1,5 +1,8 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import android.content.Intent;
+import android.view.View;
+
 import androidx.databinding.DataBindingUtil;
 
 import kr.co.metisinfo.sharingcharger.R;
@@ -42,6 +45,17 @@ public class WalletActivity extends BaseActivity {
     public void init() {
 
         binding.includeHeader.txtTitle.setText("전자지갑");                                           //HEADER TXT SET
+    }
+
+    /**
+     * 포인트 사용이력 화면 이동
+     * @param view
+     */
+    public void go_point_history(View view) {
+
+        //포인트 사용이력 화면
+        Intent intent = new Intent(this, PointHistoryActivity.class);
+        startActivity(intent);
     }
 
 }
