@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/bookmark_top_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            style="@style/margin_start_end_20">
+
+            <TextView
+                android:id="@+id/bookmark_name_txt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="7"
+                android:text="관광대학교 주차장"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/bookmark_navigation_btn"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_weight="2"
+                android:background="@color/blue_button"
+                android:text="@string/bookmark_navigation"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bookmark_bottom_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            style="@style/margin_start_end_20"
+            android:layout_below="@+id/bookmark_top_linear_layout">
+
+            <TextView
+                android:id="@+id/bookmark_address_txt"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="7"
+                android:textColor="@color/black"
+                android:paddingRight="20dp"
+                android:text="제주 제주시 관광대학로 111(아라일동)제주 제주시 관광대학로 111(아라일동"
+                android:gravity="center_vertical"/>
+
+            <Button
+                android:id="@+id/bookmark_delete_btn"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_weight="2"
+                android:layout_gravity="center_vertical"
+                android:background="@color/red"
+                android:text="@string/bookmark_delete"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/bookmark_bottom_linear_layout"
+            android:background="@color/whitegray"/>
+
+    </RelativeLayout>
+
+</layout>

@@ -135,5 +135,35 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
+        <!-- 즐겨찾기 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.BookmarkActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarTransparent" />
+
+        <!-- 충전기 이력 화면 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.ChargeHistoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarTransparent" />
+
+        <!-- 포인트 이력 화면 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.PointHistoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarTransparent" />
+
+        <!-- 이력 조건 검색 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.HistorySearchConditionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarTransparent" />
+
+        <!-- WebView -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarTransparent" />
+
     </application>
 </manifest>

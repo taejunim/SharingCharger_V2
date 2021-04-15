@@ -55,13 +55,21 @@
     <string name="search_condition_go_charging">즉시 충전</string>
     <string name="search_condition_reserve_charging">예약 충전</string>
 
-
     <!-- 충전기 검색-->
     <string name="search_device">충전기 검색</string>
 
     <!-- 메인 검색-->
     <string name="search_condition_my_place">내위치중심</string>
     <string name="search_condition_map_place">지도중심</string>
+
+    <!-- 이력조회-->
+    <string name="charge_history_title">충전 이력</string>
+    <string name="point_history_title">포인트 이력</string>
+
+    <!-- 즐겨찾기-->
+    <string name="bookmark_title">즐겨찾기</string>
+    <string name="bookmark_navigation">지도보기</string>
+    <string name="bookmark_delete">삭제</string>
 
     <!-- 기타-->
     <string name="map">지도</string>
