@@ -57,7 +57,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-
     ApiUtils apiUtils = new ApiUtils();
 
     Animation translateTop;

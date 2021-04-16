@@ -1,23 +1,24 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.charzin.evzsdk.EvzBLEData;
-import com.charzin.evzsdk.EvzBLEScan;
+import com.charzin.evzsdk.EvzBluetooth;
+import com.evzlife.android.blescanner.EVZScanCallbacks;
+import com.evzlife.android.blescanner.EVZScanManager;
+import com.evzlife.android.blescanner.EVZScanResult;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
-import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.databinding.ActivitySearchChargerBinding;
 
 public class SearchChargerActivity extends BaseActivity {
@@ -26,32 +27,17 @@ public class SearchChargerActivity extends BaseActivity {
 
     ActivitySearchChargerBinding binding;
 
-    EvzBLEScan mEBS;
-    ArrayList<EvzBLEData> mArrayBLEData = new ArrayList<>();
     GlideDrawableImageViewTarget gifImage;
 
+    //임시 5분충전
+    String reservationTime = "5";
 
-    String reservationTime;
+    EvzBluetooth mEvzBluetooth;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Constants.PAGE_SEARCH_CHARGER) {
-            if (resultCode == RESULT_OK) {
-
-                assert data != null;
-                passingMCurData(data.getParcelableExtra("mCurData"));
-
-            } else {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                Glide.with(this).onDestroy();
-
-                viewEnable(true);
-
-            }
-        }
-    }
+    //스캔 관련.
+    private EVZScanManager mScanner;
+    List<EVZScanResult> mScData;
+    EVZScanResult mEVZScanResult;
 
     @Override
     public void initLayout() {
@@ -64,9 +50,7 @@ public class SearchChargerActivity extends BaseActivity {
         binding.includeHeader.btnBack.setVisibility(View.INVISIBLE);
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
 
-
-
-        reservationTime = getIntent().getStringExtra("reservationTime");
+        // reservationTime = getIntent().getStringExtra("reservationTime");
 
     }
 
@@ -79,16 +63,9 @@ public class SearchChargerActivity extends BaseActivity {
     public void setOnClickListener() {
 
         binding.btnSearchDevice.setOnClickListener(view -> {
-
-//            showLoading();
-//            getBLEScan();
-
-            //test
-            Intent intent = new Intent(SearchChargerActivity.this, ChargingActivity.class);
-            startActivity(intent);
-
-            finish();
-            //test
+            Log.e(TAG, "btnSearchDevice");
+            showLoading();
+            getBLEScan();
 
         });
     }
@@ -96,55 +73,60 @@ public class SearchChargerActivity extends BaseActivity {
     @Override
     public void init() {
 
-        mEBS = new EvzBLEScan(SearchChargerActivity.this);
+        mScanner = new EVZScanManager();
+        mEvzBluetooth = new EvzBluetooth(SearchChargerActivity.this);
 
-    }
+        mEvzBluetooth.setBluetooth(true);
 
-    public void viewEnable(boolean enable) {
-
-        binding.btnSearchDevice.setEnabled(enable);
     }
 
     public void getBLEScan() {
 
-        mEBS.BLEScan(list -> {
+        mScanner.startScan(new EVZScanCallbacks() {
 
-            mArrayBLEData = list;
-            EvzBLEData model = null;
+            @Override
+            public void onScanFinished(@NonNull List<EVZScanResult> results) {
+                mScData = results;
+                if (mScData.size() > 0) {
+                    Log.e(TAG, "onScan > 0");
 
-            // 예약된 bleNumber와 같으면 충전화면 바로 이동
-            if (mArrayBLEData.size() != 0) {
+                    for (int i = 0; i < mScData.size(); i++) {
+                        Log.e(TAG, "BLE : " + mScData.get(i).getDevice().getAddress());
+                    }
 
-                for (int i = 0; i < mArrayBLEData.size(); i++) {
-
-
+                    // api 적용시 예약된 BLE로 바로 보내줌
+                    mEVZScanResult = mScData.get(0);
+                    passingMEVZScanResult();
+                } else {
+                    Log.e(TAG, "onScan = 0");
+                    scanFailed();
                 }
+
             }
 
-            mArrayBLEData.clear();
-            if(model != null){
-                mArrayBLEData.add(model);
+            @Override
+            public void onScanFailed(int errorCode) {
+                Log.e(TAG, "onScanFailed");
+                scanFailed();
             }
-
-            if(mArrayBLEData.size() == 1){
-
-                passingMCurData(mArrayBLEData.get(0));
-
-            }else{
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setTitle("충전기 검색");
-                builder.setMessage("연결 가능한 충전기를 찾지 못했습니다.\n다시 검색하시겠습니까?");
-
-                builder.setPositiveButton("확인", (dialog, which) -> getBLEScan());
-
-                builder.setNegativeButton("취소", (dialog, which) -> finish());
-                builder.show();
-            }
-
         });
 
     }
+
+    private void scanFailed() {
+        hideLoading();
+        CustomDialog customDialog = new CustomDialog(this, "연결 가능한 충전기를 찾지 못했습니다.\n다시 검색하시겠습니까?");
+
+        customDialog.show();
+
+        customDialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
+            Log.e(TAG, "customDialog_ok_btn");
+            customDialog.dismiss();
+            showLoading();
+            getBLEScan();
+        });
+    }
+
 
     private void showLoading() {
 
@@ -156,23 +138,26 @@ public class SearchChargerActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        viewEnable(false);
-
     }
 
-    private void passingMCurData(EvzBLEData mCurData) {
+    private void hideLoading() {
+        binding.imageLoading.setVisibility(View.INVISIBLE);
 
-//        Intent intent = new Intent(SearchBluetoothActivity.this, ChargerListActivity.class);
-//
-//        intent.putExtra("mCurData", mCurData);
-//
-//        intent.putExtra("reservationModel", reservationModel);
-//
-//        intent.putExtra("reservationTime", reservationTime);
-//
-//        startActivity(intent);
-//
-//        finish();
+        //이벤트 다시 풀기
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void passingMEVZScanResult() {
+
+        Intent intent = new Intent(SearchChargerActivity.this, ChargingActivity.class);
+
+        intent.putExtra("mEVZScanResult", mEVZScanResult);
+
+        intent.putExtra("reservationTime", reservationTime);
+
+        startActivity(intent);
+
+        finish();
     }
 
     @Override
@@ -182,7 +167,12 @@ public class SearchChargerActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
 
+        if (mScanner != null) {
+            mScanner.release();
+            mScanner = null;
+        }
+
+        super.onDestroy();
     }
 }
