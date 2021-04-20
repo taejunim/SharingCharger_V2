@@ -280,6 +280,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             //test 충전기검색화면
             Intent intent = new Intent(this, SearchChargerActivity.class);
             startActivity(intent);
+
+            binding.reservationDetailCloseImg.performClick();
             //test
 
             /*

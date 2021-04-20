@@ -53,6 +53,12 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">#f3f3f3</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
+    </style>
+
     <style name="edit_txt2" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>

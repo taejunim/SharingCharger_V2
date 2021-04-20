@@ -127,7 +127,6 @@ public class SearchChargerActivity extends BaseActivity {
         });
     }
 
-
     private void showLoading() {
 
         binding.imageLoading.setVisibility(View.VISIBLE);
