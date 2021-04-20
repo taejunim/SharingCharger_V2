@@ -52,6 +52,7 @@
     <string name="search_condition_start_date">충전 시작 일시</string>
     <string name="search_condition_end_date">충전 시간</string>
     <string name="search_condition_radius_range">범위</string>
+    <string name="search_condition_type">타입</string>
     <string name="search_condition_go_charging">즉시 충전</string>
     <string name="search_condition_reserve_charging">예약 충전</string>
 

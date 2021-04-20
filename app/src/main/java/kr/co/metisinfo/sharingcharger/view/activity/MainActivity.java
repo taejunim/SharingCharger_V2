@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     private int reserveChargingMinute = 240; // 기본 4시간, 90 => 1시간 30분
     private String reserveRadius = "3 km";         // 예약 반경 거리
+    private String reserveType = "BLE";            // 예약 충전기 타입
 
     private int chargingStartYYYY;          // 충전 시작 년도
     private int chargingStartMM;            // 충전 시작 월
@@ -158,6 +159,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     chargingEndII = data.getIntExtra("chargingEndII", -1);
 
                     reserveRadius = data.getStringExtra("reserveRadius");
+                    reserveType = data.getStringExtra("reserveType");
 
                     String temp = data.getStringExtra("checkChange");
                     Log.e(TAG, "checkChange temp: " + temp);
@@ -536,7 +538,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         intent.putExtra("chargingEndII", chargingEndII);            // 충전 종료 분
 
         intent.putExtra("reserveRadius", reserveRadius);              // 예약 반경 거리
-
+        intent.putExtra("reserveType", reserveType);              // 예약 충전기 타입
+        
         intent.putExtra("checkChange", String.valueOf(checkChange));     //즉시, 예약
 
         Log.e(TAG, "checkChange : " + checkChange);

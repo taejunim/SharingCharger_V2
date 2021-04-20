@@ -8,6 +8,11 @@
         <item>40 km</item>
     </array>
 
+    <array name="array_charging_type">
+        <item>BLE</item>
+        <item>MODEM</item>
+    </array>
+
     <!-- side menu item SETTING START  -->
     <string-array name="nav_drawer_items">
         <item>충전기 사용 이력</item>

@@ -73,6 +73,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
     private int selectEndII = 0;
 
     private String reserveRadius = "";
+    private String reserveType = "";
 
     private int oldPosition = 0;
 
@@ -82,6 +83,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
     Calendar maxDate = Calendar.getInstance(Locale.getDefault());
 
     List<CharSequence> distanceEntry = new ArrayList<>();
+    List<CharSequence> typeEntry = new ArrayList<>();
     ArrayList<String> timeList = new ArrayList<>();
 
     int startWeek = 0;
@@ -123,12 +125,17 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
         binding.dropdown3.setOnClickListener(view -> binding.spinnerLengthRange.performClick());
 
+        binding.txtType.setOnClickListener(view -> binding.spinnerLengthType.performClick());
+
+        binding.dropdown4.setOnClickListener(view -> binding.spinnerLengthType.performClick());
+
         binding.layoutEDate.setOnClickListener(view -> binding.spinnerTimeRange.performClick());
 
         binding.includeHeader.btnReload.setOnClickListener(view -> {
 
             binding.spinnerTimeRange.setSelection(7);  // 기본 4시간
             binding.spinnerLengthRange.setSelection(1); // 거리 Spinner에서 두번째 값을 강제 선택
+            binding.spinnerLengthType.setSelection(0);
             chargeBtnClick(binding.goCharging);
 
         });
@@ -158,6 +165,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
                 intent.putExtra("chargingEndII", Integer.parseInt(selectEndFullDate.substring(10, 12)));
 
                 intent.putExtra("reserveRadius", binding.spinnerLengthRange.getSelectedItem().toString());
+                intent.putExtra("reserveType", binding.spinnerLengthType.getSelectedItem().toString());
 
                 Log.e(TAG, "btnOk checkChange : " + checkChange);
 
@@ -177,9 +185,13 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
         distanceEntry = Arrays.asList(getResources().getTextArray(R.array.array_distance_radius));
 
+        typeEntry = Arrays.asList(getResources().getTextArray(R.array.array_charging_type));
+
         setTimeList();
 
         ArrayAdapter<CharSequence> lengthAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, distanceEntry);
+
+        ArrayAdapter<CharSequence> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, typeEntry);
 
         ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, timeList);
 
@@ -214,6 +226,19 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        binding.spinnerLengthType.setAdapter(typeAdapter);
+        binding.spinnerLengthType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                binding.txtType.setText(typeEntry.get(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -422,6 +447,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
             chargingEndII = getIntent().getIntExtra("chargingEndII", -1);
 
             reserveRadius = getIntent().getStringExtra("reserveRadius");
+            reserveType = getIntent().getStringExtra("reserveType");
 
             String temp = getIntent().getStringExtra("checkChange");
 
@@ -488,6 +514,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         binding.spinnerTimeRange.setSelection(timeList.indexOf(DateUtils.generateTimeToString(chargingMinute).trim()), true); //시간 Spinner에서 선택된 시간 값을 강제 선택
 
         binding.spinnerLengthRange.setSelection(distanceEntry.indexOf(reserveRadius), true);
+        binding.spinnerLengthType.setSelection(typeEntry.indexOf(reserveType), true);
 
         Log.e(TAG, "checkChange isInit else : " + checkChange);
         if (checkChange) {

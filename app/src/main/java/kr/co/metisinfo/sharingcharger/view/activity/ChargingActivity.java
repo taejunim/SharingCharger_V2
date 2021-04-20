@@ -141,6 +141,8 @@ public class ChargingActivity extends BaseActivity {
             BLEConnect();
         }
 
+        BLEDisConnect();
+
     }
 
     //AlertDialog 추가
