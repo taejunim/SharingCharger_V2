@@ -47,23 +47,23 @@ public class UserRepository  {
         return userDAO.selectAutoLoginUser(autoLogin);
     }
 
-    public UserModel selectGetLoginUser(String email, String password) {
-
-        return userDAO.selectGetLoginUser(email, password);
-    }
-
-    public UserModel selectGetLoginUserEmail(String email) {
-
-        return userDAO.selectGetLoginUserEmail(email);
-    }
-
-    public void updateUserPoint(UserModel userModel) {
-        executor.execute(() -> userDAO.updateUserPoint(userModel) );
-    }
-
-    public void deleteUser(String email) {
-
-        executor.execute(() -> userDAO.deleteUser(email));
-    }
+//    public UserModel selectGetLoginUser(String email, String password) {
+//
+//        return userDAO.selectGetLoginUser(email, password);
+//    }
+//
+//    public UserModel selectGetLoginUserEmail(String email) {
+//
+//        return userDAO.selectGetLoginUserEmail(email);
+//    }
+//
+//    public void updateUserPoint(UserModel userModel) {
+//        executor.execute(() -> userDAO.updateUserPoint(userModel) );
+//    }
+//
+//    public void deleteUser(String email) {
+//
+//        executor.execute(() -> userDAO.deleteUser(email));
+//    }
 
 }

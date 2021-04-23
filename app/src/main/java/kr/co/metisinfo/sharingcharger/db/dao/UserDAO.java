@@ -16,22 +16,22 @@ public interface UserDAO extends BaseDAO<UserModel> {
             + " AND autoLogin = :autoLogin")
     UserModel selectAutoLoginUser(boolean autoLogin);
 
-    @Query("SELECT * FROM " + DBConstants.TABLE_USER
-            + " WHERE 1=1 "
-            + " AND email = :email"
-            + " AND password = :password")
-    UserModel selectGetLoginUser(String email, String password);
-
-    @Query("SELECT * FROM " + DBConstants.TABLE_USER
-            + " WHERE 1=1 "
-            + " AND email = :email")
-    UserModel selectGetLoginUserEmail(String email);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateUserPoint(UserModel userModel);
-
-    @Query("DELETE FROM " + DBConstants.TABLE_USER
-            + " WHERE 1=1 "
-            + " AND email = :email")
-    void deleteUser(String email);
+//    @Query("SELECT * FROM " + DBConstants.TABLE_USER
+//            + " WHERE 1=1 "
+//            + " AND email = :email"
+//            + " AND password = :password")
+//    UserModel selectGetLoginUser(String email, String password);
+//
+//    @Query("SELECT * FROM " + DBConstants.TABLE_USER
+//            + " WHERE 1=1 "
+//            + " AND email = :email")
+//    UserModel selectGetLoginUserEmail(String email);
+//
+//    @Update(onConflict = OnConflictStrategy.REPLACE)
+//    void updateUserPoint(UserModel userModel);
+//
+//    @Query("DELETE FROM " + DBConstants.TABLE_USER
+//            + " WHERE 1=1 "
+//            + " AND email = :email")
+//    void deleteUser(String email);
 }

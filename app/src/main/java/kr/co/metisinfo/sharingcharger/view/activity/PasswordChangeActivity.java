@@ -114,7 +114,7 @@ public class PasswordChangeActivity extends BaseActivity {
 
                     Log.e(TAG, " 비밀번호 변경 api ");
 
-                    changePw(ThisApplication.staticUserModel.email);
+               //     changePw(ThisApplication.staticUserModel.email);
 
                     customDialog.dismiss();
 

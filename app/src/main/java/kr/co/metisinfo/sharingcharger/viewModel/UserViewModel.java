@@ -23,24 +23,24 @@ public class UserViewModel extends DisposableViewModel {
         return repository.selectAutoLoginUser(autoLogin);
     }
 
-    public UserModel selectGetLoginUser(String email, String password) {
-
-        return repository.selectGetLoginUser(email, password);
-    }
-
-    public UserModel selectGetLoginUserEmail(String email) {
-
-        return repository.selectGetLoginUserEmail(email);
-    }
-
-
-    public void updateUserPoint(UserModel userModel) {
-        repository.updateUserPoint(userModel);
-    }
-
-    public void deleteUser(String email) {
-
-        repository.deleteUser(email);
-    }
+//    public UserModel selectGetLoginUser(String email, String password) {
+//
+//        return repository.selectGetLoginUser(email, password);
+//    }
+//
+//    public UserModel selectGetLoginUserEmail(String email) {
+//
+//        return repository.selectGetLoginUserEmail(email);
+//    }
+//
+//
+//    public void updateUserPoint(UserModel userModel) {
+//        repository.updateUserPoint(userModel);
+//    }
+//
+//    public void deleteUser(String email) {
+//
+//        repository.deleteUser(email);
+//    }
 
 }

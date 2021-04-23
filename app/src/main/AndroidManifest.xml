@@ -99,6 +99,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
+        <!-- OwnerActivity -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.OwnerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
+
         <!-- 예약진행 -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.ReservationProgressActivity"
@@ -122,6 +128,12 @@
             android:name="kr.co.metisinfo.sharingcharger.view.activity.WalletActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
+
+        <!-- 충전기 검색 다이얼로그 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.ChargerDialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeDialog" />
 
         <!-- 충전기 검색 -->
         <activity

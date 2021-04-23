@@ -1,7 +1,9 @@
 package kr.co.metisinfo.sharingcharger.utils;
 
 import kr.co.metisinfo.sharingcharger.base.WebServiceAPI;
+import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.network.RetrofitFactory;
+import retrofit2.Response;
 
 public class ApiUtils {
 
@@ -13,13 +15,13 @@ public class ApiUtils {
     private CommonUtils cu = new CommonUtils();
 
     /**
-     * 로그인 정보
+     *  회원가입
      **/
-//    public Response<UserModel> login(UserModel model) throws Exception {
-//
-//        Response<UserModel> response = webServiceAPI.login(model).execute();
-//
-//        return response;
-//    }
+    public Response<Object> signUp(UserModel model) throws Exception {
+
+        Response<Object> response = webServiceAPI.signUp(model).execute();
+
+        return response;
+    }
 
 }

@@ -17,6 +17,7 @@ import kr.co.metisinfo.sharingcharger.databinding.ActivityUserRegisterBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
+import retrofit2.Response;
 
 public class UserRegisterActivity extends BaseActivity {
 
@@ -112,6 +113,12 @@ public class UserRegisterActivity extends BaseActivity {
 
                 isRegisterBtnClick = true;
 
+
+                //임시
+                isCertificationBtn = true;
+                checkPersonalInfo1 = true;
+                checkPersonalInfo2 = true;
+
                 userJoin();
             }
         });
@@ -149,22 +156,36 @@ public class UserRegisterActivity extends BaseActivity {
 
     private void userJoin() {
 
-        if (validationCheck()) {
+     //   if (validationCheck()) {
 
             UserModel userModel = new UserModel();
 
-            userModel.name = binding.registerNameInput.getText().toString();
-            userModel.email = binding.registerEmailInput.getText().toString();
-            userModel.password = binding.registerPwInput.getText().toString();
-            userModel.phone = binding.registerPhoneInput.getText().toString();
-            userModel.collectUserDataFlag = true;
-            userModel.privacyPolicyFlag = true;
+//            userModel.name = binding.registerNameInput.getText().toString();
+//            userModel.username = binding.registerEmailInput.getText().toString();
+//            userModel.password = binding.registerPwInput.getText().toString();
+//            userModel.phonenumber = binding.registerPhoneInput.getText().toString();
+
+            userModel.name = "aa";
+            userModel.username = "aaa";
+            userModel.password = "aaa";
+            userModel.phonenumber = "00000000000";
+            userModel.owner = "Gong Yoo";
+
+            try{
+                Response<Object> response = apiUtils.signUp(userModel);
+                Log.e(TAG,"=====response=====");
+                Log.e(TAG, response.toString());
+
+            }catch (Exception e){
+                Log.e(TAG,"userJoin Exception : "+ e);
+            }
 
 
-        } else {
 
-            isRegisterBtnClick = false;
-        }
+//        } else {
+//
+//            isRegisterBtnClick = false;
+//        }
 
     }
 

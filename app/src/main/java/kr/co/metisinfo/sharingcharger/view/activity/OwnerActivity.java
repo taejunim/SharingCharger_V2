@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -19,30 +22,38 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.charzin.evzsdk.EvzBLE;
 import com.charzin.evzsdk.EvzBLEData;
 import com.charzin.evzsdk.EvzBLETagData;
+import com.charzin.evzsdk.EvzBluetooth;
 import com.charzin.evzsdk.EvzProtocol;
 import com.charzin.evzsdk.EvzScan;
+import com.evzlife.android.blescanner.EVZScanCallbacks;
+import com.evzlife.android.blescanner.EVZScanManager;
+import com.evzlife.android.blescanner.EVZScanResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityChargingBinding;
-import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
-public class ChargingActivity extends BaseActivity {
+public class OwnerActivity extends BaseActivity {
 
-    private static final String TAG = ChargingActivity.class.getSimpleName();
+    private static final String TAG = OwnerActivity.class.getSimpleName();
 
     ActivityChargingBinding binding;
 
     GlideDrawableImageViewTarget gifImage;
 
-    ApiUtils apiUtils = new ApiUtils();
+    EvzBluetooth mEvzBluetooth;
+
+    //스캔 관련.
+    private EVZScanManager mScanner;
+    List<EVZScanResult> mScData;
 
     EvzBLE mEB;
     EvzBLEData mCurData = new EvzBLEData();
 
-    String ChargerTime = "30";
     final String testTag = "" + System.currentTimeMillis();
 
     //start 함수가 2번 돌아가기 때문에 한번으로 막아줘야함
@@ -55,9 +66,10 @@ public class ChargingActivity extends BaseActivity {
             // Connect 성공
             if (bd.getBoolean("Connect")) {
 
-                hideLoading();
+                Log.e(TAG,"Connect handler");
 
-                setAlertDialog("Connect","충전기 연결 성공","충전기와 연결되었습니다.");
+              //  BLEStart();
+                hideLoading();
 
             }else if(bd.getBoolean("Stop")) {
 
@@ -73,7 +85,15 @@ public class ChargingActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
+        if (requestCode == Constants.PAGE_SEARCH_CHARGER) {
+
+            if (resultCode == RESULT_OK) {
+                mCurData.mEVZScanResult = data.getParcelableExtra("mEVZScanResult");
+                mCurData.useTime = "2";
+                BLEConnect();
+            }else if(resultCode == RESULT_CANCELED){
+                hideLoading();
+            }
 
         }
     }
@@ -85,75 +105,96 @@ public class ChargingActivity extends BaseActivity {
 
         changeStatusBarColor(false);
 
-        //Evz BLE 컨트롤
-        mEB = new EvzBLE(ChargingActivity.this);
-        mCurData = new EvzBLEData();
-
     }
 
     @Override
     public void initViewModel() {
 
-        showLoading();
+        binding.includeHeader.txtTitle.setText("내 충전기 사용");
+        binding.includeHeader.layoutHeaderMenu.setBackground(getDrawable(R.mipmap.ico_edit2));
+        binding.includeHeader.layoutHeaderMenu.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 23, getResources().getDisplayMetrics());
 
+        binding.searchChargerBtn.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void setOnClickListener() {
 
-        binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
-
-        binding.includeHeader.btnBack.setOnClickListener(view -> finish());
-
-        // 충전 시작 버튼
+        //충전기 시작 버튼 누름
         binding.frameStart.setOnClickListener(view -> {
-            mCurData.useTime = "2";
-            showLoading();
-            BLEStart();
 
+            showLoading();
+            getBLEScan();
         });
 
-        // 충전 완료 버튼
+        //충전기 종료 버튼 누름
         binding.frameEnd.setOnClickListener(view -> {
             showLoading();
             BLEStop();
-
         });
 
-        //충전기 연결 버튼
-        binding.searchChargerBtn.setOnClickListener(view -> {
-
-            setAlertDialog("SearchCharger","충전기 검색","충전기를 다시 검색하시겠습니까?");
-
+        binding.customerCenterBtn.setOnClickListener(view -> {
+            BLEStart();
         });
+
     }
 
     @Override
     public void init() {
 
-        binding.includeHeader.txtTitle.setText("충전");
+        mScanner = new EVZScanManager();
+        mEvzBluetooth = new EvzBluetooth(OwnerActivity.this);
 
-        //사용자 화면에서는 필요없음, 소유주 화면 같이 사용함
-        binding.listTextDummy2.setVisibility(View.INVISIBLE);
-        binding.customerCenterBtn.setVisibility(View.INVISIBLE);
+        mEvzBluetooth.setBluetooth(true);
 
-        disableBtn();
+        //Evz BLE 컨트롤
+        mEB = new EvzBLE(OwnerActivity.this);
+        mCurData = new EvzBLEData();
 
-        //스캔데이터를 받어온다.
-        mCurData.mEVZScanResult = getIntent().getParcelableExtra("mEVZScanResult");
+        hideLoading();
 
-        if(mCurData != null){
-            BLEConnect();
-        }
+        chargerFrameClick(binding.frameStart);
 
         BLEDisConnect();
+
+    }
+
+    public void getBLEScan() {
+
+        mScanner.startScan(new EVZScanCallbacks() {
+
+            @Override
+            public void onScanFinished(@NonNull List<EVZScanResult> results) {
+                mScData = results;
+                if (mScData.size() > 0) {
+                    Log.e(TAG, "onScan > 0");
+
+                    Intent intent = new Intent(OwnerActivity.this, ChargerDialog.class);
+
+                    intent.putParcelableArrayListExtra("mScData", (ArrayList<? extends Parcelable>) mScData);
+
+                    startActivityForResult(intent, Constants.PAGE_SEARCH_CHARGER);
+
+                } else {
+                    Log.e(TAG, "onScan = 0");
+                    hideLoading();
+                }
+
+            }
+
+            @Override
+            public void onScanFailed(int errorCode) {
+                Log.e(TAG, "onScanFailed");
+                hideLoading();
+            }
+        });
 
     }
 
     //AlertDialog 추가
     public void setAlertDialog(String getType, String title, String message){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(ChargingActivity.this, R.style.AlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(OwnerActivity.this, R.style.AlertDialogStyle);
 
         builder.setCancelable(false);
         builder.setTitle(title);
@@ -165,21 +206,13 @@ public class ChargingActivity extends BaseActivity {
                 dialog.dismiss();
                 chargerFrameClick(binding.frameStart);
             }else if(getType.equals("Stop")){
-                finish();
-            }else{
-                Intent intent = new Intent(this, SearchChargerActivity.class);
-
-                startActivity(intent);
-
-                finish();
+                //finish();
+                startFlag = true;
+                chargerFrameClick(binding.frameStart);
+                dialog.dismiss();
             }
 
         });
-
-        if(getType.equals("SearchCharger")){
-            builder.setNegativeButton("취소", (dialog, which) -> {
-            });
-        }
 
         builder.show();
 
@@ -190,18 +223,18 @@ public class ChargingActivity extends BaseActivity {
 
         if (view.getId() == R.id.frame_start) {
 
-            binding.frameStart.setBackground(ContextCompat.getDrawable(ChargingActivity.this, R.drawable.border_blue_50));
+            binding.frameStart.setBackground(ContextCompat.getDrawable(OwnerActivity.this, R.drawable.border_blue_50));
             binding.frameStart.setEnabled(true);
 
-            binding.frameEnd.setBackground(ContextCompat.getDrawable(ChargingActivity.this, R.drawable.border_gray_50));
+            binding.frameEnd.setBackground(ContextCompat.getDrawable(OwnerActivity.this, R.drawable.border_gray_50));
             binding.frameEnd.setEnabled(false);
 
         } else if (view.getId() == R.id.frame_end) {
 
-            binding.frameStart.setBackground(ContextCompat.getDrawable(ChargingActivity.this, R.drawable.border_gray_50));
+            binding.frameStart.setBackground(ContextCompat.getDrawable(OwnerActivity.this, R.drawable.border_gray_50));
             binding.frameStart.setEnabled(false);
 
-            binding.frameEnd.setBackground(ContextCompat.getDrawable(ChargingActivity.this, R.drawable.border_red_50));
+            binding.frameEnd.setBackground(ContextCompat.getDrawable(OwnerActivity.this, R.drawable.border_red_50));
             binding.frameEnd.setEnabled(true);
         }
     }
@@ -214,16 +247,6 @@ public class ChargingActivity extends BaseActivity {
 
         binding.frameStart.setBackground(ContextCompat.getDrawable(this, R.drawable.border_gray_50));
         binding.frameStart.setEnabled(false);
-    }
-
-    /**
-     * 충전기 연결 버튼 비활성화
-     */
-    private void searchChargerBtnEnabled() {
-
-        binding.searchChargerBtn.setClickable(false);
-        binding.searchChargerBtn.setBackground(ContextCompat.getDrawable(ChargingActivity.this, R.drawable.button_border_gray));
-        binding.searchChargerBtn.setEnabled(false);
     }
 
     private void createMessage(String getType){
@@ -262,16 +285,17 @@ public class ChargingActivity extends BaseActivity {
             @Override
             public void Success() {
                 Log.e(TAG, "BLE Connect Success");
+                BLEGetTag();
 
                 new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
                     @Override
                     public void run() {
 
                         createMessage("Connect");
-                        BLEGetTag();
-
+                        BLEStart();
+                      //  BLEStart();
                     }
-                }, 2500);
+                }, 4000);
 
             }
 
@@ -289,9 +313,9 @@ public class ChargingActivity extends BaseActivity {
             @Override
             public void disConnect(int code) {
 
-                Toast.makeText(ChargingActivity.this,"BLEDisConnect",Toast.LENGTH_LONG).show();
+                Toast.makeText(OwnerActivity.this,"BLEDisConnect",Toast.LENGTH_LONG).show();
                 Log.e(TAG, "BLEDisConnect Code = "+code);
-                finish();
+                //finish();
 
             }
         });
@@ -333,7 +357,6 @@ public class ChargingActivity extends BaseActivity {
             public void Success() {
                 Log.e(TAG, "BLESetTag Success");
                 hideLoading();
-                searchChargerBtnEnabled();
                 chargerFrameClick(binding.frameEnd);
             }
 
@@ -351,12 +374,12 @@ public class ChargingActivity extends BaseActivity {
             @Override
             public void Success() {
                 Log.e(TAG, "BLEStop Success");
-
+                BLEGetTag();
                 new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
                     @Override
                     public void run() {
 
-                        BLEGetTag();
+                        BLEUserDis();
                         createMessage("Stop");
 
                     }
@@ -439,9 +462,16 @@ public class ChargingActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        mEB.Destroy();
+
+        if (mScanner != null) {
+            mScanner.release();
+            mScanner = null;
+        }
+
+        if(mEB != null){
+            mEB.Destroy();
+        }
+
         super.onDestroy();
-
     }
-
 }
