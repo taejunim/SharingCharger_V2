@@ -148,7 +148,7 @@ public class SearchChargerActivity extends BaseActivity {
 
     private void passingMEVZScanResult() {
 
-        Intent intent = new Intent(SearchChargerActivity.this, ChargingActivity.class);
+        Intent intent = new Intent(SearchChargerActivity.this, BLEChargingActivity.class);
 
         intent.putExtra("mEVZScanResult", mEVZScanResult);
 

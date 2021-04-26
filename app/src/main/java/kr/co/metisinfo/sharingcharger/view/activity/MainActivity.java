@@ -470,8 +470,10 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         //소유자일 경우 소유자 화면 이동
 
-        Intent intent = new Intent(this,OwnerActivity.class);
-        startActivity(intent);
+        //test
+        //Intent intent = new Intent(this,OwnerActivity.class);
+        //startActivity(intent);
+        //test
 
     }
 

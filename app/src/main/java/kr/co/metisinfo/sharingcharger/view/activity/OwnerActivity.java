@@ -157,6 +157,8 @@ public class OwnerActivity extends BaseActivity {
 
         BLEDisConnect();
 
+        BLEPlugState();
+
     }
 
     public void getBLEScan() {
@@ -342,11 +344,6 @@ public class OwnerActivity extends BaseActivity {
                 Log.e(TAG, "BLEStart Fail Code = "+code);
             }
 
-            @Override
-            public void unPlug(int i) {
-                hideLoading();
-                Log.e(TAG, "BLEStart unPlug Code = "+i);
-            }
         });
     }
 
@@ -393,11 +390,6 @@ public class OwnerActivity extends BaseActivity {
                 Log.e(TAG, "BLEStop Fail Code = "+code);
             }
 
-            @Override
-            public void unPlug(int code) {
-                hideLoading();
-                Log.e(TAG, "BLEStop unPlug Code = "+code);
-            }
         });
     }
 
@@ -456,6 +448,18 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void Fail(int i, String s) {
                 Log.e(TAG, "BLEUserDis Fail");
+            }
+        });
+    }
+
+    //plug 상태값 확인
+    public void BLEPlugState(){
+        mEB.BLEPlugState(new EvzProtocol.BLEPlugState() {
+            @Override
+            public void PlugState(int code) {
+                Toast.makeText(getApplicationContext(), "충전기에 플러그가 꼽혀있지 않습니다.\n충전기에 플러그를 꼽고 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+                hideLoading();
+                Log.e(TAG, "PlugState Plug = "+ code);
             }
         });
     }

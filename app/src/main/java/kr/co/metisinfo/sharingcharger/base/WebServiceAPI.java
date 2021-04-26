@@ -3,8 +3,10 @@ package kr.co.metisinfo.sharingcharger.base;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface WebServiceAPI {
@@ -14,52 +16,68 @@ public interface WebServiceAPI {
     Call<Object> signUp(@Body UserModel user);
 
     // 로그인
-    // /user​/v1​/login
+    @POST("/user/v1/login")
+    Call<Object> login(@Body UserModel user);
 
     // 비밀번호 변경(설정)
-    // /user/v1/password
+    @PUT("/user/v1/password")
+    Call<Object> passwordChange(@Body UserModel user);
 
     // 충전기 목록
-    // /shared-charger​/v1
+    @GET("/shared-charger/v1")
+    Call<Object> getChargers(@Body UserModel user);
 
     // 선택된 충전기 상태
-    // /shared-charger/v1/charger-status
+    @POST("/shared-charger/v1/charger-status")
+    Call<Object> getChargerStatus(@Body UserModel user);
 
     // 잔여 포인트
-    // /ElectricWalletmanagement/PointLookup
+    @GET("/ElectricWalletmanagement/PointLookup")
+    Call<Object> pointLookup(@Body UserModel user);
 
     // 차감포인트
-    // /shared-charger​/v1​/points
+    @GET("/shared-charger/v1/points")
+    Call<Object> getEstimatedPoints(@Body UserModel user);
 
     // 예약완료
-    // /shared-charger/v1/reservation
+    @POST("/shared-charger/v1/reservation")
+    Call<Object> insertReservation(@Body UserModel user);
 
     // 예약취소
-    // /shared-charger​/v1​/reservation
+    @DELETE("/shared-charger/v1/reservation")
+    Call<Object> deleteReservation(@Body UserModel user);
 
     // 충전시작
-    // /shared-charger/v1/charger-use-certification
+    @POST("/shared-charger/v1/charger-use-certification")
+    Call<Object> chargerUseCertification(@Body UserModel user);
 
     // 충전종료
-    // /shared-charger/v1/end-charging
+    @POST("/shared-charger/v1/end-charging")
+    Call<Object> endCharging(@Body UserModel user);
 
     // 비정상 충전종료
-    // /shared-charger/v1/charge-not-terminated
+    @POST("/shared-charger/v1/charge-not-terminated")
+    Call<Object> chargeNotTerminated(@Body UserModel user);
 
     // 충전이력
-    // /shared-charger/v1/history
+    @GET("/shared-charger/v1/history")
+    Call<Object> getChargerUsageHistory(@Body UserModel user);
 
     // 포인트 이력
-    // /ElectricWalletmanagement/PointUsageHistory
+    @GET("/ElectricWalletmanagement/PointUsageHistory")
+    Call<Object> getPointUsageHistory(@Body UserModel user);
 
     // 포인트 구매
-    // /ElectricWalletmanagement​/BuyPoints
+    @POST("/ElectricWalletmanagement/BuyPoints")
+    Call<Object> buyPoints(@Body UserModel user);
 
     // 회원 증명서
-    // /user/v1/proofs
+    @GET("/user/v1/proofs")
+    Call<Object> getProofs(@Body UserModel user);
 
     // 회원 탈퇴
-    // /user/v1/withdrawal
+    @POST("/user/v1/withdrawal")
+    Call<Object> withdrawal(@Body UserModel user);
 
     // 키워드 검색
     @GET("/v2/local/search/keyword.json")

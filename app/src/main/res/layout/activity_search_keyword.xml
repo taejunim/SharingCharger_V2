@@ -15,11 +15,11 @@
             android:padding="5dp">
 
             <Button
-                android:id="@+id/btn_map"
+                android:id="@+id/btn_search_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_border_blue"
-                android:text="@string/map"
+                android:text="@string/search"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -32,7 +32,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/btn_map"
+                app:layout_constraintLeft_toRightOf="@+id/btn_search_title"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:gravity="center"

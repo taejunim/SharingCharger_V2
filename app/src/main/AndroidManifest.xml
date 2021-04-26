@@ -141,9 +141,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
-        <!-- 충전 화면 -->
+        <!-- BLE 충전 화면 -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.ChargingActivity"
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.BLEChargingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
