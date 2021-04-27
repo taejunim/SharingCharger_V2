@@ -14,28 +14,16 @@
             android:layout_marginTop="5dp"
             android:padding="5dp">
 
-            <Button
-                android:id="@+id/btn_search_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_border_blue"
-                android:text="@string/search"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/edit_search_keyword"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
             <EditText
                 android:id="@+id/edit_search_keyword"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/btn_search_title"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:gravity="center"
+                android:hint="장소를 입력하여 주십시오."
+                android:paddingLeft="20dp"
                 android:inputType="text"
                 android:singleLine="true"
                 android:maxLines="1"
@@ -44,7 +32,6 @@
                 android:background="@color/header_dummy"
                 app:layout_constraintRight_toLeftOf="@+id/btn_close"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <Button
                 android:id="@+id/btn_close"
@@ -55,7 +42,6 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:background="@mipmap/icon_x"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

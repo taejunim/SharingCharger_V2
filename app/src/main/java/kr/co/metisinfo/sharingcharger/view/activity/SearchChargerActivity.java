@@ -1,9 +1,13 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -39,6 +43,18 @@ public class SearchChargerActivity extends BaseActivity {
     List<EVZScanResult> mScData;
     EVZScanResult mEVZScanResult;
 
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {  // 실행이 끝난후 확인 가능
+            Bundle bd = msg.getData();
+
+            // bluetooth 활성화
+            if (bd.getBoolean("bluetooth")) {
+
+                getBLEScan();
+            }
+        }
+    };
+
     @Override
     public void initLayout() {
 
@@ -63,9 +79,26 @@ public class SearchChargerActivity extends BaseActivity {
     public void setOnClickListener() {
 
         binding.btnSearchDevice.setOnClickListener(view -> {
-            Log.e(TAG, "btnSearchDevice");
+
+            /*
+            * 블루투스 연결해제 후 충전기 검색 버튼 클릭 시 에러남
+            * 강제로 활성화 시킨 후 2.5초 후 scan 시작함(바로 시작 시 에러남)
+            * */
+            mEvzBluetooth.setBluetooth(true);
             showLoading();
-            getBLEScan();
+
+            new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
+                @Override
+                public void run() {
+                    Message msg = mHandler.obtainMessage();  //사용할 핸들러를 이용해서 보낼 메시지 객체 생성
+                    Bundle b1 = new Bundle();    //메시지를 담을 번들 생성
+                    b1.putBoolean("bluetooth", true);    //번들에 메시지 추가
+                    msg.setData(b1);    //메세지에 번들을 넣는다.
+
+                    mHandler.sendMessage(msg);     //메세지를 핸들러로 넘긴다.
+
+                }
+            }, 2500);
 
         });
     }
