@@ -1,4 +1,4 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.userManagement;
 
 import android.view.View;
 
@@ -10,10 +10,11 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityBookmarkBinding;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.view.activity.CustomDialog;
 
-public class BookmarkActivity extends BaseActivity{
+public class ChargerFavoriteActivity extends BaseActivity{
 
-    private static final String TAG = BookmarkActivity.class.getSimpleName();
+    private static final String TAG = ChargerFavoriteActivity.class.getSimpleName();
 
     ActivityBookmarkBinding binding;
 

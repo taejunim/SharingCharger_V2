@@ -1,4 +1,4 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.digitalWalletManagement;
 
 import android.content.Intent;
 import android.view.View;
@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityWalletBinding;
+import kr.co.metisinfo.sharingcharger.digitalWalletManagement.PointUseHistoryActivity;
 
 /**
  * @ Class Name   : WalletActivity.java
@@ -54,7 +55,7 @@ public class WalletActivity extends BaseActivity {
     public void go_point_history(View view) {
 
         //포인트 사용이력 화면
-        Intent intent = new Intent(this, PointHistoryActivity.class);
+        Intent intent = new Intent(this, PointUseHistoryActivity.class);
         startActivity(intent);
     }
 

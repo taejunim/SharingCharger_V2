@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,15 +29,14 @@ import java.util.ArrayList;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.Constants;
-import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityIntroBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.service.GpsService;
 import kr.co.metisinfo.sharingcharger.service.NetworkStatus;
+import kr.co.metisinfo.sharingcharger.userManagement.SignInActivity;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.NetworkStatusInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
-import retrofit2.Response;
 
 public class IntroActivity extends BaseActivity implements NetworkStatusInterface {
 
@@ -231,7 +229,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
     Runnable r = () -> {
 
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
 
         startActivity(intent);
 

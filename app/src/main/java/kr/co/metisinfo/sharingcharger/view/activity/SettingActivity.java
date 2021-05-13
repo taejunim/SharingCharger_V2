@@ -13,6 +13,8 @@ import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivitySettingBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
+import kr.co.metisinfo.sharingcharger.userManagement.ChangePasswordActivity;
+import kr.co.metisinfo.sharingcharger.userManagement.SignInActivity;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
 
 public class SettingActivity extends BaseActivity {
@@ -89,7 +91,7 @@ public class SettingActivity extends BaseActivity {
 
     private void goChangePassword() {
 
-        Intent intent = new Intent(this, PasswordChangeActivity.class);
+        Intent intent = new Intent(this, ChangePasswordActivity.class);
         intent.putExtra("activityName", this.getLocalClassName());
 
         startActivity(intent);
@@ -153,7 +155,7 @@ public class SettingActivity extends BaseActivity {
 
                         }
                     }
-                    Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(SettingActivity.this, SignInActivity.class);
 
                     startActivity(intent);
 

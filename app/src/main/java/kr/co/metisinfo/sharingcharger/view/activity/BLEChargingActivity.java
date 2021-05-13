@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityChargingBinding;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
@@ -169,7 +170,7 @@ public class BLEChargingActivity extends BaseActivity {
             }else if(getMsgType.equals("Stop")){
                 finish();
             }else{
-                Intent intent = new Intent(this, SearchChargerActivity.class);
+                Intent intent = new Intent(this, ChargerSearchActivity.class);
 
                 startActivity(intent);
 

@@ -1,4 +1,4 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.charger;
 
 import android.content.Intent;
 import android.util.Log;
@@ -7,18 +7,15 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityReservationProgressBinding;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
-public class ReservationProgressActivity extends BaseActivity {
+public class ChargerReservationActivity extends BaseActivity {
 
-    private static final String TAG = ReservationProgressActivity.class.getSimpleName();
+    private static final String TAG = ChargerReservationActivity.class.getSimpleName();
 
     ActivityReservationProgressBinding binding;
 

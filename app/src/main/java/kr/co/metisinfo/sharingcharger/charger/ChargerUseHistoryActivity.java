@@ -1,7 +1,8 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.charger;
 
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,28 +11,28 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import kr.co.metisinfo.sharingcharger.Adapter.ItemPointHistoryRecyclerViewAdapter;
+import kr.co.metisinfo.sharingcharger.Adapter.ItemChargeHistoryRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityHistoryBinding;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
+import kr.co.metisinfo.sharingcharger.view.activity.HistorySearchConditionActivity;
 
-import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_POINT_HISTORY;
+import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_CHARGE_HISTORY;
 
-public class PointHistoryActivity extends BaseActivity {
+public class ChargerUseHistoryActivity extends BaseActivity {
 
-    private static final String TAG = PointHistoryActivity.class.getSimpleName();
+    private static final String TAG = ChargerUseHistoryActivity.class.getSimpleName();
 
     ActivityHistoryBinding binding;
 
-    private ItemPointHistoryRecyclerViewAdapter historyAdapter;
+    private ItemChargeHistoryRecyclerViewAdapter historyAdapter;
 
-    //List<PointModel> list = new ArrayList<>();
+//    List<RechargeModel> list = new ArrayList<>();
 
     private int index = 1;
 
-    private String getType = "ALL";
     private String getArray = "DESC";
 
     private String getStartDate = "";
@@ -65,7 +66,9 @@ public class PointHistoryActivity extends BaseActivity {
     @Override
     public void initViewModel() {
 
-        //현재포인트 가져오기
+        binding.currentPointTxt.setVisibility(View.GONE);
+        binding.currentPointTitle.setVisibility(View.GONE);
+        binding.historyView.setVisibility(View.GONE);
 
     }
 
@@ -79,7 +82,7 @@ public class PointHistoryActivity extends BaseActivity {
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                //Log.e(TAG,"onScrollStateChanged");
+
                 super.onScrollStateChanged(recyclerView, newState);
             }
 
@@ -106,15 +109,13 @@ public class PointHistoryActivity extends BaseActivity {
                                         public void run() {
                                             // 해당 작업을 처리함.
                                             index++;
-
-                                            getPointHistoryList(getStartDate, getEndDate, getArray, getType, index);
+                                            getChargeHistoryList(getStartDate, getEndDate, getArray, index);
                                         }
                                     });
                                 }
                             }).start();
                         }
                     }
-
                 } catch (Exception e) {
                     Log.e(TAG, "onScrolled Exception : " + e);
                 }
@@ -127,7 +128,7 @@ public class PointHistoryActivity extends BaseActivity {
     @Override
     public void init() {
 
-        binding.includeHeader.txtTitle.setText(R.string.point_history_title);
+        binding.includeHeader.txtTitle.setText(R.string.charge_history_title);
         binding.includeHeader.layoutHeaderMenu.setBackground(ContextCompat.getDrawable(this, R.mipmap.menu_list));
 
         initAdapter();
@@ -138,21 +139,26 @@ public class PointHistoryActivity extends BaseActivity {
 
         binding.chargeHistoryRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        historyAdapter = new ItemPointHistoryRecyclerViewAdapter(this);
+        historyAdapter = new ItemChargeHistoryRecyclerViewAdapter();
 
         binding.chargeHistoryRecycler.setAdapter(historyAdapter);
 
         getStartDate = setDate(1);
         getEndDate = setDate(0);
-
-        getPointHistoryList(getStartDate, getEndDate, getArray, getType, index);
+        getChargeHistoryList(getStartDate, getEndDate, getArray, index);
 
     }
 
-    private void getPointHistoryList(String startDate, String endDate, String sort, String getType, int pageIndex) {
+    private void getChargeHistoryList(String startDate, String endDate, String getType, int index) {
 
-        //historyAdapter.setList(list);
+        try {
 
+            //list 담기
+            //historyAdapter.setList(list);
+
+        } catch (Exception e) {
+            Log.e(TAG, "getChargeHistoryList Exception : " + e);
+        }
     }
 
     private void showSearchCondition() {
@@ -162,13 +168,12 @@ public class PointHistoryActivity extends BaseActivity {
         //HistorySearchConditionActivity를 같이 쓰기때문에 부모 activity로 구분해야함
         intent.putExtra("activityName", this.getLocalClassName());
 
-        intent.putExtra("getType", getType);
         intent.putExtra("getArray", getArray);
         intent.putExtra("getMonthType", getMonthType);
         intent.putExtra("getStartDate", getStartDate);
         intent.putExtra("getEndDate", getEndDate);
 
-        startActivityForResult(intent, PAGE_POINT_HISTORY);
+        startActivityForResult(intent, PAGE_CHARGE_HISTORY);
 
         overridePendingTransition(R.anim.translate_top, R.anim.translate_bottom);
     }

@@ -1,4 +1,4 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.userManagement;
 
 import android.content.Context;
 import android.content.Intent;
@@ -138,7 +138,7 @@ public class PasswordResetActivity extends BaseActivity {
 //        }
 
         //test
-        Intent intent = new Intent(getApplicationContext(), PasswordChangeActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ChangePasswordActivity.class);
 
         intent.putExtra("activityName","Reset");
         startActivity(intent);

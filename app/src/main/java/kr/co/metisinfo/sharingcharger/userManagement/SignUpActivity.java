@@ -1,4 +1,4 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.userManagement;
 
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -19,9 +19,9 @@ import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import retrofit2.Response;
 
-public class UserRegisterActivity extends BaseActivity {
+public class SignUpActivity extends BaseActivity {
 
-    private static final String TAG = UserRegisterActivity.class.getSimpleName();
+    private static final String TAG = SignUpActivity.class.getSimpleName();
 
     ActivityUserRegisterBinding binding;
 

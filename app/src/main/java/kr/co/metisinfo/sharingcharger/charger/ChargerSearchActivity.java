@@ -1,4 +1,4 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.charger;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -24,10 +23,12 @@ import java.util.List;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivitySearchChargerBinding;
+import kr.co.metisinfo.sharingcharger.view.activity.BLEChargingActivity;
+import kr.co.metisinfo.sharingcharger.view.activity.CustomDialog;
 
-public class SearchChargerActivity extends BaseActivity {
+public class ChargerSearchActivity extends BaseActivity {
 
-    private static final String TAG = SearchChargerActivity.class.getSimpleName();
+    private static final String TAG = ChargerSearchActivity.class.getSimpleName();
 
     ActivitySearchChargerBinding binding;
 
@@ -107,7 +108,7 @@ public class SearchChargerActivity extends BaseActivity {
     public void init() {
 
         mScanner = new EVZScanManager();
-        mEvzBluetooth = new EvzBluetooth(SearchChargerActivity.this);
+        mEvzBluetooth = new EvzBluetooth(ChargerSearchActivity.this);
 
         mEvzBluetooth.setBluetooth(true);
 
@@ -181,7 +182,7 @@ public class SearchChargerActivity extends BaseActivity {
 
     private void passingMEVZScanResult() {
 
-        Intent intent = new Intent(SearchChargerActivity.this, BLEChargingActivity.class);
+        Intent intent = new Intent(ChargerSearchActivity.this, BLEChargingActivity.class);
 
         intent.putExtra("mEVZScanResult", mEVZScanResult);
 

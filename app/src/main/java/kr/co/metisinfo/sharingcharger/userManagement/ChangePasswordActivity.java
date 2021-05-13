@@ -1,4 +1,4 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.userManagement;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +10,6 @@ import android.widget.Toast;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
-
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import kr.co.metisinfo.sharingcharger.R;
@@ -23,12 +18,12 @@ import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityPasswordChangeBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.view.activity.CustomDialog;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
-import retrofit2.Response;
 
-public class PasswordChangeActivity extends BaseActivity {
+public class ChangePasswordActivity extends BaseActivity {
 
-    private static final String TAG = PasswordChangeActivity.class.getSimpleName();
+    private static final String TAG = ChangePasswordActivity.class.getSimpleName();
 
     ActivityPasswordChangeBinding binding;
 

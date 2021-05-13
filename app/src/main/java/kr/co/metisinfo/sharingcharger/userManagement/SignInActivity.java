@@ -1,4 +1,4 @@
-package kr.co.metisinfo.sharingcharger.view.activity;
+package kr.co.metisinfo.sharingcharger.userManagement;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,18 +12,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
-import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityLoginBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.service.NetworkStatus;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.view.activity.MainActivity;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.NetworkStatusInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
-import retrofit2.Response;
 
-public class LoginActivity extends BaseActivity implements NetworkStatusInterface {
+public class SignInActivity extends BaseActivity implements NetworkStatusInterface {
 
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = SignInActivity.class.getSimpleName();
 
     ActivityLoginBinding binding;
 
@@ -128,7 +127,7 @@ public class LoginActivity extends BaseActivity implements NetworkStatusInterfac
 
     private void goUserRegister() {
 
-        Intent intent = new Intent(this, UserRegisterActivity.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
 
         startActivity(intent);
 
@@ -186,7 +185,7 @@ public class LoginActivity extends BaseActivity implements NetworkStatusInterfac
             // TODO 3. 해당 내용 불러온 후 현재 Activity에서 충전기 목록을 MainActivity로 넘겨주기!!
             // TODO 4. MainActivity에서는 넘겨 받은 값으로 지도에 마커 뿌려주기
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
 
             startActivity(intent);
             finish();

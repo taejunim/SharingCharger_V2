@@ -37,10 +37,10 @@ import java.util.List;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.model.MenuHeaderVO;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
-import kr.co.metisinfo.sharingcharger.view.activity.BookmarkActivity;
-import kr.co.metisinfo.sharingcharger.view.activity.ChargeHistoryActivity;
+import kr.co.metisinfo.sharingcharger.userManagement.ChargerFavoriteActivity;
+import kr.co.metisinfo.sharingcharger.charger.ChargerUseHistoryActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;
-import kr.co.metisinfo.sharingcharger.view.activity.WalletActivity;
+import kr.co.metisinfo.sharingcharger.digitalWalletManagement.WalletActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
 
 import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_SEARCH_KEYWORD;
@@ -197,7 +197,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (groupPosition == 0) {
 
                 //충전기 사용 이력
-                Intent intent = new Intent(startClass, ChargeHistoryActivity.class);
+                Intent intent = new Intent(startClass, ChargerUseHistoryActivity.class);
                 //startActivity(intent);
                 startActivityForResult(intent, PAGE_SEARCH_KEYWORD);
                 close_navi();
@@ -211,7 +211,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             } else if (groupPosition == 2) {
 
                 //즐겨찾기
-                Intent intent = new Intent(startClass, BookmarkActivity.class);
+                Intent intent = new Intent(startClass, ChargerFavoriteActivity.class);
                 //startActivity(intent);
                 startActivityForResult(intent, PAGE_SEARCH_KEYWORD);
                 close_navi();

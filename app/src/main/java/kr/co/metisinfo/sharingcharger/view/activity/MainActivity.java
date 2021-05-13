@@ -45,6 +45,8 @@ import java.util.Map;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.Constants;
+import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
+import kr.co.metisinfo.sharingcharger.charger.ChargerReservationActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityMainBinding;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
 import kr.co.metisinfo.sharingcharger.model.SearchKeywordModel;
@@ -280,7 +282,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         binding.chgrDetailStart.setOnClickListener(view -> {
 
             //test 충전기검색화면
-            Intent intent = new Intent(this, SearchChargerActivity.class);
+            Intent intent = new Intent(this, ChargerSearchActivity.class);
             startActivity(intent);
 
             binding.reservationDetailCloseImg.performClick();
@@ -342,7 +344,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
             Log.e(TAG, "충전기 연결 : ");
             //test
-            Intent intent = new Intent(MainActivity.this, ReservationProgressActivity.class);
+            Intent intent = new Intent(MainActivity.this, ChargerReservationActivity.class);
             startActivityForResult(intent, Constants.PAGE_RESERVE);
             //test
 

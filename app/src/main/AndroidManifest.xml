@@ -63,15 +63,15 @@
 
         </activity>
 
-        <!-- PasswordChangeActivity -->
+        <!-- ChangePasswordActivity -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.PasswordChangeActivity"
+            android:name="kr.co.metisinfo.sharingcharger.userManagement.ChangePasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
         <!-- PasswordResetActivity -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.PasswordResetActivity"
+            android:name="kr.co.metisinfo.sharingcharger.userManagement.PasswordResetActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
@@ -81,15 +81,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
-        <!-- LoginActivity -->
+        <!-- SignInActivity -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.LoginActivity"
+            android:name="kr.co.metisinfo.sharingcharger.userManagement.SignInActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
-        <!-- UserRegisterActivity -->
+        <!-- SignUpActivity -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.UserRegisterActivity"
+            android:name="kr.co.metisinfo.sharingcharger.userManagement.SignUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
@@ -107,7 +107,7 @@
 
         <!-- 예약진행 -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.ReservationProgressActivity"
+            android:name="kr.co.metisinfo.sharingcharger.charger.ChargerReservationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
@@ -125,7 +125,7 @@
 
         <!-- 전자지갑 -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.WalletActivity"
+            android:name="kr.co.metisinfo.sharingcharger.digitalWalletManagement.WalletActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
@@ -137,7 +137,7 @@
 
         <!-- 충전기 검색 -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.SearchChargerActivity"
+            android:name="kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
@@ -149,19 +149,19 @@
 
         <!-- 즐겨찾기 -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.BookmarkActivity"
+            android:name="kr.co.metisinfo.sharingcharger.userManagement.ChargerFavoriteActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
         <!-- 충전기 이력 화면 -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.ChargeHistoryActivity"
+            android:name="kr.co.metisinfo.sharingcharger.charger.ChargerUseHistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
         <!-- 포인트 이력 화면 -->
         <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.PointHistoryActivity"
+            android:name="kr.co.metisinfo.sharingcharger.digitalWalletManagement.PointUseHistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
