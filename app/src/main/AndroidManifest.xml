@@ -177,5 +177,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
+        <activity
+            android:name=".ble.BleTestActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ble.SampleWebView"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ble.ScanActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 </manifest>

@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import kr.co.metisinfo.sharingcharger.R;
+import kr.co.metisinfo.sharingcharger.ble.BleTestActivity;
+import kr.co.metisinfo.sharingcharger.ble.ScanActivity;
 import kr.co.metisinfo.sharingcharger.model.MenuHeaderVO;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.userManagement.ChargerFavoriteActivity;
@@ -518,6 +520,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 txtReserveSpot.setText("");
 
             }
+
+            txtEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e(TAG, "txtEmail click ");
+
+                    Intent intent = new Intent(startClass, ScanActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
     }
 
