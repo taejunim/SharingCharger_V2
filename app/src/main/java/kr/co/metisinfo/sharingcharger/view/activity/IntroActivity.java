@@ -29,12 +29,14 @@ import java.util.ArrayList;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.Constants;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityIntroBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.service.GpsService;
 import kr.co.metisinfo.sharingcharger.service.NetworkStatus;
 import kr.co.metisinfo.sharingcharger.userManagement.SignInActivity;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.NetworkStatusInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
 
@@ -117,7 +119,6 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
         mEvzBluetooth = new EvzBluetooth(IntroActivity.this);
 
         checkPermission();
-
     }
 
     private void checkPermission() {
@@ -227,17 +228,15 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
     }
 
 
-    Runnable r = () -> {
+    Runnable startSignInActivity = () -> {
 
         Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-
         startActivity(intent);
-
         finish();
     };
 
     // 오토 로그인 성공 시
-    Runnable m = () -> {
+    Runnable startMainActivity = () -> {
 
         // TODO 1. 내 계정으로 예약건이 있는지 1차 조회. ( 있을경우, 예약1건만 뿌려줌, 없을경우 Step2로 넘어감 )
         // TODO 2. 메인 화면 들어가기전 IntroActivity 혹은 LoginActivity에서 로그인 성공시 디폴트 값으로( 적정 요금, 반경 거리, 시작시간, 종료시간) 으로 충전기 정보를 불러옴.
@@ -245,17 +244,23 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
         // TODO 4. MainActivity에서는 넘겨 받은 값으로 지도에 마커 뿌려주기
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
         startActivity(intent);
-
         finish();
-
     };
 
-    private void getLogin(UserModel userModel) {
+    //로그인이 되어 있는지 체크
+    private void checkLogin() {
 
-            handler.postDelayed(m, 3000); // 2초 뒤에 Runnable 객체 수행
+        //로그인 값 가져오기
+        PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
 
+        Boolean isLogin = preferenceUtil.getBoolean("isLogin");
+
+        if (isLogin) {
+            handler.postDelayed(startMainActivity, 2000);
+        } else {
+            handler.postDelayed(startSignInActivity, 2000);
+        }
     }
 
     public boolean checkLocationServiceStatus() {
@@ -287,10 +292,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
         protected Boolean doInBackground(Integer... values) {
 
-            //로컬 db 유저 정보 확인
-            //UserModel getUser = userViewModel.selectAutoLoginUser(true);
-
-            getLogin(userModel);
+            checkLogin();
             return true;
         }
 

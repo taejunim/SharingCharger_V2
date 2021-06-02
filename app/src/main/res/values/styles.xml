@@ -67,10 +67,21 @@
         <item name="android:paddingEnd">0dp</item>
     </style>
 
-    <!-- margin20-->
+    <!-- margin_start_end_20-->
     <style name="margin_start_end_20" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginEnd">20dp</item>
+    </style>
+
+    <!-- margin_start_end_24-->
+    <style name="margin_start_end_24" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+    </style>
+
+    <!-- marginBottom30-->
+    <style name="margin_bottom_30" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_marginBottom">30dp</item>
     </style>
 
     <!-- header_dummy-->
@@ -79,6 +90,14 @@
         <item name="android:layout_height">10dp</item>
         <item name="android:background">@color/header_dummy</item>
         <item name="android:layout_marginBottom">30dp</item>
+    </style>
+
+    <!-- header_dummy-->
+    <style name="sign_up_header" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/header_dummy</item>
+        <item name="android:layout_marginBottom">1dp</item>
     </style>
 
     <!-- register_title_txt-->

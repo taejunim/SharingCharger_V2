@@ -160,26 +160,27 @@ public class SignUpActivity extends BaseActivity {
 
             UserModel userModel = new UserModel();
 
-//            userModel.name = binding.registerNameInput.getText().toString();
-//            userModel.username = binding.registerEmailInput.getText().toString();
-//            userModel.password = binding.registerPwInput.getText().toString();
-//            userModel.phonenumber = binding.registerPhoneInput.getText().toString();
+            userModel.name = binding.registerNameInput.getText().toString();
+            userModel.username = binding.registerEmailInput.getText().toString();
+            userModel.password = binding.registerPwInput.getText().toString();
+            userModel.phonenumber = binding.registerPhoneInput.getText().toString();
 
-            userModel.name = "aa";
+            /*userModel.name = "aa";
             userModel.username = "aaa";
             userModel.password = "aaa";
             userModel.phonenumber = "00000000000";
-            userModel.owner = "Gong Yoo";
+            userModel.owner = "Gong Yoo";*/
 
             try{
-                Response<Object> response = apiUtils.signUp(userModel);
+                //Response<Object> response = apiUtils.signUp(userModel);
                 Log.e(TAG,"=====response=====");
-                Log.e(TAG, response.toString());
+                //Log.e(TAG, response.toString());
 
             }catch (Exception e){
                 Log.e(TAG,"userJoin Exception : "+ e);
             }
 
+            finish();
 
 
 //        } else {
