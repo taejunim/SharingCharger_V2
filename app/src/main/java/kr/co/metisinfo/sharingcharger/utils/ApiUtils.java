@@ -1,8 +1,11 @@
 package kr.co.metisinfo.sharingcharger.utils;
 
+import java.util.Map;
+
 import kr.co.metisinfo.sharingcharger.base.WebServiceAPI;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.network.RetrofitFactory;
+import okhttp3.RequestBody;
 import retrofit2.Response;
 
 public class ApiUtils {
@@ -27,9 +30,9 @@ public class ApiUtils {
     /**
      * 로그인
      */
-    public Response<Object> login(UserModel model) throws Exception {
+    public Response<Object> login(RequestBody email, RequestBody password) throws Exception {
 
-        Response<Object> response = webServiceAPI.login(model).execute();
+        Response<Object> response = webServiceAPI.login(email, password).execute();
 
         return response;
     }

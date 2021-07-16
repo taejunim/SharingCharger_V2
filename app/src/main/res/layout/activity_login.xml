@@ -17,6 +17,7 @@
             style="@style/margin_start_end_20"
             android:singleLine="true"
             android:inputType="textEmailAddress"
+            android:text="test.name@user.com"
             android:privateImeOptions="defaultInputmode=english"
             android:backgroundTint="@color/neutral_tint"/>
 
@@ -28,6 +29,7 @@
             android:importantForAutofill="no"
             android:layout_below="@id/login_id"
             style="@style/margin_start_end_20"
+            android:text="qw21QW@!"
             android:layout_marginBottom="10dp"
             android:singleLine="true"
             android:inputType="textPassword"

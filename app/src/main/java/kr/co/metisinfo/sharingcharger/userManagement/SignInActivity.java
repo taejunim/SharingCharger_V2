@@ -7,11 +7,19 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityLoginBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.service.NetworkStatus;
@@ -19,12 +27,18 @@ import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.view.activity.MainActivity;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.NetworkStatusInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignInActivity extends BaseActivity implements NetworkStatusInterface {
 
     private static final String TAG = SignInActivity.class.getSimpleName();
 
     ActivityLoginBinding binding;
+
 
     private boolean isRegisterBtnClick = false;     // 버튼 더블클릭 막기 위한 boolean 타입 변수
 
@@ -68,7 +82,11 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
 
                     isRegisterBtnClick = true;
 
-                    getLogin();
+                    try {
+                        getLogin();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
             } else {
@@ -86,12 +104,45 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
         binding.loginResetPw.setText(content);
     }
 
-    private void getLogin() {
+
+    private void getLogin() throws Exception {
 
         if (validationCheck()) {
 
-            BackgroundTask task = new BackgroundTask(new UserModel());
-            task.execute();
+            UserModel userModel = new UserModel();
+
+            userModel.email = binding.loginId.getText().toString();
+            userModel.password = binding.loginPw.getText().toString();
+
+            RequestBody email = RequestBody.create(MediaType.parse("text/plain"), userModel.email);
+            RequestBody password = RequestBody.create(MediaType.parse("text/plain"), userModel.password);
+
+            Response<Object> response = apiUtils.login(email, password);
+
+            if(response.isSuccessful()) {
+                if(response.body() != null) {
+
+                    JSONObject json = new JSONObject((Map) response.body());
+
+                    String status = json.getString("status");
+
+                    if(status.equals("success")) {
+                        JSONObject data = json.getJSONObject("data");
+
+                        ThisApplication.token = data.getString("token");
+
+                        BackgroundTask task = new BackgroundTask(userModel);
+                        task.execute();
+
+                    }
+
+                    isRegisterBtnClick = false;
+                }
+            } else {
+
+                Log.d(TAG, "err Msg : " + response.message());
+                isRegisterBtnClick = false;
+            }
         }
     }
 
@@ -164,13 +215,49 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
 
         protected Boolean doInBackground(Integer... values) {
 
-            //로컬 db 유저 정보 저장
-            //UserModel model = userViewModel.selectGetLoginUserEmail(this.userModel.getEmail());
-            
-            return false;
+            UserModel model = userViewModel.selectGetLoginUserEmail(this.userModel.getEmail());
+
+            // 로컬디비에 이메일, 비밀번호로 조회해서 저장된 계정이 없으면 로컬 디비에 저장
+            if (model == null) {
+
+                Log.e(TAG, "Login insert UserModel : " + userModel.toString());
+
+                /*if(userModel.getUserType().equals("General")){
+                    userModel.email = userModel.getEmail();
+                }else{
+                    userModel.email = userModel.getUsername();
+                }*/
+
+                userModel.autoLogin = true;
+                userViewModel.insertUser(this.userModel);
+
+                ThisApplication.staticUserModel = this.userModel;
+                return true;
+
+            } else {
+                // 로컬디비에 저장 된게 있으면 업데이트
+
+/*                if (userModel.getUserType().equals("General")) {
+                    userModel.loginId = model.getEmail();
+                } else {
+                    userModel.loginId = model.getUsername();
+                    userModel.email = userModel.getUsername();
+                }*/
+
+                userModel.autoLogin = true;
+                userModel.pkId = model.getPkId();
+                Log.e(TAG, "Login update UserModel : " + userModel.toString());
+
+//                userViewModel.updateUserPoint(userModel);
+                ThisApplication.staticUserModel = userModel;
+
+                return false;
+            }
         }
 
         protected void onPostExecute(Boolean isInsert) {
+
+            isRegisterBtnClick = false;
 
             if (isInsert) {
 

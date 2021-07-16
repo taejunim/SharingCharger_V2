@@ -10,10 +10,10 @@ public class Constants {
     public static final String KAKAO_SERCH_KEYWORD_KEY = "4332dce3f2f8d3ee87e31884c5c5523d";
 
     /* 테스트 서버 */
-    public static final String DEV_HOST = "http://175.106.99.220:5000";
-    public static final String REAL_HOST = "http://175.106.99.220:5000";
-    public static final String DAILY_DEV_HOST = "http://175.106.99.220:5000";
-    public static final String DAILY_REAL_HOST = "http://175.106.99.220:5000";
+    public static final String DEV_HOST = "http://175.106.99.153:5000";
+    public static final String REAL_HOST = "http://175.106.99.153:5000";
+    public static final String DAILY_DEV_HOST = "http://175.106.99.153:5000";
+    public static final String DAILY_REAL_HOST = "http://175.106.99.153:5000";
 
     public static final String KAKAO_SEARCH_KEYWORD_HOST = "https://dapi.kakao.com";
 

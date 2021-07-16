@@ -5,7 +5,7 @@
     <domain includeSubdomains="true">maps.daum-img.net</domain>
 
 <!--    시티랩스_aip-->
-    <domain includeSubdomains="true">175.106.99.220</domain>
+    <domain includeSubdomains="true">175.106.99.153</domain>
 
 <!--    차지인-->
     <domain includeSubdomains="true">evzone.evzcharge.com</domain>

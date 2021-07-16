@@ -28,10 +28,10 @@ public class UserViewModel extends DisposableViewModel {
 //        return repository.selectGetLoginUser(email, password);
 //    }
 //
-//    public UserModel selectGetLoginUserEmail(String email) {
-//
-//        return repository.selectGetLoginUserEmail(email);
-//    }
+    public UserModel selectGetLoginUserEmail(String email) {
+
+        return repository.selectGetLoginUserEmail(email);
+    }
 //
 //
 //    public void updateUserPoint(UserModel userModel) {

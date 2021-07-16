@@ -22,10 +22,10 @@ public interface UserDAO extends BaseDAO<UserModel> {
 //            + " AND password = :password")
 //    UserModel selectGetLoginUser(String email, String password);
 //
-//    @Query("SELECT * FROM " + DBConstants.TABLE_USER
-//            + " WHERE 1=1 "
-//            + " AND email = :email")
-//    UserModel selectGetLoginUserEmail(String email);
+    @Query("SELECT * FROM " + DBConstants.TABLE_USER
+            + " WHERE 1=1 "
+            + " AND email = :email")
+    UserModel selectGetLoginUserEmail(String email);
 //
 //    @Update(onConflict = OnConflictStrategy.REPLACE)
 //    void updateUserPoint(UserModel userModel);

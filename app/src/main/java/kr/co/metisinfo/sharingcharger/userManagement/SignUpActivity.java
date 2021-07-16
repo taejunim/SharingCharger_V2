@@ -163,8 +163,7 @@ public class SignUpActivity extends BaseActivity {
             userModel.name = binding.registerNameInput.getText().toString();
             userModel.username = binding.registerEmailInput.getText().toString();
             userModel.password = binding.registerPwInput.getText().toString();
-            userModel.phonenumber = binding.registerPhoneInput.getText().toString();
-
+            userModel.phoneNumber = Integer.parseInt(binding.registerPhoneInput.getText().toString());
             /*userModel.name = "aa";
             userModel.username = "aaa";
             userModel.password = "aaa";

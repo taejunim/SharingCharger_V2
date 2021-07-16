@@ -17,6 +17,7 @@ public class ThisApplication extends Application {
     public static Context context;
     public static String userCd = "";
     public static UserModel staticUserModel;
+    public static String token = "";
 
     public static RetrofitHeader header = new RetrofitHeader();
 

@@ -52,10 +52,10 @@ public class UserRepository  {
 //        return userDAO.selectGetLoginUser(email, password);
 //    }
 //
-//    public UserModel selectGetLoginUserEmail(String email) {
-//
-//        return userDAO.selectGetLoginUserEmail(email);
-//    }
+    public UserModel selectGetLoginUserEmail(String email) {
+
+        return userDAO.selectGetLoginUserEmail(email);
+    }
 //
 //    public void updateUserPoint(UserModel userModel) {
 //        executor.execute(() -> userDAO.updateUserPoint(userModel) );
