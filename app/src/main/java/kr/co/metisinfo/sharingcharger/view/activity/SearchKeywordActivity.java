@@ -166,7 +166,7 @@ public class SearchKeywordActivity extends BaseActivity implements SearchKeyword
                             keywordAdapter.setList(list);
                         } catch (JSONException je) {
 
-                            Log.e(TAG, "JSONException : " + je.getMessage());
+                            Log.e("metis", "JSONException : " + je.getMessage());
                         }
 
                     }
@@ -177,7 +177,7 @@ public class SearchKeywordActivity extends BaseActivity implements SearchKeyword
             public void onFailure(@NonNull Call<Object> call, @NonNull Throwable t) {
 
                 // url 호출 후 오류 났을 때
-                Log.e(TAG, "getSearchKeyword error : " + t.getMessage());
+                Log.e("metis", "getSearchKeyword error : " + t.getMessage());
             }
         });
 

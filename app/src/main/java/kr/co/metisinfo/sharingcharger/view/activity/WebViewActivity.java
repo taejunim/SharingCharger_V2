@@ -7,11 +7,13 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityWebViewBinding;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
@@ -51,14 +53,14 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onScaleChanged(WebView view, float oldScale, float newScale) {
                 super.onScaleChanged(view, oldScale, newScale);
-                Log.e(TAG, "oldScale : " + oldScale);
+                Log.e("metis", "oldScale : " + oldScale);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                Log.e(TAG, "onPageFinished");
+                Log.e("metis", "onPageFinished");
             }
         });
 
@@ -70,11 +72,11 @@ public class WebViewActivity extends BaseActivity {
                 //스크롤 안의 높이
                     v.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
 
-                    Log.e(TAG, "View : " + v.getMeasuredHeight());
+                    Log.e("metis", "View : " + v.getMeasuredHeight());
                     //마지막 높이랑 2200정도 차이가남
                     int getHeight = v.getMeasuredHeight() - 2200;
 
-                    Log.e(TAG, "getHeight : " + getHeight);
+                    Log.e("metis", "getHeight : " + getHeight);
 
                     if (!chkScroll) {
 
@@ -106,7 +108,7 @@ public class WebViewActivity extends BaseActivity {
 
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    //@SuppressLint("SetJavaScriptEnabled")
     @Override
     public void init() {
 
@@ -123,7 +125,7 @@ public class WebViewActivity extends BaseActivity {
         if (getTagName.equals("setting")) {
             binding.personalBtn.setVisibility(View.GONE);
             //http://118.67.132.235:8081/Alice
-            //url = " http://118.67.132.235:8081/" + ThisApplication.staticUserModel.email;
+            url = " http://118.67.132.235:8081/" + ThisApplication.staticUserModel.email;
 
             binding.personalWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             binding.personalWebView.setMinimumHeight(800);
@@ -143,10 +145,29 @@ public class WebViewActivity extends BaseActivity {
         //개인정보 동의여부
         else {
 
+            try {
 
+                String getText = apiUtils.getPolicy(getTagName);
+
+                //정보 가져오기 성공
+                if(getText != null){
+                    System.out.println(getText);
+
+                    String base64 = android.util.Base64.encodeToString(getText.getBytes("UTF-8"), android.util.Base64.DEFAULT);
+                    binding.personalWebView.loadData(base64, "text/html; charset=utf-8", "base64");
+                }
+                //실패
+                else{
+                    Toast.makeText(WebViewActivity.this, "약관 불러오기에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                }
+
+            } catch (Exception e) {
+                Toast.makeText(WebViewActivity.this, "약관 불러오기에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                Log.e("metis", "PersonalInfo1 Exception: " + e);
+
+            }
 
         }
-
     }
 
     public void onBackPressed() {

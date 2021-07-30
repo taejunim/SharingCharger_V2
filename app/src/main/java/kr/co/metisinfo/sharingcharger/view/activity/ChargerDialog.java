@@ -65,7 +65,7 @@ public class ChargerDialog extends BaseActivity implements CheckListInterface {
                 Intent intent = new Intent();
                 intent.putExtra("mEVZScanResult", mEVZScanResult);
 
-                Log.e(TAG, "mEVZScanResult :  " + mEVZScanResult);
+                Log.e("metis", "mEVZScanResult :  " + mEVZScanResult);
 
                 setResult(RESULT_OK, intent);
 

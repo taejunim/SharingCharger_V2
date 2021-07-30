@@ -54,7 +54,32 @@ public class PasswordResetActivity extends BaseActivity {
             if (checkVerificationCode()) {
 
                 String phone = binding.registerPhoneInput.getText().toString().trim();
-                Log.e(TAG, "phone : " + phone);
+                Log.e("metis", "phone : " + phone);
+
+                try {
+
+                    //tempCertificateNo = apiUtils.getSms(phone);
+
+                    if (tempCertificateNo != null) {
+                        Log.e(TAG, "response : " + tempCertificateNo);
+
+                        if (tempCertificateNo.contains(".")) {
+                            tempCertificateNo = tempCertificateNo.substring(0, tempCertificateNo.indexOf("."));
+                        }
+
+                        Log.e(TAG, "tempCertificateNo : " + tempCertificateNo);
+
+                        isCertificationBtn = true;
+                        binding.layoutTimeRemaining.setVisibility(View.VISIBLE);
+                        countDown("0300");
+                    } else {
+                        Toast.makeText(PasswordResetActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (Exception e) {
+                    Toast.makeText(PasswordResetActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "registerCertificationBtn Exception: " + e);
+                }
 
             }
         });
@@ -133,17 +158,16 @@ public class PasswordResetActivity extends BaseActivity {
 
 
         // validationCheck 체크 하고 화면 이동
-//        if (validationCheck()) {
-//
-//        }
+        if (validationCheck()) {
 
-        //test
-        Intent intent = new Intent(getApplicationContext(), ChangePasswordActivity.class);
+            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            intent.putExtra("activityName", this.getLocalClassName());
 
-        intent.putExtra("activityName","Reset");
-        startActivity(intent);
-        finish();
-        //test
+            intent.putExtra("userEmail", binding.registerEmailInput.getText().toString());
+
+            startActivity(intent);
+            finish();
+        }
 
     }
 

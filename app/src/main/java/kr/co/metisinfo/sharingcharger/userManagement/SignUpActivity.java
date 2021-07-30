@@ -17,7 +17,10 @@ import kr.co.metisinfo.sharingcharger.databinding.ActivityUserRegisterBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
+import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
 import retrofit2.Response;
+
+import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_PERSONAL_INFORMATION;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -88,7 +91,7 @@ public class SignUpActivity extends BaseActivity {
             if (checkVerificationCode()) {
 
                 String phone = binding.registerPhoneInput.getText().toString().trim();
-                Log.e(TAG, "phone : " + phone);
+                Log.e("metis", "phone : " + phone);
 
 
             }
@@ -96,14 +99,23 @@ public class SignUpActivity extends BaseActivity {
         });
 
         binding.registerPersonalInfo1Btn.setOnClickListener(view -> {
-            Log.e(TAG, "btn1");
+            Log.e("metis", "btn1");
             //개인정보
+            Intent intent = new Intent(this, WebViewActivity.class);
 
+            intent.putExtra("getTagName", "PersonalInfo1");
+            intent.putExtra("titleName", "개인정보 동의여부");
+            startActivityForResult(intent, PAGE_PERSONAL_INFORMATION);
         });
 
         binding.registerPersonalInfo2Btn.setOnClickListener(view -> {
 
             //개인정보 처리방침
+            Intent intent = new Intent(this, WebViewActivity.class);
+
+            intent.putExtra("getTagName", "PersonalInfo2");
+            intent.putExtra("titleName", "개인정보 처리방침 동의여부");
+            startActivityForResult(intent, PAGE_PERSONAL_INFORMATION);
 
         });
 
@@ -156,37 +168,50 @@ public class SignUpActivity extends BaseActivity {
 
     private void userJoin() {
 
-     //   if (validationCheck()) {
+        if (validationCheck()) {
 
             UserModel userModel = new UserModel();
 
             userModel.name = binding.registerNameInput.getText().toString();
-            userModel.username = binding.registerEmailInput.getText().toString();
+            userModel.email = binding.registerEmailInput.getText().toString();
             userModel.password = binding.registerPwInput.getText().toString();
-            userModel.phonenumber = binding.registerPhoneInput.getText().toString();
-
-            /*userModel.name = "aa";
-            userModel.username = "aaa";
-            userModel.password = "aaa";
-            userModel.phonenumber = "00000000000";
-            userModel.owner = "Gong Yoo";*/
+            userModel.phone = binding.registerPhoneInput.getText().toString();
+            userModel.servicePolicyFlag = true; // 서비스 이용약관
+            userModel.privacyPolicyFlag = true; // 개인정보
+            userModel.userType = "General"; // 사용자 타입 정의. 임시 정의
+            userModel.username = ""; // 일반 사용자는 공란.
 
             try{
-                //Response<Object> response = apiUtils.signUp(userModel);
-                Log.e(TAG,"=====response=====");
-                //Log.e(TAG, response.toString());
+                UserModel model = apiUtils.signUp(userModel);
+
+                //회원가입 성공
+                if(model != null){
+                    Log.e("metis", "회원가입 성공 : " + model);
+
+                    Toast.makeText(SignUpActivity.this, "회원가입이 완료되어 로그인 페이지으로 이동합니다.", Toast.LENGTH_LONG).show();
+
+                    finish();
+                }
+                //회원가입 실패
+                // id 중복 체크따로 해야함
+                else{
+                    Toast.makeText(SignUpActivity.this, "회원가입에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                    Log.e("metis", "회원가입 실패");
+                    isRegisterBtnClick = false;
+                }
 
             }catch (Exception e){
-                Log.e(TAG,"userJoin Exception : "+ e);
+
+                Toast.makeText(SignUpActivity.this, "회원가입에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                Log.e("metis","userJoin Exception : "+ e);
+                isRegisterBtnClick = false;
             }
 
-            finish();
 
+        } else {
 
-//        } else {
-//
-//            isRegisterBtnClick = false;
-//        }
+            isRegisterBtnClick = false;
+        }
 
     }
 

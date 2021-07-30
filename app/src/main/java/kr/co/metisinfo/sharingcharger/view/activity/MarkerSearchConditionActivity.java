@@ -167,11 +167,11 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
                 intent.putExtra("reserveRadius", binding.spinnerLengthRange.getSelectedItem().toString());
                 intent.putExtra("reserveType", binding.spinnerLengthType.getSelectedItem().toString());
 
-                Log.e(TAG, "btnOk checkChange : " + checkChange);
+                Log.e("metis", "btnOk checkChange : " + checkChange);
 
                 intent.putExtra("checkChange", String.valueOf(checkChange));
 
-                Log.e(TAG, "binding.spinnerLengthRange.getSelectedItem().toString()1 : " + binding.spinnerLengthRange.getSelectedItem().toString());
+                Log.e("metis", "binding.spinnerLengthRange.getSelectedItem().toString()1 : " + binding.spinnerLengthRange.getSelectedItem().toString());
 
                 setResult(RESULT_OK, intent);
 
@@ -262,8 +262,8 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
             selectStartDD = dayOfMonth;
 
             if (chargingStartDD == selectStartDD) { // 일자가 같은 경우 시간 선택을 현재 시간 이전 날짜는 선택안되게 막기!
-                Log.e(TAG, "chargingStartDD == selectStartDD : ");
-                Log.e(TAG, "chargingStartDD == selectStartDD : Time : " + selectStartFullDate.substring(8, 10) + " : " + selectEndFullDate.substring(10, 12));
+                Log.e("metis", "chargingStartDD == selectStartDD : ");
+                Log.e("metis", "chargingStartDD == selectStartDD : Time : " + selectStartFullDate.substring(8, 10) + " : " + selectEndFullDate.substring(10, 12));
                 MyTimePicker timePicker = new MyTimePicker(MarkerSearchConditionActivity.this, startTimePickerListener, Integer.parseInt(selectStartFullDate.substring(8, 10)), Integer.parseInt(selectEndFullDate.substring(10, 12)), true);
 
                 Objects.requireNonNull(timePicker.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -272,7 +272,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
             } else {
 
-                Log.e(TAG, "chargingStartDD != selectStartDD : ");
+                Log.e("metis", "chargingStartDD != selectStartDD : ");
                 MyTimePicker dialog = new MyTimePicker(MarkerSearchConditionActivity.this, startTimePickerListener, 0, 0, true);
 
                 dialog.setCancelable(false);
@@ -287,8 +287,8 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         @Override
         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
-            Log.e(TAG, "selectStartMM : " + selectStartMM);
-            Log.e(TAG, "minDate : " + minDate.get(Calendar.MONTH));
+            Log.e("metis", "selectStartMM : " + selectStartMM);
+            Log.e("metis", "minDate : " + minDate.get(Calendar.MONTH));
 
             if (selectStartYYYY == minDate.get(Calendar.YEAR)) {
 
@@ -296,11 +296,11 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
                     if (selectStartDD == minDate.get(Calendar.DATE)) {
 
-                        Log.e(TAG, "selectedHour : " + selectedHour);
-                        Log.e(TAG, "minDate.get(Calendar.HOUR) : " + minDate.get(Calendar.HOUR_OF_DAY));
+                        Log.e("metis", "selectedHour : " + selectedHour);
+                        Log.e("metis", "minDate.get(Calendar.HOUR) : " + minDate.get(Calendar.HOUR_OF_DAY));
 
-                        Log.e(TAG, "selectedMinute : " + selectedMinute);
-                        Log.e(TAG, "minDate.get(Calendar.MINUTE) : " + minDate.get(Calendar.MINUTE));
+                        Log.e("metis", "selectedMinute : " + selectedMinute);
+                        Log.e("metis", "minDate.get(Calendar.MINUTE) : " + minDate.get(Calendar.MINUTE));
 
                         if ((selectedHour <= minDate.get(Calendar.HOUR_OF_DAY) && selectedMinute < minDate.get(Calendar.MINUTE) || selectedHour < minDate.get(Calendar.HOUR_OF_DAY))) {
 
@@ -375,11 +375,11 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
             binding.txtChargingDate2.setText(String.format("%02d", selectEndHH) + ":" + String.format("%02d", selectEndII));
         }
-        Log.e(TAG, "txtChargingDate1 : " + selectStartMM);
+        Log.e("metis", "txtChargingDate1 : " + selectStartMM);
 
         long time = DateUtils.getCompareTwoDate(selectStartFullDate, selectEndFullDate);
 
-        Log.e(TAG, "시작일자 종료일자 차이 : " + time);
+        Log.e("metis", "시작일자 종료일자 차이 : " + time);
 
         String temp = DateUtils.generateTimeToString((int) time);
 
@@ -394,8 +394,8 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
         if (view.getId() == binding.layoutSDate.getId()) {
 
-            Log.e(TAG, "layoutSDate : ");
-            Log.e(TAG, "layoutSDate : " + Integer.parseInt(selectStartFullDate.substring(0, 4)) + "-" + Integer.parseInt(selectStartFullDate.substring(4, 6)) + "-" + Integer.parseInt(selectStartFullDate.substring(6, 8)));
+            Log.e("metis", "layoutSDate : ");
+            Log.e("metis", "layoutSDate : " + Integer.parseInt(selectStartFullDate.substring(0, 4)) + "-" + Integer.parseInt(selectStartFullDate.substring(4, 6)) + "-" + Integer.parseInt(selectStartFullDate.substring(6, 8)));
 
             dialog = new DatePickerDialog(MarkerSearchConditionActivity.this, startDatePickerListener, Integer.parseInt(selectStartFullDate.substring(0, 4)), Integer.parseInt(selectStartFullDate.substring(4, 6)) - 1, Integer.parseInt(selectStartFullDate.substring(6, 8)));
         }
@@ -451,14 +451,14 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
             String temp = getIntent().getStringExtra("checkChange");
 
-            Log.e(TAG, "checkChange temp : " + temp);
+            Log.e("metis", "checkChange temp : " + temp);
 
             checkChange = Boolean.valueOf(temp);
 
             selectStartFullDate = String.format("%04d", chargingStartYYYY) + String.format("%02d", chargingStartMM) + String.format("%02d", chargingStartDD) + String.format("%02d", chargingStartHH) + String.format("%02d", chargingStartII);
             selectEndFullDate = String.format("%04d", chargingEndYYYY) + String.format("%02d", chargingEndMM) + String.format("%02d", chargingEndDD) + String.format("%02d", chargingEndHH) + String.format("%02d", chargingEndII);
 
-            Log.e(TAG, "checkChange isInit : " + checkChange);
+            Log.e("metis", "checkChange isInit : " + checkChange);
 
         } else {
 
@@ -516,7 +516,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         binding.spinnerLengthRange.setSelection(distanceEntry.indexOf(reserveRadius), true);
         binding.spinnerLengthType.setSelection(typeEntry.indexOf(reserveType), true);
 
-        Log.e(TAG, "checkChange isInit else : " + checkChange);
+        Log.e("metis", "checkChange isInit else : " + checkChange);
         if (checkChange) {
             chargeBtnClick(binding.goCharging);
         } else {
@@ -604,8 +604,8 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         startWeek = todayCal.get(Calendar.DAY_OF_WEEK);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 
-        Log.e(TAG,"startWeek : " + simpleDateFormat.format(todayCal.getTime()));
-        Log.e(TAG,"startWeek : " + startWeek);
+        Log.e("metis","startWeek : " + simpleDateFormat.format(todayCal.getTime()));
+        Log.e("metis","startWeek : " + startWeek);
 
         Calendar calendar = Calendar.getInstance();
 
@@ -653,7 +653,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         Calendar nowCal = Calendar.getInstance(Locale.getDefault());
         Calendar addCal = Calendar.getInstance(Locale.getDefault());
 
-        Log.e(TAG, "getMonth : " + nowCal.get(Calendar.MONTH));
+        Log.e("metis", "getMonth : " + nowCal.get(Calendar.MONTH));
 
         //예약 충전
         if (!checkChange) {
@@ -664,18 +664,18 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
             int StartHH = Integer.parseInt(selectStartFullDate.substring(8, 10));
             int StartII = Integer.parseInt(selectStartFullDate.substring(10, 12));
 
-            Log.e(TAG, "StartMM 예약 " + StartMM);
+            Log.e("metis", "StartMM 예약 " + StartMM);
 
             nowCal.set(StartYYYY, StartMM - 1, StartDD, StartHH, StartII);
             addCal.set(StartYYYY, StartMM - 1, StartDD, StartHH, StartII);
-            Log.e(TAG, "getMonth 예약 " + nowCal.get(Calendar.MONTH));
+            Log.e("metis", "getMonth 예약 " + nowCal.get(Calendar.MONTH));
 
             System.out.println("onItemSelected end : " + selectStartFullDate);
             System.out.println("onItemSelected end : " + StartYYYY + "-" + StartMM + "-" + StartDD + " " + StartHH + ":" + StartII);
 
         }
 
-        Log.e(TAG, "getMonth 끝 " + nowCal.get(Calendar.MONTH));
+        Log.e("metis", "getMonth 끝 " + nowCal.get(Calendar.MONTH));
 
         addCal.add(Calendar.MINUTE, totalMinute);
 
@@ -689,10 +689,10 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
         nowCal.add(Calendar.MONTH, -1);
         addCal.add(Calendar.MONTH, -1);
-        Log.e(TAG, "getToday : " + getToday);
-        Log.e(TAG, "addToday : " + addToday);
+        Log.e("metis", "getToday : " + getToday);
+        Log.e("metis", "addToday : " + addToday);
 
-        Log.e(TAG, "nowCal.get(Calendar.MONTH) " + nowCal.get(Calendar.MONTH));
+        Log.e("metis", "nowCal.get(Calendar.MONTH) " + nowCal.get(Calendar.MONTH));
 
         //같은 요일
         if (getToday.equals(addToday)) {
@@ -713,7 +713,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         selectStartHH = nowCal.get(Calendar.HOUR_OF_DAY);
         selectStartII = nowCal.get(Calendar.MINUTE);
 
-        Log.e(TAG, "selectStartMM : " + selectStartMM);
+        Log.e("metis", "selectStartMM : " + selectStartMM);
 
         chargingEndWeek = addToday;
         selectEndYYYY = addCal.get(Calendar.YEAR);
@@ -725,8 +725,8 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         selectStartFullDate = String.format(Locale.KOREA, "%04d", selectStartYYYY) + String.format(Locale.KOREA, "%02d", selectStartMM) + String.format(Locale.KOREA, "%02d", selectStartDD) + String.format(Locale.KOREA, "%02d", selectStartHH) + String.format(Locale.KOREA, "%02d", selectStartII);
         selectEndFullDate = String.format(Locale.KOREA, "%04d", selectEndYYYY) + String.format(Locale.KOREA, "%02d", selectEndMM) + String.format(Locale.KOREA, "%02d", selectEndDD) + String.format(Locale.KOREA, "%02d", selectEndHH) + String.format(Locale.KOREA, "%02d", selectEndII);
 
-        Log.e(TAG, "selectStartFullDate : " + selectStartFullDate);
-        Log.e(TAG, "selectEndFullDate : " + selectEndFullDate);
+        Log.e("metis", "selectStartFullDate : " + selectStartFullDate);
+        Log.e("metis", "selectEndFullDate : " + selectEndFullDate);
     }
 
     private String getWeek(Calendar getCal) {

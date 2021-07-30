@@ -84,6 +84,18 @@
             android:textColor="@color/gray"
             android:text="종료시간" />
 
+        <TextView
+            android:id="@+id/charging_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:textColor="@color/black"
+            android:textSize="45dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
         <LinearLayout
             android:id="@+id/linear_charger_img_layout"
             android:layout_width="match_parent"

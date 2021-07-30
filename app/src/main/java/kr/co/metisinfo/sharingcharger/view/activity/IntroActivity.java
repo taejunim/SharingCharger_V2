@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -39,6 +40,7 @@ import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.NetworkStatusInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
+import retrofit2.Response;
 
 public class IntroActivity extends BaseActivity implements NetworkStatusInterface {
 
@@ -58,6 +60,8 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
     EvzBluetooth mEvzBluetooth;
 
     ApiUtils apiUtils = new ApiUtils();
+
+    PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -86,9 +90,9 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
         if (checkLocationServiceStatus()) {
 
-            Log.e(TAG, "GPS 가져올 수 있음");
+            Log.e("metis", "GPS 가져올 수 있음");
         } else {
-            Log.e(TAG, "GPS 가져올 수 없음");
+            Log.e("metis", "GPS 가져올 수 없음");
         }
 
         Log.d(TAG, "Hash key : " + getKeyHash(getApplicationContext()));
@@ -164,8 +168,8 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
                 task.execute();
             }
 
-            Log.e(TAG, "currentLocationLat : " + Constants.currentLocationLat);
-            Log.e(TAG, "currentLocationLng : " + Constants.currentLocationLng);
+            Log.e("metis", "currentLocationLat : " + Constants.currentLocationLat);
+            Log.e("metis", "currentLocationLng : " + Constants.currentLocationLng);
             // TODO : 인트로 이미지 변경
             // TODO : 이미지 로딩 시간 변경
         }
@@ -191,9 +195,9 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
                 getLogin(userModel);
             }*/
 
-            Log.e(TAG, "네트워크를 사용할 준비가 되었을 때11111111111111");
+            Log.e("metis", "네트워크를 사용할 준비가 되었을 때11111111111111");
         } else {
-            Log.e(TAG, "네트워크가 끊켰을 때22222222222222222");
+            Log.e("metis", "네트워크가 끊켰을 때22222222222222222");
         }
     }
 
@@ -221,7 +225,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, "getKeyHash error : " + e.toString());
+            Log.e("metis", "getKeyHash error : " + e.toString());
         }
 
         return null;
@@ -292,12 +296,98 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
         protected Boolean doInBackground(Integer... values) {
 
-            checkLogin();
+            //db에 오토로그인 된 유저가 있는지 확인
+            //UserModel getUser = userViewModel.selectAutoLoginUser(true);
+            UserModel getUser = new UserModel();
+
+            getUser.loginId = preferenceUtil.getString("email");
+            getUser.password = preferenceUtil.getString("password");
+
+            //오토로그인 된 유저가 있다면 실제 서버에 로그인
+            if (getUser != null) {
+
+                if (!isLoginSuccess) {
+                    userModel = getUser;
+
+                    Log.e("metis", "userModel : " + getUser.toString());
+
+                    getLogin(userModel);
+                } else {
+
+                    handler.postDelayed(startSignInActivity, 1000); // 2초 뒤에 Runnable 객체 수행
+
+                }
+            } else {
+
+                handler.postDelayed(startSignInActivity, 1000); // 1초 뒤에 Runnable 객체 수행
+
+            }
             return true;
         }
 
         protected void onPostExecute(Boolean isInsert) {
 
+        }
+    }
+
+    private void getLogin(UserModel userModel) {
+
+        try {
+            Response<UserModel> response = apiUtils.login(userModel);
+
+            //로그인 성공
+            if (response.code() == 200 && response.body() != null) {
+
+                UserModel user = response.body();
+
+                user.pkId = userModel.pkId;
+                if (user.getUserType().equals("General")) {
+                    user.loginId = userModel.getEmail();
+                } else {
+                    user.loginId = userModel.getUsername();
+                    user.email = user.getUsername();
+                }
+
+                user.autoLogin = true;
+
+                Log.e("metis", "response UserModel : " + user);
+
+                //새로운 유저정보를 로컬디비에 저장함
+                //userViewModel.updateUserPoint(user);
+
+                //로그인 값 가져오기
+
+                preferenceUtil.putBoolean("isLogin", true);
+                preferenceUtil.putInt("userId", user.getId());
+                preferenceUtil.putString("name", user.getName());
+                preferenceUtil.putString("email", user.getUserType().equals("General") ? user.getEmail() : user.getUsername());
+                preferenceUtil.putString("password", userModel.getPassword());
+                preferenceUtil.putString("userType", user.getUserType());
+                preferenceUtil.putString("username", user.getUsername());
+
+                ThisApplication.staticUserModel = user;
+                isLoginSuccess = true;
+
+                handler.postDelayed(startMainActivity, 3000); // 2초 뒤에 Runnable 객체 수행
+
+            }
+            //로그인정보가 맞지 않을 때
+            else if (response.code() == 204) {
+                //userViewModel.deleteUser(userModel.email);
+                Toast.makeText(getApplicationContext(), R.string.login_reject, Toast.LENGTH_LONG).show();
+                handler.postDelayed(startSignInActivity, 1000); // 1초 뒤에 Runnable 객체 수행
+            }
+            //로그인 실패
+            else {
+                Toast.makeText(getApplicationContext(), R.string.login_reject, Toast.LENGTH_LONG).show();
+                handler.postDelayed(startSignInActivity, 1000); // 1초 뒤에 Runnable 객체 수행
+            }
+
+        } catch (Exception e) {
+
+            Log.e("metis", "getLogin response : " + e);
+            handler.postDelayed(startSignInActivity, 1000); // 1초 뒤에 Runnable 객체 수행
+            isLoginSuccess = false;
         }
     }
 }

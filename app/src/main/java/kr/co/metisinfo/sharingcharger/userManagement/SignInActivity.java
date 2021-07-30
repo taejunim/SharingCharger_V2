@@ -12,13 +12,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityLoginBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.service.NetworkStatus;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.activity.MainActivity;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.NetworkStatusInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
+import retrofit2.Response;
 
 public class SignInActivity extends BaseActivity implements NetworkStatusInterface {
 
@@ -90,8 +93,79 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
 
         if (validationCheck()) {
 
-            BackgroundTask task = new BackgroundTask(new UserModel());
-            task.execute();
+            UserModel userModel = new UserModel();
+
+            userModel.loginId = binding.loginId.getText().toString();
+            userModel.email = binding.loginId.getText().toString();
+            userModel.password = binding.loginPw.getText().toString();
+
+            try{
+                Response<UserModel> response = apiUtils.login(userModel);
+
+                //로그인 성공
+                if (response.code() == 200 && response.body() != null){
+
+                    UserModel user = response.body();
+
+                    if(!user.getUserType().equals("General")){
+                        user.email = user.getUsername();
+                        user.loginId = user.getUsername();
+
+                    } else if (user.getUserType().equals("General")) {
+                        user.loginId = user.getEmail();
+                    }
+
+                    user.setPassword(userModel.password);
+                    user.autoLogin = true;
+
+                    //로그인 값 가져오기
+                    PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+
+                    preferenceUtil.putBoolean("isLogin", true);
+                    preferenceUtil.putInt("userId", user.getId());
+                    preferenceUtil.putString("name", user.getName());
+                    preferenceUtil.putString("email", user.getUserType().equals("General") ? user.getEmail() : user.getUsername());
+                    preferenceUtil.putString("password", userModel.getPassword());
+                    preferenceUtil.putString("userType", user.getUserType());
+                    preferenceUtil.putString("username", user.getUsername());
+
+                    ThisApplication.staticUserModel = user;
+
+                    // TODO 1. 내 계정으로 예약건이 있는지 1차 조회. ( 있을경우, 예약1건만 뿌려줌, 없을경우 Step2로 넘어감 )
+                    // TODO 2. 메인 화면 들어가기전 IntroActivity 혹은 LoginActivity에서 로그인 성공시 디폴트 값으로( 적정 요금, 반경 거리, 시작시간, 종료시간) 으로 충전기 정보를 불러옴.
+                    // TODO 3. 해당 내용 불러온 후 현재 Activity에서 충전기 목록을 MainActivity로 넘겨주기!!
+                    // TODO 4. MainActivity에서는 넘겨 받은 값으로 지도에 마커 뿌려주기
+
+                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+
+                    startActivity(intent);
+                    finish();
+
+                }
+                //로그인정보가 맞지 않을 때
+                else if (response.code() == 204) {
+                    isRegisterBtnClick = false; // 버튼 다시 클릭 가능하도록 false로 전환
+
+                    Toast.makeText(SignInActivity.this, R.string.login_reject, Toast.LENGTH_SHORT).show();
+
+                    binding.loginId.requestFocus();
+                }
+                //로그인 실패
+                else{
+                    isRegisterBtnClick = false; // 버튼 다시 클릭 가능하도록 false로 전환
+
+                    Toast.makeText(SignInActivity.this, R.string.login_reject, Toast.LENGTH_SHORT).show();
+
+                    binding.loginId.requestFocus();
+                }
+
+                isRegisterBtnClick = false;
+            }catch (Exception e) {
+
+                isRegisterBtnClick = false;
+                Log.e("metis","getLogin Exception : "+ e);
+            }
+
         }
     }
 
@@ -141,55 +215,9 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
         isNetworkStatus = true;
 
         if (isAvailable) {
-            Log.e(TAG, "로그인 네트워크를 사용할 준비가 되었을 333333");
+            Log.e("metis", "로그인 네트워크를 사용할 준비가 되었을 333333");
         } else {
-            Log.e(TAG, "로그인 네트워크가 끊켰을 4444444");
-        }
-    }
-
-    // < >안에 들은 자료형은 순서대로 doInBackground, onProgressUpdate, onPostExecute의 매개변수 자료형(내가 사용할 매개변수타입을 설정하면된다)
-    class BackgroundTask extends AsyncTask<Integer, Integer, Boolean> {
-
-        private UserModel userModel;
-
-        public BackgroundTask(UserModel userModel) {
-            super();
-
-            this.userModel = userModel;
-        }
-
-        protected void onPreExecute() {
-
-        }
-
-        protected Boolean doInBackground(Integer... values) {
-
-            //로컬 db 유저 정보 저장
-            //UserModel model = userViewModel.selectGetLoginUserEmail(this.userModel.getEmail());
-            
-            return false;
-        }
-
-        protected void onPostExecute(Boolean isInsert) {
-
-            if (isInsert) {
-
-                Log.e(TAG, "계정 정보 저장");
-
-            } else {
-                Log.e(TAG, "계정 정보 수정");
-            }
-
-            // TODO 1. 내 계정으로 예약건이 있는지 1차 조회. ( 있을경우, 예약1건만 뿌려줌, 없을경우 Step2로 넘어감 )
-            // TODO 2. 메인 화면 들어가기전 IntroActivity 혹은 LoginActivity에서 로그인 성공시 디폴트 값으로( 적정 요금, 반경 거리, 시작시간, 종료시간) 으로 충전기 정보를 불러옴.
-            // TODO 3. 해당 내용 불러온 후 현재 Activity에서 충전기 목록을 MainActivity로 넘겨주기!!
-            // TODO 4. MainActivity에서는 넘겨 받은 값으로 지도에 마커 뿌려주기
-
-            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-
-            startActivity(intent);
-            finish();
-
+            Log.e("metis", "로그인 네트워크가 끊켰을 4444444");
         }
     }
 

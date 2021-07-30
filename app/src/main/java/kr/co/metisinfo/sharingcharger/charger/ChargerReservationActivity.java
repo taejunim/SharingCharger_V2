@@ -48,7 +48,7 @@ public class ChargerReservationActivity extends BaseActivity {
                         //포인트 충전후 포인트 확인
 
                     }catch (Exception e){
-                        Log.e(TAG, "onActivityResult Exception : " + e);
+                        Log.e("metis", "onActivityResult Exception : " + e);
                     }
                 }
 

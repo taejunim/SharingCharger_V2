@@ -56,6 +56,10 @@
     <string name="search_condition_go_charging">즉시 충전</string>
     <string name="search_condition_reserve_charging">예약 충전</string>
 
+    <!-- 포인트 -->
+    <string name="point">p</string>
+    <string name="point_charge">포인트 충전</string>
+
     <!-- 충전기 검색-->
     <string name="search_device">충전기 검색</string>
 

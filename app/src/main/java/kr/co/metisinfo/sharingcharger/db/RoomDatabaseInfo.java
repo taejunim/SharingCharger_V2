@@ -7,14 +7,18 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import kr.co.metisinfo.sharingcharger.base.DBConstants;
+import kr.co.metisinfo.sharingcharger.db.dao.BookmarkDAO;
 import kr.co.metisinfo.sharingcharger.db.dao.UserDAO;
+import kr.co.metisinfo.sharingcharger.model.BookmarkModel;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 
-@Database(entities = { UserModel.class}, version = 1, exportSchema = false)
+//@Database(entities = { UserModel.class}, version = 1, exportSchema = false)
+@Database(entities = { UserModel.class, BookmarkModel.class}, version = 1)
 
 public abstract class RoomDatabaseInfo extends RoomDatabase implements DBConstants {
 
     public abstract UserDAO getUserDAO();
+    public abstract BookmarkDAO getBookmarkDAO();
 
     public static RoomDatabaseInfo instance;
 

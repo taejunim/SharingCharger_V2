@@ -45,7 +45,7 @@
         <!-- 카카오앱 키 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="14b4ccd36367ca07adefc15884a0b602" />
+            android:value="8c076cd238736c78c5f2a703adf2c1ff" />
 
         <!-- 웹뷰 및 위치 서비스 사용하지 않는 경우 설정 -->
         <meta-data
@@ -152,6 +152,12 @@
             android:name="kr.co.metisinfo.sharingcharger.userManagement.ChargerFavoriteActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
+
+        <!-- PointChargeActivity -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
 
         <!-- 충전기 이력 화면 -->
         <activity

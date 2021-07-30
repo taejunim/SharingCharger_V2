@@ -162,7 +162,7 @@ public class GpsService extends Service implements LocationListener {
         double altitude = location.getAltitude();
 
 
-        Log.e(TAG, "위치정보 : " + provider + "\n" +
+        Log.e("metis", "위치정보 : " + provider + "\n" +
                 "위도 : " + Constants.currentLocationLng + "\n" +
                 "경도 : " + Constants.currentLocationLat + "\n" +
                 "고도  : " + altitude);

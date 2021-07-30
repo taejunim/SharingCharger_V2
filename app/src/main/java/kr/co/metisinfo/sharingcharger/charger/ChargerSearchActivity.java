@@ -18,11 +18,16 @@ import com.evzlife.android.blescanner.EVZScanCallbacks;
 import com.evzlife.android.blescanner.EVZScanManager;
 import com.evzlife.android.blescanner.EVZScanResult;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivitySearchChargerBinding;
+import kr.co.metisinfo.sharingcharger.model.ReservationModel;
+import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.view.activity.BLEChargingActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.CustomDialog;
 
@@ -34,8 +39,11 @@ public class ChargerSearchActivity extends BaseActivity {
 
     GlideDrawableImageViewTarget gifImage;
 
+    ApiUtils apiUtils = new ApiUtils();
+
+    ReservationModel reservationModel;
     //임시 5분충전
-    String reservationTime = "5";
+    String reservationTime;
 
     EvzBluetooth mEvzBluetooth;
 
@@ -66,6 +74,10 @@ public class ChargerSearchActivity extends BaseActivity {
         binding.includeHeader.txtTitle.setText("충전기 검색");
         binding.includeHeader.btnBack.setVisibility(View.INVISIBLE);
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
+
+        //reservationModel = (ReservationModel) getIntent().getSerializableExtra("reservationModel");
+
+        reservationTime = getIntent().getStringExtra("reservationTime");
 
         // reservationTime = getIntent().getStringExtra("reservationTime");
 
@@ -122,17 +134,25 @@ public class ChargerSearchActivity extends BaseActivity {
             public void onScanFinished(@NonNull List<EVZScanResult> results) {
                 mScData = results;
                 if (mScData.size() > 0) {
-                    Log.e(TAG, "onScan > 0");
+                    Log.e("metis", "onScan > 0");
 
                     for (int i = 0; i < mScData.size(); i++) {
-                        Log.e(TAG, "BLE : " + mScData.get(i).getDevice().getAddress());
+                        Log.e("metis", "BLE : " + mScData.get(i).getDevice().getAddress());
+
+                        if(reservationModel.bleNumber.equals(mScData.get(i).getDevice().getAddress())){
+                            //model = mArrayBLEData.get(i);
+                            // api 적용시 예약된 BLE로 바로 보내줌
+                            mEVZScanResult = mScData.get(i);
+                            passingMEVZScanResult();
+                            break;
+                        }
                     }
 
                     // api 적용시 예약된 BLE로 바로 보내줌
-                    mEVZScanResult = mScData.get(0);
-                    passingMEVZScanResult();
+                    /*mEVZScanResult = mScData.get(0);
+                    passingMEVZScanResult();*/
                 } else {
-                    Log.e(TAG, "onScan = 0");
+                    Log.e("metis", "onScan = 0");
                     scanFailed();
                 }
 
@@ -140,7 +160,7 @@ public class ChargerSearchActivity extends BaseActivity {
 
             @Override
             public void onScanFailed(int errorCode) {
-                Log.e(TAG, "onScanFailed");
+                Log.e("metis", "onScanFailed");
                 scanFailed();
             }
         });
@@ -154,7 +174,7 @@ public class ChargerSearchActivity extends BaseActivity {
         customDialog.show();
 
         customDialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
-            Log.e(TAG, "customDialog_ok_btn");
+            Log.e("metis", "customDialog_ok_btn");
             customDialog.dismiss();
             showLoading();
             getBLEScan();
@@ -186,6 +206,8 @@ public class ChargerSearchActivity extends BaseActivity {
 
         intent.putExtra("mEVZScanResult", mEVZScanResult);
 
+        intent.putExtra("reservationModel", reservationModel);
+
         intent.putExtra("reservationTime", reservationTime);
 
         startActivity(intent);
@@ -207,5 +229,32 @@ public class ChargerSearchActivity extends BaseActivity {
         }
 
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //예약 상태 확인, 예약없음, 예약 있음, 충전 중
+        reservationModel = apiUtils.getReservationStatus();
+
+        // 충전을 바로 하지 않을 수 있기 때문에 현재시간에서 예약완료 시간을 구해서 보내줘야함
+        Date nowDt = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date endDt = null;
+        try {
+            endDt = format.parse(reservationModel.getEndDate().replaceAll("T", " "));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long diff = endDt.getTime() - nowDt.getTime();
+        long min = diff / (60 * 1000);
+
+        Log.e("metis", "min : " + min);
+        Log.e("metis", "reservationTime : " + reservationTime);
+
+        reservationTime = String.valueOf(min);
+
     }
 }

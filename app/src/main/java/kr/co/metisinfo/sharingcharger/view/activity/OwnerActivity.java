@@ -66,7 +66,7 @@ public class OwnerActivity extends BaseActivity {
             // Connect 성공
             if (bd.getBoolean("Connect")) {
 
-                Log.e(TAG,"Connect handler");
+                Log.e("metis","Connect handler");
 
               //  BLEStart();
                 hideLoading();
@@ -169,7 +169,7 @@ public class OwnerActivity extends BaseActivity {
             public void onScanFinished(@NonNull List<EVZScanResult> results) {
                 mScData = results;
                 if (mScData.size() > 0) {
-                    Log.e(TAG, "onScan > 0");
+                    Log.e("metis", "onScan > 0");
 
                     Intent intent = new Intent(OwnerActivity.this, ChargerDialog.class);
 
@@ -178,7 +178,7 @@ public class OwnerActivity extends BaseActivity {
                     startActivityForResult(intent, Constants.PAGE_SEARCH_CHARGER);
 
                 } else {
-                    Log.e(TAG, "onScan = 0");
+                    Log.e("metis", "onScan = 0");
                     hideLoading();
                 }
 
@@ -186,7 +186,7 @@ public class OwnerActivity extends BaseActivity {
 
             @Override
             public void onScanFailed(int errorCode) {
-                Log.e(TAG, "onScanFailed");
+                Log.e("metis", "onScanFailed");
                 hideLoading();
             }
         });
@@ -286,7 +286,7 @@ public class OwnerActivity extends BaseActivity {
         mEB.BLEConnect(mCurData, new EvzScan.BLEConnect() {
             @Override
             public void Success() {
-                Log.e(TAG, "BLE Connect Success");
+                Log.e("metis", "BLE Connect Success");
                 BLEGetTag();
 
                 new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
@@ -303,7 +303,7 @@ public class OwnerActivity extends BaseActivity {
 
             @Override
             public void Fail(int code, String msg) {
-                Log.e(TAG, "BLE Connect Fail Code = "+code);
+                Log.e("metis", "BLE Connect Fail Code = "+code);
             }
 
         });
@@ -316,7 +316,7 @@ public class OwnerActivity extends BaseActivity {
             public void disConnect(int code) {
 
                 Toast.makeText(OwnerActivity.this,"BLEDisConnect",Toast.LENGTH_LONG).show();
-                Log.e(TAG, "BLEDisConnect Code = "+code);
+                Log.e("metis", "BLEDisConnect Code = "+code);
                 //finish();
 
             }
@@ -332,7 +332,7 @@ public class OwnerActivity extends BaseActivity {
                 if(startFlag){
 
                     startFlag = false;
-                    Log.e(TAG, "BLEStart Success");
+                    Log.e("metis", "BLEStart Success");
                     mCurData.setTag = testTag;
                     BLESetTag();
                 }
@@ -341,7 +341,7 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void Fail(int code, String msg) {
                 hideLoading();
-                Log.e(TAG, "BLEStart Fail Code = "+code);
+                Log.e("metis", "BLEStart Fail Code = "+code);
             }
 
         });
@@ -352,7 +352,7 @@ public class OwnerActivity extends BaseActivity {
         mEB.BLESetTag(mCurData, new EvzProtocol.BLESetTag() {
             @Override
             public void Success() {
-                Log.e(TAG, "BLESetTag Success");
+                Log.e("metis", "BLESetTag Success");
                 hideLoading();
                 chargerFrameClick(binding.frameEnd);
             }
@@ -360,7 +360,7 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void Fail(int code, String msg) {
                 hideLoading();
-                Log.e(TAG, "BLESetTag Fail Code = "+code);
+                Log.e("metis", "BLESetTag Fail Code = "+code);
             }
         });
     }
@@ -370,7 +370,7 @@ public class OwnerActivity extends BaseActivity {
         mEB.BLEStop(mCurData, new EvzProtocol.BLEStop() {
             @Override
             public void Success() {
-                Log.e(TAG, "BLEStop Success");
+                Log.e("metis", "BLEStop Success");
                 BLEGetTag();
                 new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
                     @Override
@@ -387,7 +387,7 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void Fail(int code, String msg) {
                 hideLoading();
-                Log.e(TAG, "BLEStop Fail Code = "+code);
+                Log.e("metis", "BLEStop Fail Code = "+code);
             }
 
         });
@@ -398,16 +398,16 @@ public class OwnerActivity extends BaseActivity {
         mEB.BLEGetTag(mCurData, new EvzProtocol.BLEGetTag() {
             @Override
             public void Success(ArrayList<EvzBLETagData> _data) {
-                Log.e(TAG, "BLEGetTag Success = " + _data.size());
+                Log.e("metis", "BLEGetTag Success = " + _data.size());
                 if (_data.size() == 0) {
-                    Log.e(TAG, "BLEGetTag Size == 0 ");
+                    Log.e("metis", "BLEGetTag Size == 0 ");
                 } else {
 
                     for (int i = 0; i < _data.size(); i++) {
 
                         EvzBLETagData _tag = _data.get(i);
 
-                        Log.e(TAG, "BLEGetTag  Number : "+ _tag.Number +" , kWh : "+ _tag.kwh + " , useTime : "+ _tag.useTime);
+                        Log.e("metis", "BLEGetTag  Number : "+ _tag.Number +" , kWh : "+ _tag.kwh + " , useTime : "+ _tag.useTime);
 
                         BLEDelOneTag(_tag);
                     }
@@ -416,7 +416,7 @@ public class OwnerActivity extends BaseActivity {
 
             @Override
             public void Fail(int code, String msg) {
-                Log.e(TAG, "BLEGetTag Fail Code = "+code);
+                Log.e("metis", "BLEGetTag Fail Code = "+code);
             }
         });
     }
@@ -427,12 +427,12 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void Success() {
 
-                runOnUiThread(() ->  Log.e(TAG, "BLEDelOneTag Success") );
+                runOnUiThread(() ->  Log.e("metis", "BLEDelOneTag Success") );
             }
 
             @Override
             public void Fail(int code, String msg) {
-                runOnUiThread(() ->  Log.e(TAG, "BLEDelOneTag Fail Code = " +code) );
+                runOnUiThread(() ->  Log.e("metis", "BLEDelOneTag Fail Code = " +code) );
             }
         });
     }
@@ -442,12 +442,12 @@ public class OwnerActivity extends BaseActivity {
         mEB.BLEUserDis(new EvzProtocol.BLEUserDis() {
             @Override
             public void Success() {
-                Log.e(TAG, "BLEUserDis Success");
+                Log.e("metis", "BLEUserDis Success");
             }
 
             @Override
             public void Fail(int i, String s) {
-                Log.e(TAG, "BLEUserDis Fail");
+                Log.e("metis", "BLEUserDis Fail");
             }
         });
     }
@@ -459,7 +459,7 @@ public class OwnerActivity extends BaseActivity {
             public void PlugState(int code) {
                 Toast.makeText(getApplicationContext(), "충전기에 플러그가 꼽혀있지 않습니다.\n충전기에 플러그를 꼽고 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
                 hideLoading();
-                Log.e(TAG, "PlugState Plug = "+ code);
+                Log.e("metis", "PlugState Plug = "+ code);
             }
         });
     }

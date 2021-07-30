@@ -15,6 +15,7 @@ import kr.co.metisinfo.sharingcharger.databinding.ActivitySettingBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.userManagement.ChangePasswordActivity;
 import kr.co.metisinfo.sharingcharger.userManagement.SignInActivity;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
 
 public class SettingActivity extends BaseActivity {
@@ -125,7 +126,16 @@ public class SettingActivity extends BaseActivity {
 
         protected Boolean doInBackground(Integer... values) {
 
-            //user Model update
+            //로그인 값 가져오기
+            PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+
+            preferenceUtil.putBoolean("isLogin", false);
+            preferenceUtil.putInt("userId", 0);
+            preferenceUtil.putString("name", "");
+            preferenceUtil.putString("email", "");
+            preferenceUtil.putString("password", "");
+            preferenceUtil.putString("userType", "");
+            preferenceUtil.putString("username", "");
 
             //TODO 로그아웃시 추후에 로컬디비에 지우거나 업데이트 해야할 로직이 있으면 여기에!
 
@@ -136,13 +146,13 @@ public class SettingActivity extends BaseActivity {
 
             if (isUpdate) {
 
-                Log.e(TAG, "로그아웃 성공");
+                Log.e("metis", "로그아웃 성공");
 
                 if(activityList.size() > 0) {
 
                     for (int i = 0; i < activityList.size(); i++) {
 
-                        Log.e(TAG,"activityList.get(i).getClass() : "+activityList.get(i).getClass());
+                        Log.e("metis","activityList.get(i).getClass() : "+activityList.get(i).getClass());
 
                         if (activityList.get(i).getClass().equals(MainActivity.class)) {
 
@@ -165,7 +175,7 @@ public class SettingActivity extends BaseActivity {
 
             } else {
 
-                Log.e(TAG, "로그아웃 실패");
+                Log.e("metis", "로그아웃 실패");
             }
 
             ThisApplication.staticUserModel = null;

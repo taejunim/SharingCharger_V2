@@ -67,7 +67,7 @@ public class HistorySearchConditionActivity extends BaseActivity {
 
         Intent intent = new Intent();
 
-        Log.e(TAG, "getMonth : " + getMonth);
+        Log.e("metis", "getMonth : " + getMonth);
 
         if (getMonth.equals("직접선택")) {
             getMonth = binding.historySearchStartDate.getText().toString() + "," + binding.historySearchEndDate.getText().toString();
@@ -121,7 +121,7 @@ public class HistorySearchConditionActivity extends BaseActivity {
 
         binding.historySearchEndDate.setText(setDate(0));
 
-        Log.e(TAG, "getMonth : " + getMonth);
+        Log.e("metis", "getMonth : " + getMonth);
 
         if (getMonth.equals("1개월")) {
             binding.historySearchStartDate.setText(setDate(1));

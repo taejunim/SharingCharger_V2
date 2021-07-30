@@ -56,13 +56,13 @@ public class L {
 
     public static void e(String TAG, String message) {
         if (BuildConfig.DEBUG) {
-            Log.e(TAG, getLoggerLocation() + message);
+            Log.e("metis", getLoggerLocation() + message);
         }
     }
 
     public static void e(String TAG) {
         if (BuildConfig.DEBUG) {
-            Log.e(TAG, getLoggerLocation());
+            Log.e("metis", getLoggerLocation());
         }
     }
 

@@ -267,7 +267,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void prepareListData() {
 
-        Log.e(TAG, "prepareListData START : " + startClass.getClass().getSimpleName());
+        Log.e("metis", "prepareListData START : " + startClass.getClass().getSimpleName());
 
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
@@ -514,7 +514,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
             } catch (Exception e) {
-                Log.e(TAG, "Exception : " + e);
+                Log.e("metis", "Exception : " + e);
 
                 txtReserveTime.setText("");
                 txtReserveSpot.setText("");
@@ -524,7 +524,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             txtEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e(TAG, "txtEmail click ");
+                    Log.e("metis", "txtEmail click ");
 
                     Intent intent = new Intent(startClass, ScanActivity.class);
                     startActivity(intent);

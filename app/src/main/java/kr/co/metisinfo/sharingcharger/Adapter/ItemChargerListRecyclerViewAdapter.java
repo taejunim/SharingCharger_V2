@@ -79,7 +79,7 @@ public class ItemChargerListRecyclerViewAdapter extends RecyclerView.Adapter<Ite
     @Override
     public int getItemCount() {
 
-        Log.e(TAG, "list.size() : " + list.size());
+        Log.e("metis", "list.size() : " + list.size());
         return list.size();
     }
 

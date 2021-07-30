@@ -1,25 +1,36 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.gson.Gson;
 import com.kakao.kakaonavi.KakaoNaviParams;
 import com.kakao.kakaonavi.KakaoNaviService;
 import com.kakao.kakaonavi.Location;
@@ -34,9 +45,15 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -45,19 +62,33 @@ import java.util.Map;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.Constants;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
 import kr.co.metisinfo.sharingcharger.charger.ChargerReservationActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityMainBinding;
+import kr.co.metisinfo.sharingcharger.dialog.ChargerFinishDialog;
+import kr.co.metisinfo.sharingcharger.dialog.InstantChargingDialog;
+import kr.co.metisinfo.sharingcharger.dialog.PointChargingDialog;
+import kr.co.metisinfo.sharingcharger.model.AllowTimeOfDayModel;
+import kr.co.metisinfo.sharingcharger.model.BookmarkModel;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
+import kr.co.metisinfo.sharingcharger.model.RechargeModel;
+import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.model.SearchKeywordModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
+import kr.co.metisinfo.sharingcharger.view.viewInterface.FragmentDialogInterface;
+import kr.co.metisinfo.sharingcharger.viewModel.BookmarkViewModel;
+import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements MapView.POIItemEventListener, MapView.MapViewEventListener {
+public class MainActivity extends BaseActivity implements MapView.POIItemEventListener, MapView.MapViewEventListener, FragmentDialogInterface {
 
     ActivityMainBinding binding;
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private List<ChargerModel> personalChargeList = new ArrayList<>();  //소유주 충전기 리스트
 
     ApiUtils apiUtils = new ApiUtils();
 
@@ -68,11 +99,14 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     private ArrayList<MapPoint> pointList = new ArrayList<>();  //맵 마커 표시
 
+    private MapPOIItem beforeClickMapPOIItem;   //마커 아이템 값
+
     private int clickPOIIndex = -1;
 
     private ChargerModel clickChargerModel;
 
     private ArrayList<ChargerModel> chargerList = new ArrayList<>();    //충전기 리스트
+    private ReservationModel reservationModel;
 
     private boolean isCurrentLocation = false;  // 현위치로 이동 여부
 
@@ -97,6 +131,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     private double locationLat = Constants.currentLocationLat;  //위도 , Y
     private double locationLng = Constants.currentLocationLng;  //경도 , X
 
+    private String reservationTime;
+
     GlideDrawableImageViewTarget gifImage;
 
     MapPOIItem[] mapPOIItems;
@@ -105,16 +141,34 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     private long backKeyPressedTime = 0;
 
+    private CustomDialog reservationCancelDialog;
+
+    private BookmarkViewModel bookmarkViewModel;
+
     Handler handler = new Handler();
 
     private String centerLocation;
 
+    private String chkRecharge = "";
+
+    private String gerUserType = "";
+
+    /* 20.12.28 즉시충전을 위한 변수 추가 START */
+    private String intntChgSTime = "";                                                            //즉시충전 다이어로그의 충전 시간을 위한 변수
+    private String intntChgETime = "";                                                            //즉시충전 다이어로그의 충전 시간을 위한 변수
+    /* 20.12.28 즉시충전을 위한 변수 추가 END */
 
     // true : 즉시충전, false : 예약충전
     private boolean checkChange = true;
 
     private String searchKeyword = "";
 
+    CommonUtils commonUtils = new CommonUtils();
+
+    //소유주 충전결과 화면 표시
+    boolean ownerResult = false;
+
+    boolean isFirst = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -164,12 +218,12 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     reserveType = data.getStringExtra("reserveType");
 
                     String temp = data.getStringExtra("checkChange");
-                    Log.e(TAG, "checkChange temp: " + temp);
+                    Log.e("metis", "checkChange temp: " + temp);
                     checkChange = Boolean.valueOf(temp);
 
-                    Log.e(TAG, "reserveChargingMinute : " + reserveChargingMinute);
-                    Log.e(TAG, "checkChange : " + checkChange);
-                    Log.e(TAG, "reserveRadius : " + reserveRadius);
+                    Log.e("metis", "reserveChargingMinute : " + reserveChargingMinute);
+                    Log.e("metis", "checkChange : " + checkChange);
+                    Log.e("metis", "reserveRadius : " + reserveRadius);
 
                     setTimeInit();
 
@@ -223,8 +277,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         String endHh = String.format(Locale.KOREA, "%02d", chargingEndHH);
         String endIi = String.format(Locale.KOREA, "%02d", chargingEndII);
 
-        Log.e(TAG, "choiceDate : " + choiceDate);
-        Log.e(TAG, "DateUtils.getWeek(choiceDate) : " + DateUtils.getWeek(choiceDate));
+        Log.e("metis", "choiceDate : " + choiceDate);
+        Log.e("metis", "DateUtils.getWeek(choiceDate) : " + DateUtils.getWeek(choiceDate));
 
         binding.txtChargingTerm.setText(mm + "/" + dd + " " + DateUtils.getWeek(choiceDate) + " " + startHh + ":" + startIi + " ~ " + endHh + ":" + endIi);
     }
@@ -234,14 +288,20 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        bookmarkViewModel = new ViewModelProvider(this).get(BookmarkViewModel.class);
+
         changeStatusBarColor(false);
+
+        if (ThisApplication.staticUserModel != null) {
+            gerUserType = ThisApplication.staticUserModel.userType;
+        }
 
     }
 
     @Override
     public void initViewModel() {
 
-        Log.e(TAG, "lat : " + Constants.currentLocationLat + ", lng : " + Constants.currentLocationLng);
+        Log.e("metis", "lat : " + Constants.currentLocationLat + ", lng : " + Constants.currentLocationLng);
         //현재 시간 표시
         setTime();
 
@@ -255,8 +315,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         createDefaultMarker(binding.mapView);
 
         //test 예약 있을때
-        binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
-        binding.layoutReservationInfo.setVisibility(View.VISIBLE);
+        /*binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
+        binding.layoutReservationInfo.setVisibility(View.VISIBLE);*/
         //test
     }
 
@@ -267,6 +327,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         binding.layoutReservationInfo.setOnClickListener(view -> {
 
             clickPOIIndex = 1;
+
+            CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ReservationInfo", Integer.parseInt(binding.txtChgrDetailNm.getTag().toString()));
+            task.execute();
 
             binding.layoutReservationDetailInfo.setVisibility(View.VISIBLE);
             binding.layoutReservationDetailInfo.startAnimation(translateTop);
@@ -281,11 +344,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         //충전시작 버튼 클릭
         binding.chgrDetailStart.setOnClickListener(view -> {
 
-            //test 충전기검색화면
-            Intent intent = new Intent(this, ChargerSearchActivity.class);
-            startActivity(intent);
-
-            binding.reservationDetailCloseImg.performClick();
+            //binding.reservationDetailCloseImg.performClick();
             //test
 
             /*
@@ -296,21 +355,82 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
              *  - 현재시간에서 예약완료 시간 구해서 실제 충전 시간 보내기
              * */
 
+            //소유주의 충전기일 경우 바로 소유주화면이동
+            Log.e("metis", "gerUserType : " + gerUserType);
+            if (gerUserType != null && gerUserType.equals("Personal")) {
+
+                SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+
+                String getActivity = pref.getString("activity", "");
+                Log.e("metis", "getActivity : " + getActivity);
+
+                if (!getActivity.equals("ChargerListActivity")) {
+
+                    Log.e("metis", "chkRecharge : " + chkRecharge);
+                    startMainPersonalActivity();
+                    return;
+                }
+            }
+
+            Log.e("metis", "chgrDetailStart return : ");
+
+            //사용자 일때
+            try {
+                boolean isTime = commonUtils.checkRechargeTime(reservationModel);
+                if (!isTime) {
+                    Toast.makeText(MainActivity.this, "현재 예약시간이 아니라 충전 시작을 할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    Log.e("metis", "현재 예약시간이 아니라 충전 시작을 할 수 없습니다.");
+                } else {
+                    //시작전 시간확인
+                    Intent intent = new Intent(this, ChargerSearchActivity.class);
+
+                    chkRecharge = "SearchBluetoothActivity";
+                    Log.e("metis", "chkRecharge is " + chkRecharge);
+
+                    intent.putExtra("reservationModel", reservationModel);
+
+                    // 충전을 바로 하지 않을 수 있기 때문에 현재시간에서 예약완료 시간을 구해서 보내줘야함
+                    Date nowDt = new Date();
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date endDt = format.parse(reservationModel.getEndDate().replaceAll("T", " "));
+
+                    long diff = endDt.getTime() - nowDt.getTime();
+                    long min = diff / (60 * 1000);
+
+                    Log.e("metis", "min : " + min);
+                    Log.e("metis", "reservationTime : " + reservationTime);
+
+                    intent.putExtra("reservationTime", String.valueOf(min));
+
+                    startActivity(intent);
+                }
+            } catch (ParseException e) {
+                Log.e("metis", "chgrDetailStart ParseException : " + e);
+            }
+
         });
 
         //예약취소 버튼 클릭
         binding.chgrDetailCancel.setOnClickListener(view -> {
 
+            showReservationDialog();
         });
 
         //충전기 즐겨찾기 추가
         binding.imageFavorite.setOnClickListener(view -> {
 
+            checkBookmark(view, chargerList.get(clickPOIIndex).id);
+
+            CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ChargerInfo", chargerList.get(clickPOIIndex).id);
+            task.execute();
         });
 
         //예약화면 즐겨찾기
         binding.imageFavoriteDetail.setOnClickListener(view -> {
+            checkBookmark(view, Integer.parseInt(binding.txtChgrDetailNm.getTag().toString()));
 
+            CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ReservationInfo", Integer.parseInt(binding.txtChgrDetailNm.getTag().toString()));
+            task.execute();
         });
 
         binding.layoutChargingInfo.setOnClickListener(view -> {
@@ -342,12 +462,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         //충전하기 클릭
         binding.btnReservation.setOnClickListener(view -> {
 
-            Log.e(TAG, "충전기 연결 : ");
-            //test
-            Intent intent = new Intent(MainActivity.this, ChargerReservationActivity.class);
-            startActivityForResult(intent, Constants.PAGE_RESERVE);
-            //test
-
             /*
              * 1. 소유주의 충전기일 경우 바로 소유주화면이동
              * 2. 즉시충전/예약하기 구분
@@ -355,13 +469,115 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
              * 4. 예상 포인트 가져오기
              * 5. 현재 - 예상 : 충전가능한지 확인
              * */
+            Log.e("metis", "gerUserType : " + gerUserType);
+            if (gerUserType != null && gerUserType.equals("Personal")) {
+                Log.e("metis", "personalChargeList.size() : " + personalChargeList.size());
+                for (int i = 0; i < personalChargeList.size(); i++) {
 
+                    Log.e("metis", "personalChargeList.get(i).getBleNumber() : " + personalChargeList.get(i).getBleNumber());
+                    Log.e("metis", "chargerList.get(clickPOIIndex).getBleNumber() : " + chargerList.get(clickPOIIndex).getBleNumber());
+
+                    if (personalChargeList.get(i).getBleNumber().equals(chargerList.get(clickPOIIndex).getBleNumber())) {
+
+                        startMainPersonalActivity();
+
+                        return;
+                    }
+                }
+            }
+
+            //소유주일 경우 바로 소유주화면이동
+
+            Log.e("metis", "return : ");
+
+            //넘기기 전에 예약진행인지 잔액부족인지 구분해야함 , chargerId
+            Intent intent = new Intent(this, ChargerReservationActivity.class);
+
+            //충전시간 보내주기
+            intent.putExtra("chargerId", chargerList.get(clickPOIIndex).id);
+
+            int expectPoint = 0;
+            int currentPoint = 0;
+
+            String sDate = "";
+            String eDate = "";
+
+            try {
+                //실시간 포인트 가져오기
+                currentPoint = apiUtils.getUserPoint();
+
+                Log.d(TAG, "충전하기 버튼 클릭 시 현재 포인트 : " + currentPoint);
+
+                //계산된 api에서 값 가져와야함
+
+                sDate = String.format(Locale.KOREA, "%04d", chargingStartYYYY) + "-" + String.format(Locale.KOREA, "%02d", chargingStartMM) + "-" + String.format(Locale.KOREA, "%02d", chargingStartDD) + "T" + String.format(Locale.KOREA, "%02d", chargingStartHH) + ":" + String.format(Locale.KOREA, "%02d", chargingStartII) + ":00";
+                eDate = String.format(Locale.KOREA, "%04d", chargingEndYYYY) + "-" + String.format(Locale.KOREA, "%02d", chargingEndMM) + "-" + String.format(Locale.KOREA, "%02d", chargingEndDD) + "T" + String.format(Locale.KOREA, "%02d", chargingEndHH) + ":" + String.format(Locale.KOREA, "%02d", chargingEndII) + ":00";
+
+                expectPoint = apiUtils.getExpectPoint(String.valueOf(chargerList.get(clickPOIIndex).id), sDate, eDate);
+
+            } catch (Exception e) {
+                Log.e("metis", "binding.btnReservation.setOnClickListener Exception : " + e);
+            }
+
+
+            if (currentPoint >= expectPoint) {                                                      //포인트가 부족하지 않으면,
+                intent.putExtra("reservation", "true");
+            } else {                                                                                  //포인트 충전
+                intent.putExtra("reservation", "false");
+            }
+
+            //현재 잔여포인트
+            intent.putExtra("currentPoint", currentPoint);
+            //예상 포인트
+            intent.putExtra("expectPoint", expectPoint);
+            //예약시간
+            intent.putExtra("reservationSDate", sDate);
+            intent.putExtra("reservationEDate", eDate);
+            //충전기이름
+            intent.putExtra("chargerName", chargerList.get(clickPOIIndex).name);
+
+            if (checkChange) {                                                                        //즉시 충전
+
+                ReservationModel rModel = new ReservationModel();
+
+                rModel.startDate = sDate;
+                rModel.endDate = eDate;
+                rModel.reservationType = "RESERVE";
+                rModel.chargerId = chargerList.get(clickPOIIndex).id;
+                rModel.userId = ThisApplication.staticUserModel.getId();
+                rModel.expectPoint = expectPoint;
+
+                Log.d(TAG, "보유 포인트: " + currentPoint);
+                Log.d(TAG, "계산 포인트: " + expectPoint);
+
+                /*21.01.04 즉시 충전 시, 포인트 체크 후 수정 START*/
+                if (currentPoint < expectPoint) {                                                   //포인트가 부족하면,
+
+                    //현재 포인트 보내줘야함
+                    PointChargingDialog pcd = new PointChargingDialog(this, currentPoint);
+                    pcd.setCancelable(false);                                                       //DIALOG BACKGROUND CLICK FALSE
+                    pcd.show();
+                } else {
+
+                    reservationTime = String.valueOf(reserveChargingMinute);                        //minute과 Time의 2개 있는 이유를 모르겠음..minute을 Time에 담아주는것도 없고..
+
+                    InstantChargingDialog icd = new InstantChargingDialog(this, chargerList.get(clickPOIIndex).name, intntChgSTime + " ~ " + intntChgETime, rModel, reservationTime);
+
+                    chkRecharge = "SearchBluetoothActivity";
+                    icd.setCancelable(false);                                                       //DIALOG BACKGROUND CLICK FALSE
+                    icd.show();                                                                     //충전하기 DIALOG SHOW
+                }
+                /*21.01.04 즉시 충전 시, 포인트 체크 후 수정 END*/
+            } else {
+
+                startActivityForResult(intent, Constants.PAGE_RESERVE);
+            }
         });
 
         // 충전기 길 안내
         binding.btnNavi.setOnClickListener(view -> {
 
-            Log.e(TAG, "클릭한 충전기명 : " + clickChargerModel.name + "\n위도 : " + clickChargerModel.gpsY + "\n경도 : " + clickChargerModel.gpsX);
+            Log.e("metis", "클릭한 충전기명 : " + clickChargerModel.name + "\n위도 : " + clickChargerModel.gpsY + "\n경도 : " + clickChargerModel.gpsX);
 
             goNavigation(clickChargerModel.name, clickChargerModel.gpsX, clickChargerModel.gpsY);
 
@@ -420,6 +636,117 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         });
     }
 
+    private void showReservationDialog() {
+
+        reservationCancelDialog = new CustomDialog(this, "해당 예약건을 취소하시겠습니까?");
+
+        reservationCancelDialog.show();
+
+        reservationCancelDialog.findViewById(R.id.dialog_no_btn).setOnClickListener(view -> {
+
+            reservationCancelDialog.dismiss();
+        });
+
+        reservationCancelDialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
+
+            //예약취소
+            try {
+                //예약취소
+                boolean result = apiUtils.cancelReservation(Integer.toString(reservationModel.id));
+
+                if(result){
+                    if (ThisApplication.staticUserModel.getUserType().equals("Personal")) {
+                        SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("activity", null);
+                        editor.commit();
+                    }
+                }else{
+                    Log.e("metis", "취소할 예약건이 없음");
+                }
+
+                setTime();
+
+                binding.reservationDetailCloseImg.performClick();
+                reservationCancelDialog.cancel();
+                reloadInfo();
+
+            } catch (Exception e) {
+
+                Log.e("metis", "예약취소 실패 ");
+                Log.e("metis", "error : " + e.getMessage());
+
+                binding.reservationDetailCloseImg.performClick();
+                reservationCancelDialog.cancel();
+                reloadInfo();
+
+            }
+        });
+    }
+
+    public void checkBookmark(View view, int chargerId) {
+
+        if (view.getTag().toString().equals("on")) {
+
+            bookmarkViewModel.deleteBookmarkItem(ThisApplication.staticUserModel.id, chargerId);
+
+        } else {
+
+            BookmarkModel model = new BookmarkModel();
+
+            model.userId = ThisApplication.staticUserModel.id;
+            model.chargerId = chargerId;
+
+            BookMarkTask task = new BookMarkTask(model);
+            task.execute();
+
+        }
+    }
+
+    @Override
+    public void btnClick(boolean btnType) {
+        setTime();
+        reloadInfo();
+        chkRecharge = "";
+    }
+
+    // < >안에 들은 자료형은 순서대로 doInBackground, onProgressUpdate, onPostExecute의 매개변수 자료형(내가 사용할 매개변수타입을 설정하면된다)
+    class BookMarkTask extends AsyncTask<Integer, Integer, Boolean> {
+
+        private BookmarkModel model;
+
+        public BookMarkTask(BookmarkModel model) {
+            super();
+            this.model = model;
+        }
+
+        protected void onPreExecute() {
+
+        }
+
+        protected Boolean doInBackground(Integer... values) {
+
+            BookmarkModel bookModel = bookmarkViewModel.selectOneBookmark(ThisApplication.staticUserModel.id, model.chargerId);
+            if (bookModel == null) {
+                bookmarkViewModel.insertBookmark(model);
+
+            }
+
+            return true;
+        }
+
+        protected void onPostExecute(Boolean isInsert) {
+
+        }
+    }
+
+    public void startMainPersonalActivity(){
+
+        chkRecharge = "MainPersonalActivity";
+        Intent intent = new Intent(this, OwnerActivity.class);
+        startActivity(intent);
+    }
+
     //지도 움직일때마다 주소 가져오기
     private void SearchAddress() {
 
@@ -430,17 +757,17 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             addresses = geocoder.getFromLocation(locationLat, locationLng, 7);
         } catch (IOException ioException) {
             //네트워크 문제
-            Log.e(TAG, "지오코더 서비스 사용불가");
+            Log.e("metis", "지오코더 서비스 사용불가");
         } catch (IllegalArgumentException illegalArgumentException) {
 
-            Log.e(TAG, "잘못된 GPS 좌표");
+            Log.e("metis", "잘못된 GPS 좌표");
         }
 
-        Log.e(TAG, "addresses size : " + addresses.size());
+        Log.e("metis", "addresses size : " + addresses.size());
         if (addresses.size() > 0) {
             Address address = addresses.get(0);
             binding.editSearch.setText(address.getAddressLine(0).replaceAll("대한민국 ", ""));
-            Log.e(TAG, "주소 발견 : " + address);
+            Log.e("metis", "주소 발견 : " + address);
 
         }
     }
@@ -549,7 +876,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         
         intent.putExtra("checkChange", String.valueOf(checkChange));     //즉시, 예약
 
-        Log.e(TAG, "checkChange : " + checkChange);
+        Log.e("metis", "checkChange : " + checkChange);
 
         startActivityForResult(intent, Constants.PAGE_SEARCH_CONDITION);
 
@@ -651,20 +978,48 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             if (isSearchKeywordMarkerClick) {    // 키워드 검색 후 말풍선 클릭
 
             } else {                            // 그 외
-                Log.e(TAG, "onPOIItemSelected else");
+                Log.e("metis", "onPOIItemSelected else");
                 int tag = mapPOIItem.getTag();
 
                 if (tag != 0) {
-                    Log.e(TAG, "onPOIItemSelected tag != 0");
-                    Log.e(TAG, "mapPOIItem.getTag() : " + mapPOIItem.getTag());
+                    Log.e("metis", "onPOIItemSelected tag != 0");
+                    Log.e("metis", "mapPOIItem.getTag() : " + mapPOIItem.getTag());
                     clickPOIIndex = mapPOIItem.getTag();
 
-                    chargerId = chargerList.get(clickPOIIndex).id;
+                    if (beforeClickMapPOIItem == null) {
 
-                    binding.layoutChgrInfo.setVisibility(View.VISIBLE);
-                    binding.layoutChgrInfo.startAnimation(translateTop);
+                        beforeClickMapPOIItem = mapPOIItem;
 
-                    binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
+                        if (!isPageOpen) {
+
+                            //충전기 상세정보
+                            chargerId = setChargerDetailInfo();
+
+                        } else {
+                            chargerId = -1;
+                        }
+                    } else {
+
+                        if (beforeClickMapPOIItem == mapPOIItem) {
+
+                            if (!isPageOpen) {
+
+                                //충전기 상세정보
+                                chargerId = setChargerDetailInfo();
+
+                            } else {
+                                chargerId = -1;
+                            }
+                        } else {
+
+                            isPageOpen = false;
+
+                            //충전기 상세정보
+                            chargerId = setChargerDetailInfo();
+
+                        }
+                        beforeClickMapPOIItem = mapPOIItem;
+                    }
 
                     if (chargerId != -1) {
                         clickChargerModel = chargerList.get(clickPOIIndex);
@@ -672,10 +1027,38 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, "onPOIItemSelected  Exception : " + e);
+            Log.e("metis", "onPOIItemSelected  Exception : " + e);
         }
     }
 
+    //충전기 상세정보
+    public int setChargerDetailInfo(){
+
+        binding.txtChgrNm.setText(chargerList.get(clickPOIIndex).name);
+        //주소 및 충전 요금 즐겨찾기
+        setChargerInfo();
+
+        binding.layoutChgrInfo.setVisibility(View.VISIBLE);
+        binding.layoutChgrInfo.startAnimation(translateTop);
+
+        binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
+
+        return chargerList.get(clickPOIIndex).id;
+    }
+
+    public void setChargerInfo() {
+
+        Log.e("metis", "clickPOIIndex : " + clickPOIIndex);
+        Log.e("metis", "chargerList : " + chargerList.size());
+
+        binding.txtChgrAddrNm.setText(chargerList.get(clickPOIIndex).address);
+        binding.txtChgrAmtValue.setText(chargerList.get(clickPOIIndex).rangeOfFee);
+
+        //즐겨찾기 확인
+        CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ChargerInfo", chargerList.get(clickPOIIndex).id);
+        task.execute();
+
+    }
 
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
@@ -780,8 +1163,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             locationLat = mapPoint.getMapPointGeoCoord().latitude;
             locationLng = mapPoint.getMapPointGeoCoord().longitude;
 
-            Log.e(TAG, "locationLat : " + locationLat);
-            Log.e(TAG, "locationLng : " + locationLng);
+            Log.e("metis", "locationLat : " + locationLat);
+            Log.e("metis", "locationLng : " + locationLng);
 
             SearchAddress();
         }
@@ -838,7 +1221,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         createSearchKeywordMarker(binding.mapView, model);
 
-        Log.e(TAG, "mapView  2 : " + model.x + " , " + model.y);
+        Log.e("metis", "mapView  2 : " + model.x + " , " + model.y);
 
         //키워드 검색 시 지도중심일 경우 중심좌표는 그대로 나둠
         if (centerLocation == null || !centerLocation.equals("지도")) {
@@ -868,49 +1251,623 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
         Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
 
+        //예약 상태 확인, 예약없음, 예약 있음, 충전 중
+        reservationModel = apiUtils.getReservationStatus();
+
+        if (reservationModel != null) {
+
+            //userType 체크, 예약 있을시 예약화면 표시 or 충전중 표시
+            checkRecharge();
+
+            SearchAddress();
+
+            binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
+
+            //예약클릭시 디테일정보 표시
+            setReservationDetailInfo(reservationModel);
+
+            binding.layoutReservationInfo.setVisibility(View.VISIBLE);
+
+            pointList.add(MapPoint.mapPointWithGeoCoord(Constants.currentLocationLat, Constants.currentLocationLng));
+
+        }
+        //예약없을 시 충전기 검색
+        else {
+
+            binding.layoutChargingInfo.setVisibility(View.VISIBLE);
+            binding.layoutReservationInfo.setVisibility(View.INVISIBLE);
+
+            ChargerModel chargerModel;
+
+            chargerModel = new ChargerModel();
+
+            chargerModel.id = -1;
+            chargerModel.address = "현재위치";
+            chargerModel.gpsY = lat;
+            chargerModel.gpsX = lng;
+            chargerModel.name = "현재위치";
+
+            chargerList.add(chargerModel);
+
+            getChargersAPI();
+
+            for (int i = 0; i < chargerList.size(); i++) {
+
+                pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
+            }
+        }
+    }
+
+    public void getChargersAPI() {
+
         SearchAddress();
 
-        ChargerModel chargerModel = new ChargerModel();
+        Log.e("metis", "getChargersAPI");
 
-        chargerModel.id = -1;
-        chargerModel.address = "현재위치";
-        chargerModel.gpsY = lat;
-        chargerModel.gpsX = lng;
-        chargerModel.name = "현재위치";
+        String tempRadius = reserveRadius;
 
-        chargerList.add(chargerModel);
-
-        //dummy start
-        List<Map<String, String>> test = new ArrayList<>();
-        Map<String, String> testM = new HashMap<>();
-        testM.put("gpsX","126.5676455");
-        testM.put("gpsY","33.4524403");
-
-        test.add(testM);
-
-        testM = new HashMap<>();
-        testM.put("gpsX","126.5620128");
-        testM.put("gpsY","33.4515312");
-        test.add(testM);
-
-        for(int j = 0; j < test.size(); j++){
-            ChargerModel c = new ChargerModel();
-
-            c.id = j+1;
-            c.address = "test"+j;
-            c.gpsY = Double.parseDouble(test.get(j).get("gpsY"));
-            c.gpsX = Double.parseDouble(test.get(j).get("gpsX"));
-            c.currentStatusType = "READY";
-            c.name = "test"+j;
-
-            chargerList.add(c);
+        if (tempRadius.equals("전체")) {
+            tempRadius = "";
+        } else {
+            tempRadius = tempRadius.replaceAll("km", "").trim();
         }
-        //dummy end
+        Log.e("metis", "tempRadius : " + tempRadius);
 
-        for (int i = 0; i < chargerList.size(); i++) {
+        Log.e("metis", "gpsX : " + Constants.currentLocationLat);
+        Log.e("metis", "gpsY : " + Constants.currentLocationLng);
 
-            pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
+        String tempStartDate = String.format(Locale.KOREA, "%04d", chargingStartYYYY) + "-" + String.format(Locale.KOREA, "%02d", chargingStartMM) + "-" + String.format(Locale.KOREA, "%02d", chargingStartDD) + "T" + String.format(Locale.KOREA, "%02d", chargingStartHH) + ":" + String.format(Locale.KOREA, "%02d", chargingStartII) + ":00";
+
+        Log.e("metis", "tempStartDate  : " + tempStartDate);
+
+        String tempEndDate = String.format(Locale.KOREA, "%04d", chargingEndYYYY) + "-" + String.format(Locale.KOREA, "%02d", chargingEndMM) + "-" + String.format(Locale.KOREA, "%02d", chargingEndDD) + "T" + String.format(Locale.KOREA, "%02d", chargingEndHH) + ":" + String.format(Locale.KOREA, "%02d", chargingEndII) + ":00";
+        Log.e("metis", "endDate : " + tempEndDate);
+
+        try {
+
+            //충전기 리스트 가져오기
+            Map<String, Object> map = apiUtils.getChargers(tempStartDate, tempEndDate, tempRadius, chargerList);
+
+            boolean result = (boolean) map.get("result");
+
+            if(result){
+                chargerList = (ArrayList<ChargerModel>) map.get("list");
+            }else{
+                Toast.makeText(getApplicationContext(), "충전기 목록을 가져오는데 실패하였습니다. 충전기 검색을 다시 해주세요.", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", "getChargersAPI Exception : " + e);
         }
+    }
+
+    public void setReservationDetailInfo(ReservationModel reservationModel) {
+
+        String getStartDate = reservationModel.startDate;
+
+        Log.e("metis", "getStartDate :" + getStartDate);
+
+        String getEndDate = reservationModel.endDate;
+
+        Log.e("metis", "getEndDate :" + getEndDate);
+
+        Calendar startCal = commonUtils.setCalendarDate(getStartDate);
+        Calendar endCal = commonUtils.setCalendarDate(getEndDate);
+
+        //요일 구하기
+        String getWeek = DateUtils.getWeek(
+                String.format(Locale.KOREA, "%02d", startCal.get(Calendar.YEAR))
+                        + String.format(Locale.KOREA, "%02d", startCal.get(Calendar.MONTH) + 1)
+                        + String.format(Locale.KOREA, "%02d", startCal.get(Calendar.DAY_OF_MONTH)));
+
+        //총 몇시간 충전인지 구하기
+        long diff = endCal.getTimeInMillis() - startCal.getTimeInMillis();
+
+        long min = diff / (60 * 1000);
+        long hour = diff / (60 * 60 * 1000);
+        long day = diff / (24 * 60 * 60 * 1000);
+
+        reservationTime = String.valueOf(min);
+
+        String totalTime = "";
+
+        if ((hour - day * 24) != 0) {
+            totalTime = (hour - day * 24) + "시간 ";
+        }
+        if ((min - hour * 60) != 0) {
+            totalTime += (min - hour * 60) + "분";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        String timeTerm = String.format(Locale.KOREA, "%02d", startCal.get(Calendar.MONTH) + 1) + "/" + String.format(Locale.KOREA, "%02d", startCal.get(Calendar.DAY_OF_MONTH)) + " " + getWeek + " " + sdf.format(startCal.getTime()) + " ~ " + sdf.format(endCal.getTime());
+
+        binding.txtReservationTime.setText(totalTime);
+        binding.txtReservationTerm.setText(timeTerm);
+
+        binding.reservationDetailTotalTime.setText(totalTime);
+        binding.reservationDetailDetailTime.setText(timeTerm);
+        binding.txtChgrDetailNm.setText(reservationModel.chargerName);
+
+        binding.txtChgrDetailNm.setTag(reservationModel.chargerId);
+
+        //"제주 제주시 관광대학로 111(아라일동)"
+        binding.txtChgrAddrDetailNm.setText(reservationModel.chargerAddress);
+
+        //"178p"
+        binding.txtChgrDetailAmtValue.setText(reservationModel.rangeOfFee);
+
+        //즐겨찾기 확인
+        CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ReservationInfo", reservationModel.chargerId);
+        task.execute();
+
+        //네비이미지
+        binding.btnNaviDetail.setTag(reservationModel.gpsX + "," + reservationModel.gpsY);
+
+    }
+
+    public void checkRecharge() {
+
+        try {
+
+            binding.layoutReservationInfoRechargeTxt.setText("예약");
+            binding.mainRechargingTxt.setVisibility(View.INVISIBLE);
+            binding.chgrDetailCancel.setVisibility(View.VISIBLE);
+            binding.chgrDetailStart.setText("충전 시작");
+
+            Log.e("metis", " gerUserType is " + gerUserType);
+
+            //현재시간이 예약 start,end Date 범위안에 있고 예약상태가 KEEP일경우 (충전중)
+            if (commonUtils.checkRechargeTime(reservationModel) && reservationModel.state.equals("KEEP")) {
+                binding.layoutReservationInfoRechargeTxt.setText("충전중");
+                binding.mainRechargingTxt.setVisibility(View.VISIBLE);
+                binding.chgrDetailCancel.setVisibility(View.GONE);
+                binding.chgrDetailStart.setText("충전기 연결");
+
+                SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+
+                // UserType이 소유주 이고
+                if (gerUserType != null && gerUserType.equals("Personal") && !chkRecharge.equals("onResume")) {
+                    String getActivity = pref.getString("activity", "");
+
+                    //소유주 화면에서 충전 중일시 소유주 화면으로 이동
+                    if (getActivity.equals("MainPersonalActivity")) {
+                        startMainPersonalActivity();
+                    }
+                }
+
+            }
+            //충전중인 상황에서 자동종료
+            else if (!commonUtils.checkRechargeTime(reservationModel) && reservationModel.state.equals("KEEP")) {
+                mainRechargeModel();
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", "checkRecharge Exception : " + e);
+        }
+
+    }
+
+    // 메인화면에서 충전결과 화면 표시.
+    public void mainRechargeModel() {
+
+        try {
+
+            SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+            String prefTime = pref.getString("time", "");
+
+            ownerResult = true;
+
+            //modal 추가
+            /*충전결과 MSG를 위하여 MODEL에 SET START*/
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            RechargeModel rModel = new RechargeModel();   //충전결과 MSG MODEL SET
+
+            Date oldDate = format.parse(prefTime);
+            Date nowDate = format.parse(reservationModel.getEndDate().replaceAll("T", " "));
+            Log.e("metis", "oldDate : " + format.format(oldDate));
+            Log.e("metis", "nowDate : " + format.format(nowDate));
+
+            long diff = nowDate.getTime() - oldDate.getTime();
+            long second = diff / 1000;
+
+            rModel.reservationPoint = reservationModel.expectPoint;
+            rModel.rechargePoint = 0;
+            rModel.chargingTime = commonUtils.chargingTime((int) second);                                  //sec를 hh:mm:ss로 변환 CALL
+            rModel.startRechargeDate = prefTime;
+            rModel.endRechargeDate = commonUtils.timeSecCalculation(rModel.startRechargeDate, (int) second);   //sec 시간 계산(yyyy-MM-dd HH:mm:ss) CALL
+
+            showChargerFinishDialog(rModel);
+            /*충전결과 MSG를 위하여 MODEL에 SET END*/
+
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("activity", null);
+            editor.putString("time", null);
+            editor.commit();
+
+        } catch (Exception e) {
+            Log.e("metis", "checkRecharge Exception : " + e);
+        }
+    }
+
+    /*
+     * CHARGER FINNISH DIALOG SHOW
+     * */
+    private void showChargerFinishDialog(RechargeModel rModel) {
+
+        ChargerFinishDialog cfd = new ChargerFinishDialog(this, rModel, this);
+
+        cfd.getType = "Main";
+        cfd.setCancelable(false);                                                                   //DIALOG BACKGROUND CLICK FALSE
+        cfd.show();
+    }
+
+    // < >안에 들은 자료형은 순서대로 doInBackground, onProgressUpdate, onPostExecute의 매개변수 자료형(내가 사용할 매개변수타입을 설정하면된다)
+    class CheckBookmarkBackgroundTask extends AsyncTask<Integer, Integer, Boolean> {
+
+        String getType;
+        int getChargerId;
+        Context context;
+        Response<Object> response;
+
+        public CheckBookmarkBackgroundTask(Context context, String getType, int getChargerId) {
+            super();
+
+            this.context = context;
+            this.getType = getType;
+            this.getChargerId = getChargerId;
+
+        }
+
+        protected void onPreExecute() {
+
+        }
+
+        protected Boolean doInBackground(Integer... values) {
+
+            BookmarkModel model = bookmarkViewModel.selectOneBookmark(ThisApplication.staticUserModel.id, getChargerId);
+
+            Log.e("metis", "getChargerId");
+
+            Log.e("metis", String.valueOf(getChargerId));
+
+            try {
+                response = apiUtils.getReservationsChargersList(String.valueOf(getChargerId));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return model != null;
+        }
+
+        protected void onPostExecute(Boolean isBoolean) {
+
+            if (getType.equals("ChargerInfo")) {
+
+                if (isBoolean) {
+                    binding.imageFavorite.setBackground(getDrawable(R.mipmap.star_on));
+                    binding.imageFavorite.setTag("on");
+                } else {
+                    binding.imageFavorite.setBackground(getDrawable(R.mipmap.star_off));
+                    binding.imageFavorite.setTag("off");
+                }
+
+                if (response.code() == 200) {
+
+                    //예약 이용가능 시간
+                    JSONObject json = new JSONObject((Map) response.body());
+                    Log.e("metis", "json : " + json);
+
+                    //yyyyMMddHHmm
+                    String getFullSDate = String.format(Locale.KOREA, "%04d", chargingStartYYYY) + String.format(Locale.KOREA, "%02d", chargingStartMM) + String.format(Locale.KOREA, "%02d", chargingStartDD) + String.format(Locale.KOREA, "%02d", chargingStartHH) + String.format(Locale.KOREA, "%02d", chargingStartII);
+
+                    Log.e("metis", "getFullSdate : " + getFullSDate);
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                    Calendar startCal = Calendar.getInstance();
+
+                    startCal.set(Integer.parseInt(getFullSDate.substring(0, 4)), Integer.parseInt(getFullSDate.substring(4, 6)), Integer.parseInt(getFullSDate.substring(6, 8)), Integer.parseInt(getFullSDate.substring(8, 10)), Integer.parseInt(getFullSDate.substring(10, 12)), 00);
+                    //month+1이 나오기 때문에 다시 -1 해줌
+                    startCal.add(Calendar.MONTH, -1);
+
+                    String currentTime = format.format(startCal.getTime());
+                    intntChgSTime = currentTime.substring(currentTime.length() - 8, currentTime.length());
+                    Log.e("metis", "currentTime : " + currentTime);
+
+                    List<ReservationModel> reservationList = new ArrayList<>();
+
+                    System.out.println("충전 분 :" + reserveChargingMinute);
+
+                    try {
+
+                        //충전기 open, closeTime 가져오기
+                        JSONArray contacts = json.getJSONArray("chargerTimeAvailable");
+
+                        for (int i = 0; i < contacts.length(); i++) {
+                            Log.e("metis", "chargerTimeAvailable");
+                            JSONObject obj = (JSONObject) contacts.get(i);
+
+                            JSONArray allowArray = obj.getJSONArray("allowTimeOfDays");
+
+                            Gson gson = new Gson();
+
+                            AllowTimeOfDayModel allowTimeOfDayModel = gson.fromJson(allowArray.get(0).toString(), AllowTimeOfDayModel.class);
+
+                            Log.e("metis", "allowTimeOfDayModel : " + allowTimeOfDayModel);
+
+                            //full open
+                            if (allowTimeOfDayModel.getOpenTime().equals("00:00:00") && allowTimeOfDayModel.getCloseTime().equals("23:59:59")) {
+
+                            } else {
+
+                                String openTime = allowTimeOfDayModel.getOpenTime();
+                                String closeTime = allowTimeOfDayModel.getCloseTime();
+                                if (allowTimeOfDayModel.getCloseTime().equals("23:59:59")) {
+                                    closeTime = "24:00:00";
+                                }
+
+                                openTime = format.format(startCal.getTime()).substring(0, 10) + " " + openTime;
+                                closeTime = format.format(startCal.getTime()).substring(0, 10) + " " + closeTime;
+
+                                String hourOpen = format.format(startCal.getTime()).substring(0, 10) + " 00:00:00";
+                                String hourClose = format.format(startCal.getTime()).substring(0, 10) + " 24:00:00";
+
+                                ReservationModel model = new ReservationModel();
+                                //closeTime 만 다름
+                                if (allowTimeOfDayModel.getOpenTime().equals("00:00:00")) {
+
+                                    model.startDate = closeTime;
+                                    model.endDate = hourClose;
+                                    reservationList.add(model);
+                                    Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
+
+                                }
+                                //openTime만 다름
+                                else if (allowTimeOfDayModel.getCloseTime().equals("23:59:59")) {
+
+                                    model.startDate = hourOpen;
+                                    model.endDate = openTime;
+                                    reservationList.add(model);
+                                    Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
+                                }
+                                //둘다 다름
+                                else {
+
+                                    model.startDate = closeTime;
+                                    model.endDate = hourClose;
+                                    reservationList.add(model);
+                                    Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
+
+                                    model = new ReservationModel();
+                                    model.startDate = hourOpen;
+                                    model.endDate = openTime;
+                                    reservationList.add(model);
+                                    Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
+                                }
+                            }
+
+                            startCal.add(Calendar.DATE, 1);
+                        }
+
+                        Calendar tempCal = commonUtils.setCalendarDate(currentTime);
+
+                        tempCal.add(Calendar.MINUTE, reserveChargingMinute);
+
+                        String tempTime = format.format(tempCal.getTime());
+                        tempTime = tempTime.substring(0, tempTime.length() - 2) + "00";
+                        Log.e("metis", "tempCal :" + tempTime);
+
+                        intntChgETime = tempTime.substring(tempTime.length() - 8, tempTime.length());
+
+                        //예약 리스트 가져오기
+                        JSONObject obj = json.getJSONObject("reservations");
+
+                        JSONArray contentArray = obj.getJSONArray("content");
+
+                        for (int i = 0; i < contentArray.length(); i++) {
+                            Log.e("metis", contentArray.get(i).toString());
+
+                            Gson gson = new Gson();
+                            ReservationModel reservationModel = gson.fromJson(contentArray.get(i).toString(), ReservationModel.class);
+                            reservationList.add(reservationModel);
+                        }
+
+                        reservationList = commonUtils.dateSort(reservationList);
+                        Log.e("metis", "sort");
+                        Log.e("metis", reservationList.toString());
+
+                        //현재 시간 구하기
+                        String getFullDate = setFullDateTime(true);
+                        Log.e("metis", "getFullDate :" + getFullDate);
+
+                        getFullDate = getFullDate.substring(0, 4) + "-" + getFullDate.substring(4, 6) + "-" + getFullDate.substring(6, 8) + " " + getFullDate.substring(8, 10) + ":" + getFullDate.substring(10, 12) + ":00";
+
+                        Date currDt = format.parse(getFullDate);
+                        List<String> availableList = new ArrayList<>();
+                        Calendar curCal = Calendar.getInstance();
+                        curCal.setTime(currDt);
+
+                        Log.e("metis", "curCal diff:" + format.format(curCal.getTime()));
+
+                        //이용 가능시간
+                        for (int i = 0; i < reservationList.size(); i++) {
+
+                            ReservationModel model = reservationList.get(i);
+                            Date tempDt = format.parse(model.getStartDate().replaceAll("T", " "));
+
+                            currDt = format.parse(format.format(curCal.getTime()));
+
+                            long diff = currDt.getTime() - tempDt.getTime();
+
+                            //현재시간 보다 앞에 예약이 있음
+                            if (diff >= 0) {
+
+                                tempDt = format.parse(model.getEndDate().replaceAll("T", " "));
+
+                                Log.e("metis", "예약있음:");
+                                Log.e("metis", "tempDt:" + format.format(tempDt));
+                                Log.e("metis", "currDt:" + format.format(currDt));
+
+                                long endDiff = tempDt.getTime() - currDt.getTime();
+                                Log.e("metis", "availableList endDiff:" + endDiff);
+                                if (endDiff > 0) {
+                                    endDiff = endDiff / (60 * 1000);
+
+                                    double tempDouble = (double) endDiff / 30;
+
+                                    curCal.add(Calendar.MINUTE, (int) (Math.ceil(tempDouble) + 1) * 30);
+                                }
+                            }
+                            //뒤에 예약이 있음
+                            else {
+
+                                Calendar tempCalendar = Calendar.getInstance();
+                                tempCalendar.setTime(tempDt);
+                                tempCalendar.add(Calendar.MINUTE, -30);
+
+                                String addTime = format.format(curCal.getTime()) + ", " + format.format(tempCalendar.getTime());
+
+                                curCal.setTime(format.parse(model.getEndDate().replaceAll("T", " ")));
+                                curCal.add(Calendar.MINUTE, 30);
+
+                                availableList.add(addTime);
+                            }
+                        }
+
+                        Log.e("metis", "curCal diff:" + format.format(curCal.getTime()));
+                        Log.e("metis", "availableList" + availableList);
+
+                        //txt 그리는 부분
+                        LinearLayout layoutText = binding.layoutChgrTimeAvailableTxt;
+                        layoutText.removeAllViews();
+
+                        if (reservationList.size() > 0 && availableList.size() == 0) {
+
+                            binding.timeAvailableLayout.setVisibility(View.VISIBLE);
+                            binding.txtAllTime.setVisibility(View.INVISIBLE);
+
+                            Calendar checkCal = Calendar.getInstance();
+                            checkCal.setTime(currDt);
+
+                            if (checkCal.getTimeInMillis() != curCal.getTimeInMillis()) {
+                                String temp = format.format(curCal.getTime()).substring(11, 16);
+
+                                setLinearLayoutText(layoutText, context, temp + " ~ ");
+                            }
+
+                            return;
+                        }
+
+                        Log.e("metis", "return");
+
+                        if (availableList.size() == 0) {
+
+                            binding.timeAvailableLayout.setVisibility(View.INVISIBLE);
+                            binding.txtAllTime.setVisibility(View.VISIBLE);
+
+                        } else {
+                            for (int i = 0; i < availableList.size(); i++) {
+                                String[] value = availableList.get(i).split(",");
+
+                                if (value.length > 0) {
+                                    setLinearLayoutText(layoutText, context, value[0].substring(11, 16) + " ~ " + value[1].substring(11, 17));
+                                }
+                            }
+
+                            String temp = availableList.get(availableList.size() - 1);
+                            String[] value = temp.split(",");
+                            Log.e("metis", "value last" + value[1]);
+                            if (value[1].equals(format.format(curCal.getTime()))) {
+                                //30분 더하기
+                                curCal.add(Calendar.MINUTE, 30);
+                            }
+
+                            temp = format.format(curCal.getTime()).substring(11, 16);
+                            setLinearLayoutText(layoutText, context, temp + " ~ ");
+
+                            binding.timeAvailableLayout.setVisibility(View.VISIBLE);
+                            binding.txtAllTime.setVisibility(View.INVISIBLE);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                } else if (response.code() == 400) {
+                    Toast.makeText(context, "서버와 통신이 원활하지 않습니다. 문제가 지속될 시 고객센터로 문의주십시오.", Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+
+                if (isBoolean) {
+                    binding.imageFavoriteDetail.setBackground(getDrawable(R.mipmap.star_on));
+                    binding.imageFavoriteDetail.setTag("on");
+                } else {
+                    binding.imageFavoriteDetail.setBackground(getDrawable(R.mipmap.star_off));
+                    binding.imageFavoriteDetail.setTag("off");
+                }
+            }
+        }
+    }
+
+    /**
+     * YYYYMMDDHHII 형식의 시작일자, 종료일자 가자오는 함수.
+     *
+     * @param isStartTime true : 시작일자, false : 종료 일자
+     * @return YYYYMMDDHHII 일자
+     */
+    private String setFullDateTime(boolean isStartTime) {
+
+        String dateTime;
+        int currTime = Integer.parseInt(DateUtils.addTimeGetTime(0).substring(3));
+
+        if (0 <= currTime && currTime < 30) {
+
+            int standardTime = 30 - currTime;
+
+            if (!isStartTime) {
+                standardTime += reserveChargingMinute;
+            }
+
+            String currDateTime = DateUtils.nowDateTime();
+            dateTime = DateUtils.dateAddTime(currDateTime, standardTime);
+
+        } else {
+
+            int standardTime = 60 - currTime;
+
+            if (!isStartTime) {
+                standardTime += reserveChargingMinute;
+            }
+
+            String currDateTime = DateUtils.nowDateTime();
+            dateTime = DateUtils.dateAddTime(currDateTime, standardTime);
+        }
+
+        return dateTime;
+    }
+
+    public void setLinearLayoutText(LinearLayout layoutText, Context context, String txt) {
+
+        LinearLayout.LayoutParams viewParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+        viewParam.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+        viewParam.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
+
+        TextView textView = new TextView(context);
+
+        textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+        textView.setText(txt);
+        textView.setBackground(ContextCompat.getDrawable(this, R.drawable.border_mint_30));
+        textView.setTextColor(Color.WHITE);
+        textView.setTextSize(12);
+
+        textView.setLayoutParams(viewParam);
+        layoutText.addView(textView);
     }
 
     public boolean checkLocationServiceStatus() {
@@ -950,11 +1907,38 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
 
+        Log.e("metis", "onResume");
+        Log.e("metis", "chkRecharge : " + chkRecharge);
+        try {
+
+            if (!isFirst) {
+                isFirst = true;
+            }
+            //처음 한번에는 동작할 필요 없음
+            else {
+                if (chkRecharge.equals("SearchBluetoothActivity") || chkRecharge.equals("MainPersonalActivity")) {
+                    isPageOpen = true;
+                    Log.e("metis", "SearchBluetoothActivity");
+                    chkRecharge = "onResume";
+
+                    setTime();
+                    reloadInfo();
+
+                    chkRecharge = "";
+                }
+
+                if (reservationModel != null && !commonUtils.checkRechargeTime(reservationModel) && reservationModel.state.equals("KEEP")) {
+                    // 경과시간 지나고나서 충전 종료 됐을때, 메인화면에서 충전결과 화면 표시.
+                    mainRechargeModel();
+                }
+            }
+        } catch (Exception e) {
+            Log.e("metis", "onResume Exception : " + e);
+        }
     }
 
     @Override

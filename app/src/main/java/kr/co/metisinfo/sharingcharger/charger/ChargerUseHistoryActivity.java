@@ -88,14 +88,14 @@ public class ChargerUseHistoryActivity extends BaseActivity {
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                Log.e(TAG, "onScrolled");
+                Log.e("metis", "onScrolled");
                 super.onScrolled(recyclerView, dx, dy);
 
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
                 int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
 
-                Log.e(TAG, "lastVisibleItemPosition : " + lastVisibleItemPosition);
-                Log.e(TAG, "itemTotalCount : " + itemTotalCount);
+                Log.e("metis", "lastVisibleItemPosition : " + lastVisibleItemPosition);
+                Log.e("metis", "itemTotalCount : " + itemTotalCount);
 
                 try {
                     if (lastVisibleItemPosition == itemTotalCount) {
@@ -117,7 +117,7 @@ public class ChargerUseHistoryActivity extends BaseActivity {
                         }
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "onScrolled Exception : " + e);
+                    Log.e("metis", "onScrolled Exception : " + e);
                 }
             }
 
@@ -157,7 +157,7 @@ public class ChargerUseHistoryActivity extends BaseActivity {
             //historyAdapter.setList(list);
 
         } catch (Exception e) {
-            Log.e(TAG, "getChargeHistoryList Exception : " + e);
+            Log.e("metis", "getChargeHistoryList Exception : " + e);
         }
     }
 
