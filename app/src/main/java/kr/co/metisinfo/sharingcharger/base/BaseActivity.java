@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -29,18 +30,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.ble.BleTestActivity;
 import kr.co.metisinfo.sharingcharger.ble.ScanActivity;
 import kr.co.metisinfo.sharingcharger.model.MenuHeaderVO;
+import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.userManagement.ChargerFavoriteActivity;
 import kr.co.metisinfo.sharingcharger.charger.ChargerUseHistoryActivity;
+import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;
 import kr.co.metisinfo.sharingcharger.digitalWalletManagement.WalletActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
@@ -202,7 +207,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Intent intent = new Intent(startClass, ChargerUseHistoryActivity.class);
                 //startActivity(intent);
                 startActivityForResult(intent, PAGE_SEARCH_KEYWORD);
-                close_navi();
+                closeDrawer();
 
             } else if (groupPosition == 1) {
 
@@ -216,7 +221,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Intent intent = new Intent(startClass, ChargerFavoriteActivity.class);
                 //startActivity(intent);
                 startActivityForResult(intent, PAGE_SEARCH_KEYWORD);
-                close_navi();
+                closeDrawer();
 
 
             } else if (groupPosition == 3) {
@@ -225,12 +230,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Intent intent = new Intent(startClass, WebViewActivity.class);
                 intent.putExtra("getTagName", "setting");                             //WEBVIEW GBN PARAM -> setting은 회원 증명서
                 startActivity(intent);
-                close_navi();
+                closeDrawer();
 
             } else if (groupPosition == 4) {
 
                 //고객센터
-
+                Intent tt = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:0647256800"));
+                startActivity(tt);
             }
 
             return false;
@@ -323,14 +329,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         startActivity(intent);
 
-        close_navi();
+        closeDrawer();
 
     }
 
     /**
      * 네비게이션 클로즈
      */
-    public void close_navi() {
+    public void closeDrawer() {
 
         layoutId.closeDrawer(GravityCompat.START);
     }
@@ -364,6 +370,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             //충전하기
             goCharging.setOnClickListener(view -> {
 
+                Intent intent = new Intent(startClass, PointChargeActivity.class);
+
+                startActivity(intent);
+
+                closeDrawer();
             });
 
         });
@@ -457,11 +468,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             // 메뉴에 자식이 있을 경우 펼쳐보기 화살표를 보여 준다.
             if (getChildrenCount(groupPosition) != 0) {
 
-                if (isExpanded) {
-                    txt_plusminus.setBackground(getDrawable(R.mipmap.btn_dropdown));
-                } else {
-                    txt_plusminus.setBackground(getDrawable(R.mipmap.btn_dropdown));
-                }
+                txt_plusminus.setBackground(getDrawable(R.mipmap.btn_dropdown));
             } else {
 
                 // 메뉴에 자식이 없을 경우 펼쳐보기 화살표를 보여주지 않는다.
@@ -497,8 +504,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             TextView txtEmail = drawerLayout.findViewById(R.id.txt_email);
             TextView txtPoint = drawerLayout.findViewById(R.id.txt_point);
 
-//            txtName.setText(ThisApplication.staticUserModel.getName());
-//            txtEmail.setText(ThisApplication.staticUserModel.getEmail());
+            txtName.setText(ThisApplication.staticUserModel.getName());
+            txtEmail.setText(ThisApplication.staticUserModel.getEmail());
 
             TextView txtReserveTime = drawerLayout.findViewById(R.id.txt_reserve);
             TextView txtReserveSpot = drawerLayout.findViewById(R.id.txt_reserve_spot);
@@ -506,30 +513,31 @@ public abstract class BaseActivity extends AppCompatActivity {
             try {
 
                 //사용자 예약 상태 가져오기
-//                txtReserveTime.setText("");
-//                txtReserveSpot.setText("");
+                ReservationModel model = apiUtils.getReservationStatus();
+
+                if (model != null) {
+                    String getStartTime = model.startDate;
+
+                    getStartTime = getStartTime.substring(0, 4) + "년 " + getStartTime.substring(5, 7) + "월 " + getStartTime.substring(8, 10) + "일 " + getStartTime.substring(11, 13) + "시 " + getStartTime.substring(14, 16) + "분";
+
+                    txtReserveTime.setText(getStartTime);
+                    txtReserveSpot.setText(model.chargerName);
+                } else {
+                    txtReserveTime.setText("");
+                    txtReserveSpot.setText("");
+                }
 
                 //실시간 포인트 가져오기
-//                txtPoint.setText("");
+                int getPoint = apiUtils.getUserPoint();
 
+                txtPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(getPoint));
 
             } catch (Exception e) {
                 Log.e("metis", "Exception : " + e);
 
                 txtReserveTime.setText("");
                 txtReserveSpot.setText("");
-
             }
-
-            txtEmail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("metis", "txtEmail click ");
-
-                    Intent intent = new Intent(startClass, ScanActivity.class);
-                    startActivity(intent);
-                }
-            });
         }
     }
 
@@ -539,9 +547,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         //다른화면 전환시 닫기
         if (layoutId != null) {
-            close_navi();
+            closeDrawer();
         }
-
     }
-
 }
