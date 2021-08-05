@@ -608,7 +608,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             /*@Override
             public void unPlug(int i) {
                 Log.e("metis", "BLEStart unPlug");
-                Toast.makeText(ChargerListActivity.this, "충전기에 플러그가 꼽혀있지 않습니다.\n충전기에 플러그를 꼽고 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(BLEChargingActivity.this, "충전기에 플러그가 꼽혀있지 않습니다.\n충전기에 플러그를 꼽고 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                 timerFinish();
             }*/
 
@@ -626,7 +626,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             Log.e("metis", "setSharedPreferences rechargeId: " + rechargeId);
             editor.putInt("rechargeId", rechargeId);
             editor.putString("time", format.format(now));
-            editor.putString("activity", "ChargerListActivity");
+            editor.putString("activity", "BLEChargingActivity");
 
             stChargingTime = format.format(now);
         } else {

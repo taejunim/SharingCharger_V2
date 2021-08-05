@@ -364,10 +364,10 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 String getActivity = pref.getString("activity", "");
                 Log.e("metis", "getActivity : " + getActivity);
 
-                if (!getActivity.equals("ChargerListActivity")) {
+                if (!getActivity.equals("BLEChargingActivity")) {
 
                     Log.e("metis", "chkRecharge : " + chkRecharge);
-                    startMainPersonalActivity();
+                    startOwnerActivity();
                     return;
                 }
             }
@@ -384,7 +384,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     //시작전 시간확인
                     Intent intent = new Intent(this, ChargerSearchActivity.class);
 
-                    chkRecharge = "SearchBluetoothActivity";
+                    chkRecharge = "ChargerSearchActivity";
                     Log.e("metis", "chkRecharge is " + chkRecharge);
 
                     intent.putExtra("reservationModel", reservationModel);
@@ -479,7 +479,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     if (personalChargeList.get(i).getBleNumber().equals(chargerList.get(clickPOIIndex).getBleNumber())) {
 
-                        startMainPersonalActivity();
+                        startOwnerActivity();
 
                         return;
                     }
@@ -563,7 +563,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     InstantChargingDialog icd = new InstantChargingDialog(this, chargerList.get(clickPOIIndex).name, intntChgSTime + " ~ " + intntChgETime, rModel, reservationTime);
 
-                    chkRecharge = "SearchBluetoothActivity";
+                    chkRecharge = "ChargerSearchActivity";
                     icd.setCancelable(false);                                                       //DIALOG BACKGROUND CLICK FALSE
                     icd.show();                                                                     //충전하기 DIALOG SHOW
                 }
@@ -740,9 +740,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         }
     }
 
-    public void startMainPersonalActivity(){
+    public void startOwnerActivity(){
 
-        chkRecharge = "MainPersonalActivity";
+        chkRecharge = "OwnerActivity";
         Intent intent = new Intent(this, OwnerActivity.class);
         startActivity(intent);
     }
@@ -1431,8 +1431,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     String getActivity = pref.getString("activity", "");
 
                     //소유주 화면에서 충전 중일시 소유주 화면으로 이동
-                    if (getActivity.equals("MainPersonalActivity")) {
-                        startMainPersonalActivity();
+                    if (getActivity.equals("OwnerActivity")) {
+                        startOwnerActivity();
                     }
                 }
 
@@ -1920,9 +1920,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             }
             //처음 한번에는 동작할 필요 없음
             else {
-                if (chkRecharge.equals("SearchBluetoothActivity") || chkRecharge.equals("MainPersonalActivity")) {
+                if (chkRecharge.equals("ChargerSearchActivity") || chkRecharge.equals("OwnerActivity")) {
                     isPageOpen = true;
-                    Log.e("metis", "SearchBluetoothActivity");
+                    Log.e("metis", "ChargerSearchActivity");
                     chkRecharge = "onResume";
 
                     setTime();
