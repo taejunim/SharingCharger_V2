@@ -180,7 +180,6 @@
         <!-- WebView -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
         <activity

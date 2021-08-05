@@ -2,6 +2,7 @@ package kr.co.metisinfo.sharingcharger.view.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -36,8 +37,13 @@ public class WebViewActivity extends BaseActivity {
     public void initLayout() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_web_view);
 
-        changeStatusBarColor(false);
+        try {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } catch (IllegalStateException ignore) {
 
+        }
+
+        changeStatusBarColor(false);
     }
 
     @Override
