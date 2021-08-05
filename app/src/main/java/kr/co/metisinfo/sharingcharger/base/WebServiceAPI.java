@@ -105,6 +105,10 @@ public interface WebServiceAPI {
     @Ignore
     Call<ReservationModel> insertReservation(@Body ReservationModel reservation);
 
+    // 포인트 이력조회
+    @GET("/api/v1/point/users/{userId}/history")
+    Call<Object> getPoints(@Path("userId") int userId, @Query("startDate") String startDate, @Query("endDate") String endDate, @Query("sort") String sort, @Query("pointUsedType") String pointUsedType, @Query("page") int page, @Query("size") int size);
+
     // 예약취소
     @DELETE("/shared-charger/v1/reservation")
     Call<Object> deleteReservation(@Body UserModel user);

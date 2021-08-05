@@ -10,10 +10,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import kr.co.metisinfo.sharingcharger.Adapter.ItemPointHistoryRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityHistoryBinding;
+import kr.co.metisinfo.sharingcharger.model.PointModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
 import kr.co.metisinfo.sharingcharger.view.activity.HistorySearchConditionActivity;
@@ -28,7 +35,7 @@ public class PointUseHistoryActivity extends BaseActivity {
 
     private ItemPointHistoryRecyclerViewAdapter historyAdapter;
 
-    //List<PointModel> list = new ArrayList<>();
+    List<PointModel> list = new ArrayList<>();
 
     private int index = 1;
 
@@ -50,6 +57,49 @@ public class PointUseHistoryActivity extends BaseActivity {
 
         if (resultCode == RESULT_OK) {
 
+            list = new ArrayList<>();
+
+            index = 1;
+
+            String getMonth = data.getStringExtra("getMonth");
+
+            getArray = "DESC";
+
+            if (!data.getStringExtra("getArray").equals("최신순")) {
+                getArray = "ASC";
+            }
+
+            getType = "ALL";
+
+            if (data.getStringExtra("getType").equals("포인트 충전")) {
+                getType = "PURCHASE";
+            } else if (data.getStringExtra("getType").equals("사용")) {
+                getType = "USED";
+            } else if (data.getStringExtra("getType").equals("부분 환불")) {
+                getType = "REFUND";
+            }
+
+            Log.e(TAG, "getArray : " + getArray + " getType : " + getType + " Index : " + index);
+
+            if (getMonth.contains("개월")) {
+                getMonthType = getMonth;
+                getMonth = getMonth.replace("개월", "");
+
+                getStartDate = setDate(Integer.parseInt(getMonth));
+                getEndDate = setDate(0);
+                getPointHistoryList(getStartDate, getEndDate, getArray, getType, index);
+
+            } else {
+                getMonthType = "직접선택";
+                String[] getValue = getMonth.split(",");
+                //date로 들어옴
+
+                getStartDate = getValue[0];
+                getEndDate = getValue[1];
+                getPointHistoryList(getStartDate, getEndDate, getArray, getType, index);
+
+            }
+
         }
 
     }
@@ -67,6 +117,18 @@ public class PointUseHistoryActivity extends BaseActivity {
     public void initViewModel() {
 
         //현재포인트 가져오기
+        try {
+
+            int getPoint = apiUtils.getUserPoint();
+            binding.currentPointTxt.setText(NumberFormat.getInstance(Locale.KOREA).format(getPoint) + "p");
+
+            if (getPoint < 0) {
+                binding.currentPointTxt.setBackground(ContextCompat.getDrawable(PointUseHistoryActivity.this, R.drawable.border_red_30));
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "point Exception : " + e);
+        }
 
     }
 
@@ -152,7 +214,22 @@ public class PointUseHistoryActivity extends BaseActivity {
 
     private void getPointHistoryList(String startDate, String endDate, String sort, String getType, int pageIndex) {
 
-        //historyAdapter.setList(list);
+        try {
+
+            Map<String, Object> map = apiUtils.getPoints(startDate, endDate, sort, getType, pageIndex, list);
+
+            chkList = (boolean) map.get("chkList");
+
+            list = (List) map.get("list");
+
+            Log.e(TAG, "chkList : " + chkList);
+            Log.e(TAG, "List : " + list);
+
+            historyAdapter.setList(list);
+
+        } catch (Exception e) {
+            Log.e(TAG, "getPointHistoryList Exception : " + e);
+        }
 
     }
 

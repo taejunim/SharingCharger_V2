@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -355,6 +356,40 @@ public class ApiUtils {
         }
 
         return -1;
+    }
+
+    /**
+     * 포인트 이력 조회
+     **/
+    public Map<String, Object> getPoints(String startDate, String endDate, String sort, String getType, int pageIndex, List<PointModel> list) throws Exception {
+
+        Map<String, Object> map = new HashMap<>();
+
+        Response<Object> response = webServiceAPI.getPoints(ThisApplication.staticUserModel.id, startDate, endDate, sort, getType, pageIndex, 10).execute();
+
+        if (response.code() == 200 && response.body() != null) {
+            JSONObject json = new JSONObject((Map) response.body());
+
+            JSONArray contacts = json.getJSONArray("content");
+
+            if (contacts.length() == 0) {
+                map.put("chkList", false);
+            } else {
+                map.put("chkList", true);
+            }
+
+            for (int i = 0; i < contacts.length(); i++) {
+                Gson gson = new Gson();
+
+                PointModel vo = gson.fromJson(contacts.getJSONObject(i).toString(), PointModel.class);
+
+                list.add(vo);
+            }
+
+            map.put("list", list);
+        }
+
+        return map;
     }
 
     /**
