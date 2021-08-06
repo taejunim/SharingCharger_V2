@@ -1,20 +1,26 @@
 package kr.co.metisinfo.sharingcharger.Adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.ChargeHistoryItemListBinding;
+import kr.co.metisinfo.sharingcharger.model.RechargeModel;
 
 public class ItemChargeHistoryRecyclerViewAdapter extends RecyclerView.Adapter<ItemChargeHistoryRecyclerViewAdapter.CowViewHolder> {
 
     private static final String TAG = ItemChargeHistoryRecyclerViewAdapter.class.getSimpleName();
 
-  //  private List<RechargeModel> list = new ArrayList<>();
+    private List<RechargeModel> list = new ArrayList<>();
 
     public ItemChargeHistoryRecyclerViewAdapter() {
 
@@ -22,17 +28,35 @@ public class ItemChargeHistoryRecyclerViewAdapter extends RecyclerView.Adapter<I
 
     @NonNull
     @Override
-    public CowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ItemChargeHistoryRecyclerViewAdapter.CowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         ChargeHistoryItemListBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.charge_history_item_list, parent, false);
 
-        return new CowViewHolder(binding);
+        return new ItemChargeHistoryRecyclerViewAdapter.CowViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CowViewHolder holder, int position) {
 
         ChargeHistoryItemListBinding binding = holder.binding;
+
+        RechargeModel model = list.get(position);
+
+        binding.chargeHistoryNameTxt.setText(model.chargerName);
+
+        binding.chargeHistoryDateTxt.setText(setDate(model.startRechargeDate, model.endRechargeDate));
+
+        DecimalFormat format = new DecimalFormat("###,###");
+
+        binding.chargeHistoryPointTxt.setText(format.format(model.rechargePoint));
+
+        // 충전시 일때 rechargePoint 0이기 때문에 endRechargeDate이 null 이면 정산중
+        if(model.endRechargeDate == null){
+            binding.chargeHistoryPointTxt.setText("정산 중");
+            binding.chargeHistoryPoint1Txt.setVisibility(View.GONE);
+        }else{
+            binding.chargeHistoryPointTxt.setText(format.format(model.rechargePoint));
+        }
 
 
     }
@@ -53,18 +77,16 @@ public class ItemChargeHistoryRecyclerViewAdapter extends RecyclerView.Adapter<I
 
     @Override
     public int getItemCount() {
-
-//        return list.size();
-        return 0;
+        return list.size();
     }
 
-//    public void setList(List<RechargeModel> list) {
-//
-//        this.list.clear();
-//        this.list.addAll(list);
-//
-//        notifyDataSetChanged();
-//    }
+    public void setList(List<RechargeModel> list) {
+
+        this.list.clear();
+        this.list.addAll(list);
+
+        notifyDataSetChanged();
+    }
 
 
     static class CowViewHolder extends RecyclerView.ViewHolder {

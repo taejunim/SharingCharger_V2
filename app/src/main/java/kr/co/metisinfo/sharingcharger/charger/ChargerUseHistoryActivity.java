@@ -11,10 +11,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import kr.co.metisinfo.sharingcharger.Adapter.ItemChargeHistoryRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityHistoryBinding;
+import kr.co.metisinfo.sharingcharger.model.RechargeModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
 import kr.co.metisinfo.sharingcharger.view.activity.HistorySearchConditionActivity;
@@ -29,7 +34,7 @@ public class ChargerUseHistoryActivity extends BaseActivity {
 
     private ItemChargeHistoryRecyclerViewAdapter historyAdapter;
 
-//    List<RechargeModel> list = new ArrayList<>();
+    List<RechargeModel> list = new ArrayList<>();
 
     private int index = 1;
 
@@ -50,8 +55,35 @@ public class ChargerUseHistoryActivity extends BaseActivity {
 
         if (resultCode == RESULT_OK) {
 
-        }
+            list = new ArrayList<>();
 
+            index = 1;
+
+            String getMonth = data.getStringExtra("getMonth");
+            getArray = "DESC";
+
+            if (!data.getStringExtra("getArray").equals("최신순")) {
+                getArray = "ASC";
+            }
+
+            if (getMonth.contains("개월")) {
+                getMonthType = getMonth;
+                getMonth = getMonth.replace("개월", "");
+
+                getStartDate = setDate(Integer.parseInt(getMonth));
+                getEndDate = setDate(0);
+                getChargeHistoryList(getStartDate, getEndDate, getArray, index);
+
+            } else {
+                getMonthType = "직접선택";
+                String[] getValue = getMonth.split(",");
+
+                getStartDate = getValue[0];
+                getEndDate = getValue[1];
+                getChargeHistoryList(getStartDate, getEndDate, getArray, index);
+
+            }
+        }
     }
 
     @Override
@@ -153,11 +185,19 @@ public class ChargerUseHistoryActivity extends BaseActivity {
 
         try {
 
-            //list 담기
-            //historyAdapter.setList(list);
+            Map<String, Object> map = apiUtils.getRecharges(startDate, endDate, getType, index, list);
+
+            chkList = (boolean) map.get("chkList");
+
+            list = (List) map.get("list");
+
+            Log.e(TAG, "chkList : " + chkList);
+            Log.e(TAG, "List : " + list);
+
+            historyAdapter.setList(list);
 
         } catch (Exception e) {
-            Log.e("metis", "getChargeHistoryList Exception : " + e);
+            Log.e(TAG, "getChargeHistoryList Exception : " + e);
         }
     }
 

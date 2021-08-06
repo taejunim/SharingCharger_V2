@@ -14,6 +14,7 @@ import java.util.List;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.BookmarkItemListBinding;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
+import kr.co.metisinfo.sharingcharger.view.viewInterface.MasterBaseView;
 
 public class ItemBookmarkRecyclerViewAdapter extends RecyclerView.Adapter<ItemBookmarkRecyclerViewAdapter.CowViewHolder> {
 
@@ -23,24 +24,26 @@ public class ItemBookmarkRecyclerViewAdapter extends RecyclerView.Adapter<ItemBo
 
     private Context context;
 
+    private MasterBaseView baseView;
 
-    public ItemBookmarkRecyclerViewAdapter(Context context){
+    public ItemBookmarkRecyclerViewAdapter(Context context, MasterBaseView baseView){
 
         this.context = context;
 
+        this.baseView = baseView;
     }
 
     @NonNull
     @Override
-    public CowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ItemBookmarkRecyclerViewAdapter.CowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         BookmarkItemListBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.bookmark_item_list, parent, false);
 
-        return new CowViewHolder(binding);
+        return new ItemBookmarkRecyclerViewAdapter.CowViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CowViewHolder cowViewHolder, int position) {
+    public void onBindViewHolder(@NonNull ItemBookmarkRecyclerViewAdapter.CowViewHolder cowViewHolder, int position) {
 
         BookmarkItemListBinding binding = cowViewHolder.binding;
 
@@ -50,7 +53,7 @@ public class ItemBookmarkRecyclerViewAdapter extends RecyclerView.Adapter<ItemBo
 
         binding.bookmarkAddressTxt.setText(model.address);
 
-                                                                //실제 데이터 받아올때 model 넘겨줘야함(이름, 위도, 경도)
+        //실제 데이터 받아올때 model 넘겨줘야함(이름, 위도, 경도)
         binding.bookmarkNavigationBtn.setOnClickListener(view -> goMap(model));
 
         binding.bookmarkDeleteBtn.setOnClickListener(view -> deleteBtnClick(model.id));
@@ -70,15 +73,16 @@ public class ItemBookmarkRecyclerViewAdapter extends RecyclerView.Adapter<ItemBo
 
     private void goMap(ChargerModel model) {
 
-  //   baseView.onClickMasterNm(model,1);
+        baseView.onClickMasterNm(model,1);
 
     }
 
     private void deleteBtnClick(int id) {
 
-    //    baseView.onClickMasterSeq(new Object(), id,true);
+        baseView.onClickMasterSeq(new Object(), id,true);
 
     }
+
 
     static class CowViewHolder extends RecyclerView.ViewHolder {
 

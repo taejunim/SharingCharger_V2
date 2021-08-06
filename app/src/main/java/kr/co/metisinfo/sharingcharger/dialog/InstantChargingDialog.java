@@ -16,6 +16,7 @@ import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -96,6 +97,9 @@ public class InstantChargingDialog extends Dialog  {
                 Intent intent = new Intent(context, ChargerSearchActivity.class);
                 intent.putExtra("reservationModel", model);
                 intent.putExtra("reservationTime", reservationTime);
+
+                PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+                preferenceUtil.putBoolean("isInstantCharging", true);
 
                 context.startActivity(intent);
                 Log.e("metis", "예약 성공.");

@@ -164,7 +164,21 @@ public class ApiUtils {
      **/
     public boolean cancelReservation(String reservationId) throws Exception {
 
-        Response<ReservationModel> response = webServiceAPI.cancelReservation(reservationId).execute();
+        Response<ReservationModel> response;
+
+        PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+
+        Boolean isInstantCharging = preferenceUtil.getBoolean("isInstantCharging");
+
+        //즉시 충전 취소
+        if (isInstantCharging) {
+            response = webServiceAPI.cancelInstantCharging(reservationId).execute();
+        }
+
+        //예약 취소
+        else {
+            response = webServiceAPI.cancelReservation(reservationId).execute();
+        }
 
         if(response.code() == 200){
 
@@ -390,6 +404,61 @@ public class ApiUtils {
         }
 
         return map;
+    }
+
+    /**
+     * 충전 이력 조회
+     **/
+    public Map<String, Object> getRecharges(String startDate, String endDate, String getType, int index, List<RechargeModel> list) throws Exception {
+
+        Map<String, Object> map = new HashMap<>();
+
+        Response<Object> response = webServiceAPI.getRecharges(ThisApplication.staticUserModel.id, startDate, endDate, getType, index, 10).execute();
+
+        if (response.code() == 200 && response.body() != null) {
+            JSONObject json = new JSONObject((Map) response.body());
+
+            JSONArray contacts = json.getJSONArray("content");
+
+            if (contacts.length() == 0) {
+                map.put("chkList", false);
+            } else {
+                map.put("chkList", true);
+            }
+
+            for (int i = 0; i < contacts.length(); i++) {
+                Gson gson = new Gson();
+
+                RechargeModel vo = gson.fromJson(contacts.getJSONObject(i).toString(), RechargeModel.class);
+
+                list.add(vo);
+            }
+
+            map.put("list", list);
+        }
+
+        return map;
+    }
+
+    /**
+     * 충전기 정보
+     **/
+    public ChargerModel getChargerInfo(int chargerId) throws Exception {
+
+        ChargerModel model = null;
+
+        Response<Object> response = webServiceAPI.getChargerInfo(chargerId).execute();
+
+        if (response.code() == 200 && response.body() != null) {
+            JSONObject json = new JSONObject((Map) response.body());
+
+
+            Gson gson = new Gson();
+
+            model = gson.fromJson(json.toString(), ChargerModel.class);
+        }
+
+        return model;
     }
 
     /**

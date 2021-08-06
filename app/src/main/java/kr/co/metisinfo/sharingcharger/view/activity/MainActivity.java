@@ -306,13 +306,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         setTime();
 
         //메인 지도 화면, 충전기 정보 가져오기
-        addChargerInfo(Constants.currentLocationLat, Constants.currentLocationLng);
+        //addChargerInfo(Constants.currentLocationLat, Constants.currentLocationLng);
 
         binding.mapView.setMapViewEventListener(this);
         binding.mapView.setPOIItemEventListener(this);
 
         //마커 표시
-        createDefaultMarker(binding.mapView);
+        //createDefaultMarker(binding.mapView);
 
         //test 예약 있을때
         /*binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
@@ -663,6 +663,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     }
                 }else{
                     Log.e("metis", "취소할 예약건이 없음");
+                    Toast.makeText(getApplicationContext(), "취소에 실패하였습니다.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_SHORT).show();
                 }
 
                 setTime();
@@ -914,7 +915,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         mapView.removeAllPOIItems();
         MapPOIItem mDefaultMarker = new MapPOIItem();
 
-        mDefaultMarker.setItemName("마커 기준 조건 검색");
+        /*mDefaultMarker.setItemName("마커 기준 조건 검색");
         mDefaultMarker.setTag(0);
         mDefaultMarker.setMapPoint(pointList.get(0));
         mDefaultMarker.setSelectedMarkerType(MapPOIItem.MarkerType.CustomImage);
@@ -923,9 +924,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         mDefaultMarker.setCustomImageResourceId(R.mipmap.current_location_48);
         mDefaultMarker.setShowCalloutBalloonOnTouch(false);                     // POI 클릭시 말풍선 보여주는지 여부
 
-        mapView.addPOIItem(mDefaultMarker);
+        mapView.addPOIItem(mDefaultMarker);*/
 
-        for (int i = 1; i < pointList.size(); i++) {
+        for (int i = 0; i < pointList.size(); i++) {
 
             mDefaultMarker = new MapPOIItem();
 
@@ -958,9 +959,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         float minZoomLevel = 4;
         float maxZoomLevel = 10;
 
+        //pointList.add(MapPoint.mapPointWithGeoCoord(Constants.currentLocationLat, Constants.currentLocationLng));
+
+        MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(Constants.currentLocationLat, Constants.currentLocationLng);
+
         if (checkLocationServiceStatus()) {
 
-            MapPointBounds bounds = new MapPointBounds(pointList.get(0), pointList.get(0));
+            MapPointBounds bounds = new MapPointBounds(mapPoint, mapPoint);
             binding.mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, padding, minZoomLevel, maxZoomLevel));
         }
     }
@@ -981,7 +986,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 Log.e("metis", "onPOIItemSelected else");
                 int tag = mapPOIItem.getTag();
 
-                if (tag != 0) {
+                if (tag >= 0) {
                     Log.e("metis", "onPOIItemSelected tag != 0");
                     Log.e("metis", "mapPOIItem.getTag() : " + mapPOIItem.getTag());
                     clickPOIIndex = mapPOIItem.getTag();
@@ -1104,7 +1109,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
 
         // 맵의 중앙이 이동될때마다 마커 중앙에 포인트 마커도 같이 움직인다.
-        mapView.getPOIItems()[0].setMapPoint(mapPoint);
+        //mapView.getPOIItems()[0].setMapPoint(mapPoint);
 
     }
 
@@ -1138,7 +1143,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         // 맵의 중앙이 이동될때마다 마커 중앙에 포인트 마커도 같이 움직인다.
         // 맵을 더블클릭 하여 줌이 달라졌을때의 중앙 지점으로 마커 이동
-        mapView.getPOIItems()[0].setMapPoint(mapPoint);
+        //mapView.getPOIItems()[0].setMapPoint(mapPoint);
     }
 
     @Override
@@ -1194,6 +1199,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             } else {
 
                 binding.layoutChgrInfo.bringChildToFront(binding.mapView);
+                binding.layoutChgrInfo.setClickable(true);
+                binding.layoutChgrInfo.setFocusable(true);
                 isPageOpen = true;
             }
         }
@@ -1252,7 +1259,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
 
         //예약 상태 확인, 예약없음, 예약 있음, 충전 중
-        reservationModel = apiUtils.getReservationStatus();
+        //reservationModel = apiUtils.getReservationStatus();
 
         if (reservationModel != null) {
 
@@ -1277,7 +1284,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             binding.layoutChargingInfo.setVisibility(View.VISIBLE);
             binding.layoutReservationInfo.setVisibility(View.INVISIBLE);
 
-            ChargerModel chargerModel;
+            /*ChargerModel chargerModel;
 
             chargerModel = new ChargerModel();
 
@@ -1287,7 +1294,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             chargerModel.gpsX = lng;
             chargerModel.name = "현재위치";
 
-            chargerList.add(chargerModel);
+            chargerList.add(chargerModel);*/
 
             getChargersAPI();
 
@@ -1295,6 +1302,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                 pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
             }
+
+            createDefaultMarker(binding.mapView);
         }
     }
 
@@ -1442,6 +1451,25 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 mainRechargeModel();
             }
 
+            else {
+                clickPOIIndex = -1;
+
+                if (binding.layoutChgrInfo.getVisibility() == View.VISIBLE) {
+
+                    binding.layoutChgrInfo.startAnimation(translateBottom);
+                    BottomSheetBehavior.from(binding.layoutChgrInfo).setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+                } else if (binding.layoutReservationDetailInfo.getVisibility() == View.VISIBLE) {
+
+                    binding.layoutReservationDetailInfo.startAnimation(translateBottom);
+                    binding.layoutReservationDetailInfo.setVisibility(View.INVISIBLE);
+                }
+
+                if (!this.isDestroyed()) {
+                    Glide.with(this).onDestroy();
+                }
+            }
+
         } catch (Exception e) {
             Log.e("metis", "checkRecharge Exception : " + e);
         }
@@ -1583,29 +1611,46 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     try {
 
+                        JSONObject chargerAllowTimeObject = json.getJSONObject("chargerAllowTime");
+
+                        JSONArray tempArray = new JSONArray();
+
+                        for (int i=0; i<2; i++) {
+                            JSONObject tempObject = new JSONObject();
+                            tempObject.put("openTime", chargerAllowTimeObject.get("openTime").toString());
+                            tempObject.put("closeTime", chargerAllowTimeObject.get("closeTime").toString());
+
+                            tempArray.put(tempObject);
+                        }
+
+
                         //충전기 open, closeTime 가져오기
-                        JSONArray contacts = json.getJSONArray("chargerTimeAvailable");
+                        //JSONArray contacts = json.getJSONArray("chargerTimeAvailable");
+                        JSONArray contacts = tempArray;
 
                         for (int i = 0; i < contacts.length(); i++) {
                             Log.e("metis", "chargerTimeAvailable");
                             JSONObject obj = (JSONObject) contacts.get(i);
 
-                            JSONArray allowArray = obj.getJSONArray("allowTimeOfDays");
+                            /*JSONArray allowArray = obj.getJSONArray("allowTimeOfDays");
 
                             Gson gson = new Gson();
 
                             AllowTimeOfDayModel allowTimeOfDayModel = gson.fromJson(allowArray.get(0).toString(), AllowTimeOfDayModel.class);
 
-                            Log.e("metis", "allowTimeOfDayModel : " + allowTimeOfDayModel);
+                            Log.e("metis", "allowTimeOfDayModel : " + allowTimeOfDayModel);*/
 
                             //full open
-                            if (allowTimeOfDayModel.getOpenTime().equals("00:00:00") && allowTimeOfDayModel.getCloseTime().equals("23:59:59")) {
+                            //if (allowTimeOfDayModel.getOpenTime().equals("00:00:00") && allowTimeOfDayModel.getCloseTime().equals("23:59:59")) {
+                            if (obj.get("openTime").toString().equals("00:00:00") && obj.get("closeTime").toString().equals("23:59:59")) {
 
                             } else {
 
-                                String openTime = allowTimeOfDayModel.getOpenTime();
-                                String closeTime = allowTimeOfDayModel.getCloseTime();
-                                if (allowTimeOfDayModel.getCloseTime().equals("23:59:59")) {
+//                                String openTime = allowTimeOfDayModel.getOpenTime();
+//                                String closeTime = allowTimeOfDayModel.getCloseTime();
+                                String openTime = obj.get("openTime").toString();
+                                String closeTime = obj.get("closeTime").toString();
+                                if (closeTime.equals("23:59:59")) {
                                     closeTime = "24:00:00";
                                 }
 
@@ -1617,19 +1662,21 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                                 ReservationModel model = new ReservationModel();
                                 //closeTime 만 다름
-                                if (allowTimeOfDayModel.getOpenTime().equals("00:00:00")) {
+                                if (obj.get("openTime").toString().equals("00:00:00")) {
 
                                     model.startDate = closeTime;
                                     model.endDate = hourClose;
+                                    model.reservationType = "false";
                                     reservationList.add(model);
                                     Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
 
                                 }
                                 //openTime만 다름
-                                else if (allowTimeOfDayModel.getCloseTime().equals("23:59:59")) {
+                                else if (obj.get("closeTime").toString().equals("23:59:59")) {
 
                                     model.startDate = hourOpen;
                                     model.endDate = openTime;
+                                    model.reservationType = "false";
                                     reservationList.add(model);
                                     Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
                                 }
@@ -1638,12 +1685,14 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                                     model.startDate = closeTime;
                                     model.endDate = hourClose;
+                                    model.reservationType = "false";
                                     reservationList.add(model);
                                     Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
 
                                     model = new ReservationModel();
                                     model.startDate = hourOpen;
                                     model.endDate = openTime;
+                                    model.reservationType = "false";
                                     reservationList.add(model);
                                     Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
                                 }
@@ -1672,6 +1721,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                             Gson gson = new Gson();
                             ReservationModel reservationModel = gson.fromJson(contentArray.get(i).toString(), ReservationModel.class);
+                            reservationModel.reservationType = "true";
                             reservationList.add(reservationModel);
                         }
 
@@ -1718,7 +1768,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                                     double tempDouble = (double) endDiff / 30;
 
-                                    curCal.add(Calendar.MINUTE, (int) (Math.ceil(tempDouble) + 1) * 30);
+                                    if (model.reservationType.equals("true")) {
+                                        curCal.add(Calendar.MINUTE, (int) (Math.ceil(tempDouble) + 1) * 30);
+                                    } else {
+                                        curCal.add(Calendar.MINUTE, (int) (Math.ceil(tempDouble)) * 30);
+                                    }
+
+                                    //curCal.add(Calendar.MINUTE, (int) (Math.ceil(tempDouble) + 1) * 30);
                                 }
                             }
                             //뒤에 예약이 있음
@@ -1726,12 +1782,20 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                                 Calendar tempCalendar = Calendar.getInstance();
                                 tempCalendar.setTime(tempDt);
-                                tempCalendar.add(Calendar.MINUTE, -30);
+
+                                if (model.reservationType.equals("true")) {
+                                    tempCalendar.add(Calendar.MINUTE, -30);
+                                }
+
 
                                 String addTime = format.format(curCal.getTime()) + ", " + format.format(tempCalendar.getTime());
 
                                 curCal.setTime(format.parse(model.getEndDate().replaceAll("T", " ")));
-                                curCal.add(Calendar.MINUTE, 30);
+
+                                if (model.reservationType.equals("true")) {
+                                    curCal.add(Calendar.MINUTE, 30);
+                                }
+
 
                                 availableList.add(addTime);
                             }
@@ -1777,7 +1841,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                                 }
                             }
 
-                            String temp = availableList.get(availableList.size() - 1);
+                            /*String temp = availableList.get(availableList.size() - 1);
                             String[] value = temp.split(",");
                             Log.e("metis", "value last" + value[1]);
                             if (value[1].equals(format.format(curCal.getTime()))) {
@@ -1786,7 +1850,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                             }
 
                             temp = format.format(curCal.getTime()).substring(11, 16);
-                            setLinearLayoutText(layoutText, context, temp + " ~ ");
+                            setLinearLayoutText(layoutText, context, temp + " ~ ");*/
 
                             binding.timeAvailableLayout.setVisibility(View.VISIBLE);
                             binding.txtAllTime.setVisibility(View.INVISIBLE);
@@ -1897,8 +1961,11 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     //메인화면 초기화
     public void reloadInfo() {
 
+        //예약 상태 확인, 예약없음, 예약 있음, 충전 중
+        reservationModel = apiUtils.getReservationStatus();
+
         addChargerInfo(Constants.currentLocationLat, Constants.currentLocationLng);
-        createDefaultMarker(binding.mapView);
+        //createDefaultMarker(binding.mapView);
 
         //해당페이지 이벤트 막기
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -1915,7 +1982,10 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         Log.e("metis", "chkRecharge : " + chkRecharge);
         try {
 
+            //reloadInfo();
+
             if (!isFirst) {
+
                 isFirst = true;
             }
             //처음 한번에는 동작할 필요 없음
@@ -1926,7 +1996,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     chkRecharge = "onResume";
 
                     setTime();
-                    reloadInfo();
+                    //reloadInfo();
 
                     chkRecharge = "";
                 }
@@ -1936,6 +2006,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     mainRechargeModel();
                 }
             }
+
+            reloadInfo();
+
         } catch (Exception e) {
             Log.e("metis", "onResume Exception : " + e);
         }

@@ -72,6 +72,10 @@ public interface WebServiceAPI {
     @PUT("/api/v1/reservations/{id}/cancel")
     Call<ReservationModel> cancelReservation(@Path("id") String reservationId);
 
+    // 충전기 즉시 충전 취소
+    @PUT("/api/v1/reservations/{id}/cancel/immediateCharging")
+    Call<ReservationModel> cancelInstantCharging(@Path("id") String reservationId);
+
     // 현재 포인트 조회
     @GET("/api/v1/point/users/{userId}")
     Call<Object> getUserPoint(@Path("userId") int userId);
@@ -108,6 +112,14 @@ public interface WebServiceAPI {
     // 포인트 이력조회
     @GET("/api/v1/point/users/{userId}/history")
     Call<Object> getPoints(@Path("userId") int userId, @Query("startDate") String startDate, @Query("endDate") String endDate, @Query("sort") String sort, @Query("pointUsedType") String pointUsedType, @Query("page") int page, @Query("size") int size);
+
+    // 충전 이력조회
+    @GET("/api/v1/recharges/users/{userId}/history")
+    Call<Object> getRecharges(@Path("userId") int userId, @Query("startDate") String startDate, @Query("endDate") String endDate, @Query("sort") String sort, @Query("page") int page, @Query("size") int size);
+
+    // 즐겨찾기 조회(충전기 정보 조회)
+    @GET("/api/v1/app/chargers/{id}")
+    Call<Object> getChargerInfo(@Path("id") int chargerId);
 
     // 예약취소
     @DELETE("/shared-charger/v1/reservation")
