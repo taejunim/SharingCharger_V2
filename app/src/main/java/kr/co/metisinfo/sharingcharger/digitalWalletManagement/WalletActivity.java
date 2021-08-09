@@ -5,10 +5,15 @@ import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityWalletBinding;
-import kr.co.metisinfo.sharingcharger.digitalWalletManagement.PointUseHistoryActivity;
+import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
 
 /**
  * @ Class Name   : WalletActivity.java
@@ -26,11 +31,25 @@ public class WalletActivity extends BaseActivity {
 
     ActivityWalletBinding binding;                                                                  //Databinding을 사용하기 위한 변수 선언
 
+    ApiUtils apiUtils = new ApiUtils();
+
     @Override
     public void initLayout() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_wallet);           //XML bind
         changeStatusBarColor(false);
+
+        binding.txtName.setText(ThisApplication.staticUserModel.getName() + "님의 Wallet");
+
+        //실시간 포인트 가져오기
+        int getPoint = 0;
+        try {
+            getPoint = apiUtils.getUserPoint();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        binding.txtWalletPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(getPoint));
     }
 
     @Override
@@ -40,6 +59,13 @@ public class WalletActivity extends BaseActivity {
     public void setOnClickListener() {
 
         binding.includeHeader.btnBack.setOnClickListener(view -> finish());                         //HEADER BACK BTN
+
+        //충전하기
+        binding.purchasePoint.setOnClickListener(view -> {
+
+            Intent intent = new Intent(this, PointChargeActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -58,5 +84,4 @@ public class WalletActivity extends BaseActivity {
         Intent intent = new Intent(this, PointUseHistoryActivity.class);
         startActivity(intent);
     }
-
 }

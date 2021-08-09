@@ -341,7 +341,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         layoutId.closeDrawer(GravityCompat.START);
     }
 
-    public void setActionBarDrawerToggle(DrawerLayout drawerLayout, ImageButton btn) {
+    public void setActionBarDrawerToggle(DrawerLayout drawerLayout, RelativeLayout btn) {
 
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle((Activity) startClass, drawerLayout, null, R.string.app_name, R.string.app_name) {
 

@@ -418,19 +418,12 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         //충전기 즐겨찾기 추가
         binding.imageFavorite.setOnClickListener(view -> {
-
             checkBookmark(view, chargerList.get(clickPOIIndex).id);
-
-            CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ChargerInfo", chargerList.get(clickPOIIndex).id);
-            task.execute();
         });
 
         //예약화면 즐겨찾기
         binding.imageFavoriteDetail.setOnClickListener(view -> {
             checkBookmark(view, Integer.parseInt(binding.txtChgrDetailNm.getTag().toString()));
-
-            CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ReservationInfo", Integer.parseInt(binding.txtChgrDetailNm.getTag().toString()));
-            task.execute();
         });
 
         binding.layoutChargingInfo.setOnClickListener(view -> {
@@ -686,22 +679,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     }
 
     public void checkBookmark(View view, int chargerId) {
+        BookmarkModel model = new BookmarkModel();
 
-        if (view.getTag().toString().equals("on")) {
+        model.userId = ThisApplication.staticUserModel.id;
+        model.chargerId = chargerId;
 
-            bookmarkViewModel.deleteBookmarkItem(ThisApplication.staticUserModel.id, chargerId);
-
-        } else {
-
-            BookmarkModel model = new BookmarkModel();
-
-            model.userId = ThisApplication.staticUserModel.id;
-            model.chargerId = chargerId;
-
-            BookMarkTask task = new BookMarkTask(model);
-            task.execute();
-
-        }
+        BookMarkTask task = new BookMarkTask(model);
+        task.execute();
     }
 
     @Override
@@ -731,13 +715,24 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             if (bookModel == null) {
                 bookmarkViewModel.insertBookmark(model);
 
-            }
+                return true;
 
-            return true;
+            } else {
+                bookmarkViewModel.deleteBookmarkItem(ThisApplication.staticUserModel.id, model.chargerId);
+
+                return false;
+            }
         }
 
         protected void onPostExecute(Boolean isInsert) {
 
+            if (isInsert) {
+                binding.imageFavorite.setBackground(getDrawable(R.mipmap.star_on));
+                binding.imageFavorite.setTag("on");
+            } else {
+                binding.imageFavorite.setBackground(getDrawable(R.mipmap.star_off));
+                binding.imageFavorite.setTag("off");
+            }
         }
     }
 
@@ -980,20 +975,29 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         isPageOpen = false;
 
         try {
-            if (isSearchKeywordMarkerClick) {    // 키워드 검색 후 말풍선 클릭
+            Log.e("metis", "onPOIItemSelected else");
+            int tag = mapPOIItem.getTag();
 
-            } else {                            // 그 외
-                Log.e("metis", "onPOIItemSelected else");
-                int tag = mapPOIItem.getTag();
+            if (tag >= 0) {
+                Log.e("metis", "onPOIItemSelected tag != 0");
+                Log.e("metis", "mapPOIItem.getTag() : " + mapPOIItem.getTag());
+                clickPOIIndex = mapPOIItem.getTag();
 
-                if (tag >= 0) {
-                    Log.e("metis", "onPOIItemSelected tag != 0");
-                    Log.e("metis", "mapPOIItem.getTag() : " + mapPOIItem.getTag());
-                    clickPOIIndex = mapPOIItem.getTag();
+                if (beforeClickMapPOIItem == null) {
 
-                    if (beforeClickMapPOIItem == null) {
+                    beforeClickMapPOIItem = mapPOIItem;
 
-                        beforeClickMapPOIItem = mapPOIItem;
+                    if (!isPageOpen) {
+
+                        //충전기 상세정보
+                        chargerId = setChargerDetailInfo();
+
+                    } else {
+                        chargerId = -1;
+                    }
+                } else {
+
+                    if (beforeClickMapPOIItem == mapPOIItem) {
 
                         if (!isPageOpen) {
 
@@ -1005,31 +1009,19 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                         }
                     } else {
 
-                        if (beforeClickMapPOIItem == mapPOIItem) {
+                        isPageOpen = false;
 
-                            if (!isPageOpen) {
+                        //충전기 상세정보
+                        chargerId = setChargerDetailInfo();
 
-                                //충전기 상세정보
-                                chargerId = setChargerDetailInfo();
-
-                            } else {
-                                chargerId = -1;
-                            }
-                        } else {
-
-                            isPageOpen = false;
-
-                            //충전기 상세정보
-                            chargerId = setChargerDetailInfo();
-
-                        }
-                        beforeClickMapPOIItem = mapPOIItem;
                     }
-
-                    if (chargerId != -1) {
-                        clickChargerModel = chargerList.get(clickPOIIndex);
-                    }
+                    beforeClickMapPOIItem = mapPOIItem;
                 }
+
+                if (chargerId != -1) {
+                    clickChargerModel = chargerList.get(clickPOIIndex);
+                }
+
             }
         } catch (Exception e) {
             Log.e("metis", "onPOIItemSelected  Exception : " + e);
@@ -1220,27 +1212,16 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         isSearchKeywordMarkerClick = true;
 
-        for (int i = 1; i < mapPOIItems.length; i++) {
-
-            binding.mapView.removePOIItem(mapPOIItems[i]);
-
-        }
-
-        createSearchKeywordMarker(binding.mapView, model);
-
         Log.e("metis", "mapView  2 : " + model.x + " , " + model.y);
 
-        //키워드 검색 시 지도중심일 경우 중심좌표는 그대로 나둠
-        if (centerLocation == null || !centerLocation.equals("지도")) {
-            double latPoint = Double.parseDouble(model.y);
-            double lngPoint = Double.parseDouble(model.x);
+        double latPoint = Double.parseDouble(model.y);
+        double lngPoint = Double.parseDouble(model.x);
 
-            int padding = 5;
-            float minZoomLevel = 3;
-            float maxZoomLevel = 10;
-            MapPointBounds bounds = new MapPointBounds(MapPoint.mapPointWithGeoCoord(latPoint, lngPoint), MapPoint.mapPointWithGeoCoord(latPoint, lngPoint));
-            binding.mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, padding, minZoomLevel, maxZoomLevel));
-        }
+        int padding = 5;
+        float minZoomLevel = 3;
+        float maxZoomLevel = 10;
+        MapPointBounds bounds = new MapPointBounds(MapPoint.mapPointWithGeoCoord(latPoint, lngPoint), MapPoint.mapPointWithGeoCoord(latPoint, lngPoint));
+        binding.mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, padding, minZoomLevel, maxZoomLevel));
     }
 
     /**

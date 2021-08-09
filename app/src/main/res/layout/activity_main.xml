@@ -35,14 +35,14 @@
                     android:padding="1dp">
 
                     <RelativeLayout
-                        android:id="@+id/layout_left"
+                        android:id="@+id/btn_menu"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/edit_text_not_border"
-                        android:padding="10dp">
+                        android:background="@drawable/shadow_background"
+                        android:padding="7dp">
 
-                        <ImageButton
-                            android:id="@+id/btn_menu"
+                        <ImageView
+
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerVertical="true"
@@ -58,7 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginStart="20dp"
-                        android:layout_toEndOf="@+id/layout_left"
+                        android:layout_toEndOf="@+id/btn_menu"
                         android:textSize="12dp"
                         android:importantForAutofill="no"
                         android:inputType="text" />
@@ -67,12 +67,12 @@
 
                 <!-- location_img-->
                 <FrameLayout
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_below="@+id/layout_top1"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="15dp"
                     android:background="@drawable/border_white_30">
 
                     <ImageView

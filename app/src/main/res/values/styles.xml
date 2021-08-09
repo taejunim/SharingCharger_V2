@@ -1,6 +1,7 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/white</item>
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
@@ -62,7 +63,7 @@
     <style name="edit_txt2" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:background">@drawable/edit_text_not_border</item>
+        <item name="android:background">@drawable/shadow_background</item>
         <item name="android:paddingStart">15dp</item>
         <item name="android:paddingEnd">0dp</item>
     </style>
@@ -87,7 +88,7 @@
     <!-- header_dummy-->
     <style name="header_dummy" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_height">6dp</item>
         <item name="android:background">@color/header_dummy</item>
         <item name="android:layout_marginBottom">30dp</item>
     </style>
