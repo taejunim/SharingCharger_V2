@@ -931,13 +931,15 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             mDefaultMarker.setTag(i);
             mDefaultMarker.setMapPoint(pointList.get(i));
             mDefaultMarker.setSelectedMarkerType(MapPOIItem.MarkerType.CustomImage);
-            mDefaultMarker.setCustomSelectedImageResourceId(R.mipmap.black_marker_64);
+            //mDefaultMarker.setCustomSelectedImageResourceId(R.mipmap.seleted_marker);
 
             if (chargerList.get(i).currentStatusType.equals("READY")) {           // 대기 중
 
+                mDefaultMarker.setCustomSelectedImageResourceId(R.mipmap.seleted_marker);
                 mDefaultMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                 mDefaultMarker.setCustomImageResourceId(R.mipmap.blue_marker_40);
             } else {
+                mDefaultMarker.setCustomSelectedImageResourceId(R.mipmap.seleted_marker_red);
                 mDefaultMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                 mDefaultMarker.setCustomImageResourceId(R.mipmap.red_marker_40);
             }
@@ -1026,6 +1028,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         } catch (Exception e) {
             Log.e("metis", "onPOIItemSelected  Exception : " + e);
         }
+
+        mapView.setMapCenterPoint(mapPOIItem.getMapPoint(), true);
     }
 
     //충전기 상세정보
