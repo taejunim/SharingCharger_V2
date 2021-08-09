@@ -2,6 +2,7 @@ package kr.co.metisinfo.sharingcharger.digitalWalletManagement;
 
 import android.content.Intent;
 import android.util.Log;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityHistoryBinding;
 import kr.co.metisinfo.sharingcharger.model.PointModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
 import kr.co.metisinfo.sharingcharger.view.activity.HistorySearchConditionActivity;
 
@@ -50,6 +52,7 @@ public class PointUseHistoryActivity extends BaseActivity {
     private boolean chkList = false;
 
     ApiUtils apiUtils = new ApiUtils();
+    CommonUtils commonUtils = new CommonUtils();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -191,7 +194,14 @@ public class PointUseHistoryActivity extends BaseActivity {
     public void init() {
 
         binding.includeHeader.txtTitle.setText(R.string.point_history_title);
+
+        RelativeLayout.LayoutParams imageLayoutParams = new RelativeLayout.LayoutParams(commonUtils.convertToDp(20F), commonUtils.convertToDp(21.3F));
+        imageLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        imageLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        imageLayoutParams.setMarginEnd(commonUtils.convertToDp(15F));
+
         binding.includeHeader.layoutHeaderMenu.setBackground(ContextCompat.getDrawable(this, R.mipmap.menu_list));
+        binding.includeHeader.layoutHeaderMenu.setLayoutParams(imageLayoutParams);
 
         initAdapter();
 

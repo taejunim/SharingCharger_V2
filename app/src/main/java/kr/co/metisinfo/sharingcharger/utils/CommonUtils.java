@@ -2,6 +2,7 @@ package kr.co.metisinfo.sharingcharger.utils;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+import android.util.TypedValue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 
 public class CommonUtils {
@@ -208,5 +210,9 @@ public class CommonUtils {
         return Integer.parseInt(chargerTime) * 60 - (int) second;
     }
 
+    //동적으로 layoutParam 설정을 위해 float -> DP 로 변경
+    public int convertToDp(Float value) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, ThisApplication.context.getResources().getDisplayMetrics());
+    }
 }
 
