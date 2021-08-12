@@ -37,6 +37,7 @@
     <string name="setting_time">충전 시간 설정</string>
     <string name="setting_card">결제 카드 설정</string>
     <string name="setting_logout">로그아웃</string>
+    <string name="setting_change_user_type">소유주 전환</string>
 
     <!-- 메인-->
     <string name="search_condition_title_total">총&#160;</string>

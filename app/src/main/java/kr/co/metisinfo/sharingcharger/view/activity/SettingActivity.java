@@ -1,12 +1,22 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
@@ -15,8 +25,12 @@ import kr.co.metisinfo.sharingcharger.databinding.ActivitySettingBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.userManagement.ChangePasswordActivity;
 import kr.co.metisinfo.sharingcharger.userManagement.SignInActivity;
+import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
+import lombok.val;
+
+import static kr.co.metisinfo.sharingcharger.base.Constants.CHANGE_USER_TYPE;
 
 public class SettingActivity extends BaseActivity {
 
@@ -29,6 +43,31 @@ public class SettingActivity extends BaseActivity {
     private UserViewModel userViewModel;
 
     private String getType = null;
+
+    ApiUtils apiUtils = new ApiUtils();
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {  // 실행이 끝난후 확인 가능
+
+            hideLoading(binding.loading);
+
+            switch (msg.what) {
+                case CHANGE_USER_TYPE :
+
+                    final int resultCode = msg.arg1;
+
+                    if (resultCode == 201) {
+                        Toast.makeText(SettingActivity.this, "소유주로 전환 되었습니다.\n소유중인 충전기를 등록해주세요.", Toast.LENGTH_LONG).show();
+                    } else if (resultCode == 400) {
+                        Toast.makeText(SettingActivity.this, "소유주 전환에 실패하였습니다.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(SettingActivity.this, "소유주 전환에 실패하였습니다.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+            }
+        }
+    };
 
     @Override
     public void initLayout() {
@@ -60,6 +99,8 @@ public class SettingActivity extends BaseActivity {
 
         binding.includeHeader.btnBack.setOnClickListener(view -> finish());
         binding.settingPasswordLayout.setOnClickListener(view -> goChangePassword());
+
+        binding.settingChangeUserTypeLayout.setOnClickListener(view -> changeUserType());
 
         // 결제 카드 설정 추가해야함
         binding.settingCardLayout.setOnClickListener(view -> goCardSetting());
@@ -96,6 +137,36 @@ public class SettingActivity extends BaseActivity {
         intent.putExtra("activityName", this.getLocalClassName());
 
         startActivity(intent);
+    }
+
+    private void changeUserType() {
+
+        Log.d("metis", "goChangeUserType");
+
+        if (!ThisApplication.staticUserModel.getUserType().equals("Personal")) {
+
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this);
+            dialogBuilder.setMessage("소유주로 전환하시겠습니까?\n다시 일반사용자로 전환하시려면 고객센터를 통해 전환 가능합니다.");
+            dialogBuilder.setPositiveButton("전환", (dialog, which) ->{
+                PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+
+                int userId = preferenceUtil.getInt("userId");
+
+                showLoading(binding.loading);
+
+                int resultCode = apiUtils.changeUserType(userId);
+
+                Message msg = new Message();
+                msg.what = CHANGE_USER_TYPE;
+                msg.arg1 = resultCode;
+                handler.sendMessage(msg);
+            });
+            dialogBuilder.setNegativeButton("취소", null);
+            dialogBuilder.create().show();
+
+        } else {
+            Toast.makeText(SettingActivity.this, "현재 소유주 입니다.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void goCardSetting() {

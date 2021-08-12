@@ -462,6 +462,28 @@ public class ApiUtils {
     }
 
     /**
+     * 소유주 전환
+     **/
+    public int changeUserType(int userId) {
+
+        Response<Object> response = null;
+
+        try {
+            response = webServiceAPI.changeUserType(userId).execute();
+        } catch (Exception e) {
+            Log.e("metis", " changeUserType Exception1 : " + e);
+        }
+
+        if(response.code() == 201 && response.body() != null){
+            return response.code();
+        } else if (response.code() == 400) {
+            return response.code();
+        } else {
+           return response.code();
+        }
+    }
+
+    /**
      * 선택된 충전기 상태
      */
     public Response<Object> getChargerStatus(UserModel model) throws Exception {

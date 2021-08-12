@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -539,6 +540,22 @@ public abstract class BaseActivity extends AppCompatActivity {
                 txtReserveSpot.setText("");
             }
         }
+    }
+
+    public void showLoading(ProgressBar progressBar) {
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        //해당페이지 이벤트 막기
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+    }
+
+    public void hideLoading(ProgressBar progressBar) {
+        progressBar.setVisibility(View.INVISIBLE);
+
+        //이벤트 다시 풀기
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     @Override

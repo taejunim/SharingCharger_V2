@@ -161,4 +161,7 @@ public interface WebServiceAPI {
     @GET("/v2/local/search/keyword.json")
     Call<Object> getSearchKeyword(@Query("query") String query);
 
+    // 소유주 전환
+    @POST("/api/v1/userType/Personal/{id}")
+    Call<Object> changeUserType(@Path("id") int id);
 }

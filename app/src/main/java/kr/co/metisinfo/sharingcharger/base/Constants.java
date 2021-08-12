@@ -54,4 +54,6 @@ public class Constants {
     public static GpsService gpsService;
     public static double currentLocationLng;
     public static double currentLocationLat;
+
+    public final static int CHANGE_USER_TYPE = 0x01;
 }
