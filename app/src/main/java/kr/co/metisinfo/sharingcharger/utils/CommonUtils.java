@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
+import kr.co.metisinfo.sharingcharger.model.CurrentReservationModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 
 public class CommonUtils {
@@ -78,6 +79,43 @@ public class CommonUtils {
 
                     System.out.println("d1 : " + format.parse(temp1));
                     System.out.println("d2 : " + format.parse(temp2));
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                if (d1.getTime() < d2.getTime()) {
+                    return -1;
+                } else if (d1.getTime() > d2.getTime()) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
+
+        return list;
+    }
+
+    /**
+     * 날짜 정렬
+     * @param list      List<ReservationModel>
+     * @return list     List<ReservationModel>
+     */
+    public List<ReservationModel> sortReservationList(List<ReservationModel> list) {
+
+        Collections.sort(list, new Comparator<ReservationModel>() {
+            @Override
+            public int compare(ReservationModel s1, ReservationModel s2) {
+
+                Date d1 = new Date();
+                Date d2 = new Date();
+                try {
+
+                    String temp1 = s1.getStartDate().replaceAll("T", " ");
+                    String temp2 = s2.getStartDate().replaceAll("T", " ");
+
+                    d1 = format.parse(temp1);
+                    d2 = format.parse(temp2);
 
                 } catch (ParseException e) {
                     e.printStackTrace();

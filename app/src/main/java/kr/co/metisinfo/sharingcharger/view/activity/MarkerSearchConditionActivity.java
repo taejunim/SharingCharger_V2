@@ -77,7 +77,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
     private int oldPosition = 0;
 
-    private boolean checkChange = true;
+    private boolean isInstantCharge = true;
 
     Calendar minDate = Calendar.getInstance(Locale.getDefault());
     Calendar maxDate = Calendar.getInstance(Locale.getDefault());
@@ -167,9 +167,9 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
                 intent.putExtra("reserveRadius", binding.spinnerLengthRange.getSelectedItem().toString());
                 intent.putExtra("reserveType", binding.spinnerLengthType.getSelectedItem().toString());
 
-                Log.e("metis", "btnOk checkChange : " + checkChange);
+                Log.e("metis", "btnOk isInstantCharge : " + isInstantCharge);
 
-                intent.putExtra("checkChange", String.valueOf(checkChange));
+                intent.putExtra("isInstantCharge", String.valueOf(isInstantCharge));
 
                 Log.e("metis", "binding.spinnerLengthRange.getSelectedItem().toString()1 : " + binding.spinnerLengthRange.getSelectedItem().toString());
 
@@ -449,16 +449,16 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
             reserveRadius = getIntent().getStringExtra("reserveRadius");
             reserveType = getIntent().getStringExtra("reserveType");
 
-            String temp = getIntent().getStringExtra("checkChange");
+            String temp = getIntent().getStringExtra("isInstantCharge");
 
-            Log.e("metis", "checkChange temp : " + temp);
+            Log.e("metis", "isInstantCharge temp : " + temp);
 
-            checkChange = Boolean.valueOf(temp);
+            isInstantCharge = Boolean.valueOf(temp);
 
             selectStartFullDate = String.format("%04d", chargingStartYYYY) + String.format("%02d", chargingStartMM) + String.format("%02d", chargingStartDD) + String.format("%02d", chargingStartHH) + String.format("%02d", chargingStartII);
             selectEndFullDate = String.format("%04d", chargingEndYYYY) + String.format("%02d", chargingEndMM) + String.format("%02d", chargingEndDD) + String.format("%02d", chargingEndHH) + String.format("%02d", chargingEndII);
 
-            Log.e("metis", "checkChange isInit : " + checkChange);
+            Log.e("metis", "isInstantCharge isInit : " + isInstantCharge);
 
         } else {
 
@@ -516,8 +516,8 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         binding.spinnerLengthRange.setSelection(distanceEntry.indexOf(reserveRadius), true);
         binding.spinnerLengthType.setSelection(typeEntry.indexOf(reserveType), true);
 
-        Log.e("metis", "checkChange isInit else : " + checkChange);
-        if (checkChange) {
+        Log.e("metis", "isInstantCharge isInit else : " + isInstantCharge);
+        if (isInstantCharge) {
             chargeBtnClick(binding.goCharging);
         } else {
             chargeBtnClick(binding.reserveCharging);
@@ -656,7 +656,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         Log.e("metis", "getMonth : " + nowCal.get(Calendar.MONTH));
 
         //예약 충전
-        if (!checkChange) {
+        if (!isInstantCharge) {
 
             int StartYYYY = Integer.parseInt(selectStartFullDate.substring(0, 4));
             int StartMM = Integer.parseInt(selectStartFullDate.substring(4, 6));
@@ -744,7 +744,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
         //즉시 충전
         if (selectedTextView.getText().toString().contains("즉시")) {
-            checkChange = true;
+            isInstantCharge = true;
 
             binding.reserveCharging.setBackgroundResource(R.color.transparent);
             binding.reserveCharging.setTextAppearance(R.style.history_selected_none);
@@ -754,7 +754,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         }
         //예약 충전
         else {
-            checkChange = false;
+            isInstantCharge = false;
 
             binding.goCharging.setBackgroundResource(R.color.transparent);
             binding.goCharging.setTextAppearance(R.style.history_selected_none);

@@ -54,7 +54,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -72,6 +71,8 @@ import kr.co.metisinfo.sharingcharger.dialog.PointChargingDialog;
 import kr.co.metisinfo.sharingcharger.model.AllowTimeOfDayModel;
 import kr.co.metisinfo.sharingcharger.model.BookmarkModel;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
+import kr.co.metisinfo.sharingcharger.model.CurrentReservationModel;
+import kr.co.metisinfo.sharingcharger.model.ReservationDateModel;
 import kr.co.metisinfo.sharingcharger.model.RechargeModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.model.SearchKeywordModel;
@@ -159,7 +160,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     /* 20.12.28 즉시충전을 위한 변수 추가 END */
 
     // true : 즉시충전, false : 예약충전
-    private boolean checkChange = true;
+    private boolean isInstantCharge = true;
 
     private String searchKeyword = "";
 
@@ -169,6 +170,16 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     boolean ownerResult = false;
 
     boolean isFirst = false;
+
+    SimpleDateFormat ymdFormatter = new SimpleDateFormat("yyyy-MM-dd'T'");
+    SimpleDateFormat fullDateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    SimpleDateFormat HHMMFormatter = new SimpleDateFormat("HH:mm");
+    SimpleDateFormat ymdHmFormatter = new SimpleDateFormat("yyyyMMddHHmm");
+
+    List<CurrentReservationModel> currentReservationList = new ArrayList<>();
+    List<CurrentReservationModel> openCloseTimeList = new ArrayList<>();
+
+    ReservationDateModel reservationDateModel = new ReservationDateModel();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -197,8 +208,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     binding.editSearch.setText("");
 
-                    gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-                    Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
+                    /*gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
+                    Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);*/
+                    showLoading(binding.loading);
 
                     reserveChargingMinute = data.getIntExtra("chargingMinute", -1);
 
@@ -217,12 +229,29 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     reserveRadius = data.getStringExtra("reserveRadius");
                     reserveType = data.getStringExtra("reserveType");
 
-                    String temp = data.getStringExtra("checkChange");
-                    Log.e("metis", "checkChange temp: " + temp);
-                    checkChange = Boolean.valueOf(temp);
+                    String temp = data.getStringExtra("isInstantCharge");
+                    Log.e("metis", "isInstantCharge temp: " + temp);
+                    isInstantCharge = Boolean.valueOf(temp);
+                    if (isInstantCharge) {
+                        binding.btnReservation.setText(R.string.go_charge);
+                    } else {
+                        binding.btnReservation.setText(R.string.go_reserve);
+
+                        reservationDateModel.setYear(chargingStartYYYY);
+                        reservationDateModel.setMonth(chargingStartMM);
+                        reservationDateModel.setDay(chargingStartDD);
+                        reservationDateModel.setHour(chargingStartHH);
+                        reservationDateModel.setMinute(chargingStartII);
+                        reservationDateModel.setReserveChargingMinute(reserveChargingMinute);
+                        reservationDateModel.setEndYear(chargingStartYYYY);
+                        reservationDateModel.setEndMonth(chargingStartMM);
+                        reservationDateModel.setEndDay(chargingStartDD);
+                        reservationDateModel.setEndHour(chargingEndHH);
+                        reservationDateModel.setEndMinute(chargingEndII);
+                    }
 
                     Log.e("metis", "reserveChargingMinute : " + reserveChargingMinute);
-                    Log.e("metis", "checkChange : " + checkChange);
+                    Log.e("metis", "isInstantCharge : " + isInstantCharge);
                     Log.e("metis", "reserveRadius : " + reserveRadius);
 
                     setTimeInit();
@@ -529,7 +558,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             //충전기이름
             intent.putExtra("chargerName", chargerList.get(clickPOIIndex).name);
 
-            if (checkChange) {                                                                        //즉시 충전
+            if (isInstantCharge) {                                                                        //즉시 충전
 
                 ReservationModel rModel = new ReservationModel();
 
@@ -791,7 +820,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         //해당페이지 이벤트 막기
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        handler.postDelayed(r, 3000); // 1초 뒤에 Runnable 객체 수행
+        handler.postDelayed(r, 1000); // 1초 뒤에 Runnable 객체 수행
 
         //소유자일 경우 소유자 화면 이동
 
@@ -806,8 +835,11 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        if (!this.isDestroyed()) {
+        /*if (!this.isDestroyed()) {
             Glide.with(this).onDestroy();
+        }*/
+        if (binding.loading.getVisibility() == View.VISIBLE) {
+            binding.loading.setVisibility(View.INVISIBLE);
         }
 
     };
@@ -816,26 +848,39 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         /*현재시간으로 수정 START*/
         Calendar nowCal = Calendar.getInstance(Locale.getDefault());                                //시작시간을 위한 켈린더 선언
-        Calendar addCal = Calendar.getInstance(Locale.getDefault());                                //이용시간 계산을 위한 켈린더 선언
 
-        addCal.add(Calendar.MINUTE, reserveChargingMinute);                                         //이용시간 계산
+        if (isInstantCharge) {
+            chargingStartYYYY = nowCal.get(Calendar.YEAR);
+            chargingStartMM = nowCal.get(Calendar.MONTH) + 1;
+            chargingStartDD = nowCal.get(Calendar.DAY_OF_MONTH);
+            chargingStartHH = nowCal.get(Calendar.HOUR_OF_DAY);
+            chargingStartII = nowCal.get(Calendar.MINUTE);
 
-        chargingStartYYYY = nowCal.get(Calendar.YEAR);
-        chargingStartMM = nowCal.get(Calendar.MONTH) + 1;
-        chargingStartDD = nowCal.get(Calendar.DAY_OF_MONTH);
-        chargingStartHH = nowCal.get(Calendar.HOUR_OF_DAY);
-        chargingStartII = nowCal.get(Calendar.MINUTE);
+            nowCal.add(Calendar.MINUTE, reserveChargingMinute);                                         //이용시간 계산
 
-        chargingEndYYYY = addCal.get(Calendar.YEAR);
-        chargingEndMM = addCal.get(Calendar.MONTH) + 1;
-        chargingEndDD = addCal.get(Calendar.DAY_OF_MONTH);
-        chargingEndHH = addCal.get(Calendar.HOUR_OF_DAY);
-        chargingEndII = addCal.get(Calendar.MINUTE);
+            chargingEndYYYY = nowCal.get(Calendar.YEAR);
+            chargingEndMM = nowCal.get(Calendar.MONTH) + 1;
+            chargingEndDD = nowCal.get(Calendar.DAY_OF_MONTH);
+            chargingEndHH = nowCal.get(Calendar.HOUR_OF_DAY);
+            chargingEndII = nowCal.get(Calendar.MINUTE);
+
+        } else {
+            chargingStartYYYY = reservationDateModel.getYear();
+            chargingStartMM = reservationDateModel.getMonth();
+            chargingStartDD = reservationDateModel.getDay();
+            chargingStartHH = reservationDateModel.getHour();
+            chargingStartII = reservationDateModel.getMinute();
+
+            chargingEndYYYY = reservationDateModel.getEndYear();
+            chargingEndMM = reservationDateModel.getEndMonth();
+            chargingEndDD = reservationDateModel.getEndDay();
+            chargingEndHH = reservationDateModel.getEndHour();
+            chargingEndII = reservationDateModel.getEndMinute();
+        }
         /*현재시간으로 수정 END*/
 
         //하단 시간 표시
         setTimeInit();
-
     }
 
     private void showSearchCondition() {
@@ -870,9 +915,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         intent.putExtra("reserveRadius", reserveRadius);              // 예약 반경 거리
         intent.putExtra("reserveType", reserveType);              // 예약 충전기 타입
         
-        intent.putExtra("checkChange", String.valueOf(checkChange));     //즉시, 예약
+        intent.putExtra("isInstantCharge", String.valueOf(isInstantCharge));     //즉시, 예약
 
-        Log.e("metis", "checkChange : " + checkChange);
+        Log.e("metis", "isInstantCharge : " + isInstantCharge);
 
         startActivityForResult(intent, Constants.PAGE_SEARCH_CONDITION);
 
@@ -975,6 +1020,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         //페이지가 오픈 안될때도 있음
         //클릭 시 마다 false 초기화 해줌
         isPageOpen = false;
+
+        setTime(); //시간 새로고침
 
         try {
             Log.e("metis", "onPOIItemSelected else");
@@ -1240,8 +1287,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         pointList.clear();
         chargerList.clear();
 
-        gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-        Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
+        /*gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
+        Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);*/
+        showLoading(binding.loading);
 
         //예약 상태 확인, 예약없음, 예약 있음, 충전 중
         //reservationModel = apiUtils.getReservationStatus();
@@ -1590,255 +1638,60 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     intntChgSTime = currentTime.substring(currentTime.length() - 8, currentTime.length());
                     Log.e("metis", "currentTime : " + currentTime);
 
-                    List<ReservationModel> reservationList = new ArrayList<>();
-
                     System.out.println("충전 분 :" + reserveChargingMinute);
 
                     try {
 
+                        //openTime, closeTime 가져오기
                         JSONObject chargerAllowTimeObject = json.getJSONObject("chargerAllowTime");
 
-                        JSONArray tempArray = new JSONArray();
+                        List<AllowTimeOfDayModel> availableTimeList = new ArrayList<>();
 
                         for (int i=0; i<2; i++) {
-                            JSONObject tempObject = new JSONObject();
-                            tempObject.put("openTime", chargerAllowTimeObject.get("openTime").toString());
-                            tempObject.put("closeTime", chargerAllowTimeObject.get("closeTime").toString());
+                            AllowTimeOfDayModel allowTimeOfDayModel = new AllowTimeOfDayModel();
+                            allowTimeOfDayModel.setId(i);
+                            allowTimeOfDayModel.setOpenTime(chargerAllowTimeObject.get("openTime").toString());
+                            allowTimeOfDayModel.setCloseTime(chargerAllowTimeObject.get("closeTime").toString());
 
-                            tempArray.put(tempObject);
+                            availableTimeList.add(allowTimeOfDayModel);
                         }
 
+                        //예약 목록
+                        JSONObject reservationObject = json.getJSONObject("reservations");
 
-                        //충전기 open, closeTime 가져오기
-                        //JSONArray contacts = json.getJSONArray("chargerTimeAvailable");
-                        JSONArray contacts = tempArray;
+                        JSONArray reservationArray = reservationObject.getJSONArray("content");
 
-                        for (int i = 0; i < contacts.length(); i++) {
-                            Log.e("metis", "chargerTimeAvailable");
-                            JSONObject obj = (JSONObject) contacts.get(i);
+                        List<ReservationModel> reservationList = new ArrayList<>();
 
-                            /*JSONArray allowArray = obj.getJSONArray("allowTimeOfDays");
-
-                            Gson gson = new Gson();
-
-                            AllowTimeOfDayModel allowTimeOfDayModel = gson.fromJson(allowArray.get(0).toString(), AllowTimeOfDayModel.class);
-
-                            Log.e("metis", "allowTimeOfDayModel : " + allowTimeOfDayModel);*/
-
-                            //full open
-                            //if (allowTimeOfDayModel.getOpenTime().equals("00:00:00") && allowTimeOfDayModel.getCloseTime().equals("23:59:59")) {
-                            if (obj.get("openTime").toString().equals("00:00:00") && obj.get("closeTime").toString().equals("23:59:59")) {
-
-                            } else {
-
-//                                String openTime = allowTimeOfDayModel.getOpenTime();
-//                                String closeTime = allowTimeOfDayModel.getCloseTime();
-                                String openTime = obj.get("openTime").toString();
-                                String closeTime = obj.get("closeTime").toString();
-                                if (closeTime.equals("23:59:59")) {
-                                    closeTime = "24:00:00";
-                                }
-
-                                openTime = format.format(startCal.getTime()).substring(0, 10) + " " + openTime;
-                                closeTime = format.format(startCal.getTime()).substring(0, 10) + " " + closeTime;
-
-                                String hourOpen = format.format(startCal.getTime()).substring(0, 10) + " 00:00:00";
-                                String hourClose = format.format(startCal.getTime()).substring(0, 10) + " 24:00:00";
-
-                                ReservationModel model = new ReservationModel();
-                                //closeTime 만 다름
-                                if (obj.get("openTime").toString().equals("00:00:00")) {
-
-                                    model.startDate = closeTime;
-                                    model.endDate = hourClose;
-                                    model.reservationType = "false";
-                                    reservationList.add(model);
-                                    Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
-
-                                }
-                                //openTime만 다름
-                                else if (obj.get("closeTime").toString().equals("23:59:59")) {
-
-                                    model.startDate = hourOpen;
-                                    model.endDate = openTime;
-                                    model.reservationType = "false";
-                                    reservationList.add(model);
-                                    Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
-                                }
-                                //둘다 다름
-                                else {
-
-                                    model.startDate = closeTime;
-                                    model.endDate = hourClose;
-                                    model.reservationType = "false";
-                                    reservationList.add(model);
-                                    Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
-
-                                    model = new ReservationModel();
-                                    model.startDate = hourOpen;
-                                    model.endDate = openTime;
-                                    model.reservationType = "false";
-                                    reservationList.add(model);
-                                    Log.e("metis", "allowTimeOfDayModel reservationList: " + model);
-                                }
-                            }
-
-                            startCal.add(Calendar.DATE, 1);
-                        }
-
-                        Calendar tempCal = commonUtils.setCalendarDate(currentTime);
-
-                        tempCal.add(Calendar.MINUTE, reserveChargingMinute);
-
-                        String tempTime = format.format(tempCal.getTime());
-                        tempTime = tempTime.substring(0, tempTime.length() - 2) + "00";
-                        Log.e("metis", "tempCal :" + tempTime);
-
-                        intntChgETime = tempTime.substring(tempTime.length() - 8, tempTime.length());
-
-                        //예약 리스트 가져오기
-                        JSONObject obj = json.getJSONObject("reservations");
-
-                        JSONArray contentArray = obj.getJSONArray("content");
-
-                        for (int i = 0; i < contentArray.length(); i++) {
-                            Log.e("metis", contentArray.get(i).toString());
+                        for (int i = 0; i < reservationArray.length(); i++) {
+                            Log.e("metis", reservationArray.get(i).toString());
 
                             Gson gson = new Gson();
-                            ReservationModel reservationModel = gson.fromJson(contentArray.get(i).toString(), ReservationModel.class);
-                            reservationModel.reservationType = "true";
+                            ReservationModel reservationModel = gson.fromJson(reservationArray.get(i).toString(), ReservationModel.class);
+
                             reservationList.add(reservationModel);
                         }
-
-                        reservationList = commonUtils.dateSort(reservationList);
-                        Log.e("metis", "sort");
-                        Log.e("metis", reservationList.toString());
-
-                        //현재 시간 구하기
-                        String getFullDate = setFullDateTime(true);
-                        Log.e("metis", "getFullDate :" + getFullDate);
-
-                        getFullDate = getFullDate.substring(0, 4) + "-" + getFullDate.substring(4, 6) + "-" + getFullDate.substring(6, 8) + " " + getFullDate.substring(8, 10) + ":" + getFullDate.substring(10, 12) + ":00";
-
-                        Date currDt = format.parse(getFullDate);
-                        List<String> availableList = new ArrayList<>();
-                        Calendar curCal = Calendar.getInstance();
-                        curCal.setTime(currDt);
-
-                        Log.e("metis", "curCal diff:" + format.format(curCal.getTime()));
-
-                        //이용 가능시간
-                        for (int i = 0; i < reservationList.size(); i++) {
-
-                            ReservationModel model = reservationList.get(i);
-                            Date tempDt = format.parse(model.getStartDate().replaceAll("T", " "));
-
-                            currDt = format.parse(format.format(curCal.getTime()));
-
-                            long diff = currDt.getTime() - tempDt.getTime();
-
-                            //현재시간 보다 앞에 예약이 있음
-                            if (diff >= 0) {
-
-                                tempDt = format.parse(model.getEndDate().replaceAll("T", " "));
-
-                                Log.e("metis", "예약있음:");
-                                Log.e("metis", "tempDt:" + format.format(tempDt));
-                                Log.e("metis", "currDt:" + format.format(currDt));
-
-                                long endDiff = tempDt.getTime() - currDt.getTime();
-                                Log.e("metis", "availableList endDiff:" + endDiff);
-                                if (endDiff > 0) {
-                                    endDiff = endDiff / (60 * 1000);
-
-                                    double tempDouble = (double) endDiff / 30;
-
-                                    if (model.reservationType.equals("true")) {
-                                        curCal.add(Calendar.MINUTE, (int) (Math.ceil(tempDouble) + 1) * 30);
-                                    } else {
-                                        curCal.add(Calendar.MINUTE, (int) (Math.ceil(tempDouble)) * 30);
-                                    }
-
-                                    //curCal.add(Calendar.MINUTE, (int) (Math.ceil(tempDouble) + 1) * 30);
-                                }
-                            }
-                            //뒤에 예약이 있음
-                            else {
-
-                                Calendar tempCalendar = Calendar.getInstance();
-                                tempCalendar.setTime(tempDt);
-
-                                if (model.reservationType.equals("true")) {
-                                    tempCalendar.add(Calendar.MINUTE, -30);
-                                }
-
-
-                                String addTime = format.format(curCal.getTime()) + ", " + format.format(tempCalendar.getTime());
-
-                                curCal.setTime(format.parse(model.getEndDate().replaceAll("T", " ")));
-
-                                if (model.reservationType.equals("true")) {
-                                    curCal.add(Calendar.MINUTE, 30);
-                                }
-
-
-                                availableList.add(addTime);
-                            }
-                        }
-
-                        Log.e("metis", "curCal diff:" + format.format(curCal.getTime()));
-                        Log.e("metis", "availableList" + availableList);
+                        reservationList = commonUtils.sortReservationList(reservationList);
 
                         //txt 그리는 부분
                         LinearLayout layoutText = binding.layoutChgrTimeAvailableTxt;
                         layoutText.removeAllViews();
 
-                        if (reservationList.size() > 0 && availableList.size() == 0) {
+                        //이용 가능 시간대 라벨 구하기
+                        List<String> labelList = getAvailablePeriodLabelList(json, availableTimeList, reservationList, getFullSDate);
 
+                        if (labelList.size() > 0) {
                             binding.timeAvailableLayout.setVisibility(View.VISIBLE);
                             binding.txtAllTime.setVisibility(View.INVISIBLE);
 
-                            Calendar checkCal = Calendar.getInstance();
-                            checkCal.setTime(currDt);
-
-                            if (checkCal.getTimeInMillis() != curCal.getTimeInMillis()) {
-                                String temp = format.format(curCal.getTime()).substring(11, 16);
-
-                                setLinearLayoutText(layoutText, context, temp + " ~ ");
+                            for (int i=0; i<labelList.size(); i++) {
+                                setLinearLayoutText(layoutText, context, labelList.get(i));
                             }
 
-                            return;
-                        }
-
-                        Log.e("metis", "return");
-
-                        if (availableList.size() == 0) {
+                        } else {
 
                             binding.timeAvailableLayout.setVisibility(View.INVISIBLE);
                             binding.txtAllTime.setVisibility(View.VISIBLE);
-
-                        } else {
-                            for (int i = 0; i < availableList.size(); i++) {
-                                String[] value = availableList.get(i).split(",");
-
-                                if (value.length > 0) {
-                                    setLinearLayoutText(layoutText, context, value[0].substring(11, 16) + " ~ " + value[1].substring(11, 17));
-                                }
-                            }
-
-                            /*String temp = availableList.get(availableList.size() - 1);
-                            String[] value = temp.split(",");
-                            Log.e("metis", "value last" + value[1]);
-                            if (value[1].equals(format.format(curCal.getTime()))) {
-                                //30분 더하기
-                                curCal.add(Calendar.MINUTE, 30);
-                            }
-
-                            temp = format.format(curCal.getTime()).substring(11, 16);
-                            setLinearLayoutText(layoutText, context, temp + " ~ ");*/
-
-                            binding.timeAvailableLayout.setVisibility(View.VISIBLE);
-                            binding.txtAllTime.setVisibility(View.INVISIBLE);
                         }
 
                     } catch (Exception e) {
@@ -1862,41 +1715,287 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         }
     }
 
-    /**
-     * YYYYMMDDHHII 형식의 시작일자, 종료일자 가자오는 함수.
-     *
-     * @param isStartTime true : 시작일자, false : 종료 일자
-     * @return YYYYMMDDHHII 일자
-     */
-    private String setFullDateTime(boolean isStartTime) {
+    public List<String> getAvailablePeriodLabelList(JSONObject jsonObject, List<AllowTimeOfDayModel> availableTimeList, List<ReservationModel> reservationList, String selectedStartDateString) {
 
-        String dateTime;
-        int currTime = Integer.parseInt(DateUtils.addTimeGetTime(0).substring(3));
+        currentReservationList.clear();
+        openCloseTimeList.clear();
 
-        if (0 <= currTime && currTime < 30) {
+        Date nowDate = new Date();
+        Date selectedStartDate = null;
 
-            int standardTime = 30 - currTime;
+        String today = ymdFormatter.format(nowDate);
 
-            if (!isStartTime) {
-                standardTime += reserveChargingMinute;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowDate);
+        calendar.add(Calendar.DATE, 1);
+
+        String tomorrow = ymdFormatter.format(calendar.getTime());
+
+        try {
+            selectedStartDate = ymdHmFormatter.parse(selectedStartDateString);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        for (int i=0; i<reservationList.size(); i++) {
+            addReservationList(reservationList.get(i).getStartDate(), reservationList.get(i).getEndDate(), "reservation");
+        }
+
+        for (int i=0; i<availableTimeList.size(); i++) {
+
+            AllowTimeOfDayModel allowTimeOfDayModel = new AllowTimeOfDayModel();
+            allowTimeOfDayModel = availableTimeList.get(i);
+
+            String startTime = "";
+            String endTime = "";
+
+            if (i == 0) {
+                startTime = today + allowTimeOfDayModel.getOpenTime();
+                endTime = today + allowTimeOfDayModel.getCloseTime();
+            } else if (i ==1) {
+                startTime = tomorrow + allowTimeOfDayModel.getOpenTime();
+                endTime = tomorrow + allowTimeOfDayModel.getCloseTime();
             }
 
-            String currDateTime = DateUtils.nowDateTime();
-            dateTime = DateUtils.dateAddTime(currDateTime, standardTime);
+            addReservationList(startTime, endTime, "openClose");
+        }
+
+        List<String> resultList = new ArrayList<>();
+
+        if (currentReservationList.size() == 0) {
+            //예약 없을 때
+            if (HHMMFormatter.format(openCloseTimeList.get(0).getStartDate()).equals("00:00") && HHMMFormatter.format(openCloseTimeList.get(0).getEndDate()).equals("23:59") &&
+                    HHMMFormatter.format(openCloseTimeList.get(1).getStartDate()).equals("00:00") && HHMMFormatter.format(openCloseTimeList.get(1).getEndDate()).equals("23:59")) {
+                // 항시 충전 가능
+            }
+
+            else {
+                //현재 시간보다 openTime이 클 경우 ex) 현재 - 18:00, openTime - 19:00
+                if (selectedStartDate.getTime() < openCloseTimeList.get(0).getStartDate().getTime()) {
+                    String label = HHMMFormatter.format(openCloseTimeList.get(0).getStartDate()) + " ~ " + HHMMFormatter.format(openCloseTimeList.get(0).getEndDate());
+                    resultList.add(label);
+                } else {
+
+                    if (check30Minute(selectedStartDate.getTime(), openCloseTimeList.get(0).getEndDate().getTime())) {
+                        String label = HHMMFormatter.format(selectedStartDate) + " ~ " + HHMMFormatter.format(openCloseTimeList.get(0).getEndDate());
+                        resultList.add(label);
+                    }
+                }
+
+                String label = HHMMFormatter.format(openCloseTimeList.get(1).getStartDate()) + " ~ " + HHMMFormatter.format(openCloseTimeList.get(1).getEndDate());
+                resultList.add(label);
+            }
 
         } else {
 
-            int standardTime = 60 - currTime;
 
-            if (!isStartTime) {
-                standardTime += reserveChargingMinute;
+            for (int i=0; i<currentReservationList.size(); i++) {
+
+                //시작 일시가 오늘, 종료 일시가 내일
+                if (ymdFormatter.format(currentReservationList.get(i).getStartDate()).equals(today) &&
+                        ymdFormatter.format(currentReservationList.get(i).getEndDate()).equals(tomorrow)) {
+
+                    if (currentReservationList.get(i).getStartDate().getTime() < openCloseTimeList.get(0).getEndDate().getTime()) {
+                        openCloseTimeList.get(0).setEndDate(currentReservationList.get(i).getStartDate());
+                    }
+                    if (currentReservationList.get(i).getEndDate().getTime() > openCloseTimeList.get(1).getStartDate().getTime()) {
+                        openCloseTimeList.get(1).setStartDate(currentReservationList.get(i).getEndDate());
+                    }
+                    currentReservationList.remove(i);
+                }
             }
 
-            String currDateTime = DateUtils.nowDateTime();
-            dateTime = DateUtils.dateAddTime(currDateTime, standardTime);
+            //예약이 오늘에서 내일로 넘어가는 즉시충전건 뿐일때
+            if (currentReservationList.size() == 0) {
+                String label = HHMMFormatter.format(openCloseTimeList.get(1).getStartDate()) + " ~ " + HHMMFormatter.format(openCloseTimeList.get(1).getEndDate());
+                resultList.add(label);
+            } else {
+
+                int tomorrowReservationExist = 0;
+                //예약 있읕때
+                for (int i=0; i<currentReservationList.size(); i++) {
+                    if (ymdFormatter.format(currentReservationList.get(i).getStartDate()).equals(tomorrow)
+                            || ymdFormatter.format(currentReservationList.get(i).getEndDate()).equals(tomorrow)) {
+                        tomorrowReservationExist += 1;
+                    }
+
+                    if (i == 0) {
+                        //첫번째 예약이 오늘일때
+                        if (ymdFormatter.format(currentReservationList.get(i).getStartDate()).equals(today)
+                                && ymdFormatter.format(currentReservationList.get(i).getEndDate()).equals(today)) {
+                            //현재 시간보다 openTime이 클 경우 ex) 현재 - 18:00, openTime - 19:00
+                            if (selectedStartDate.getTime() < openCloseTimeList.get(0).getStartDate().getTime()) {
+                                if (check30Minute(openCloseTimeList.get(0).getStartDate().getTime(), recalculateBefore30Minute(currentReservationList.get(i).getStartDate()).getTime())) {
+                                    String label = HHMMFormatter.format(openCloseTimeList.get(0).getStartDate()) + " ~ " + HHMMFormatter.format(recalculateBefore30Minute(currentReservationList.get(i).getStartDate()));
+                                    resultList.add(label);
+                                }
+
+                            } else {
+                                if (selectedStartDate.getTime() < currentReservationList.get(i).getStartDate().getTime()) {
+                                    if (check30Minute(selectedStartDate.getTime(), recalculateBefore30Minute(currentReservationList.get(i).getStartDate()).getTime())) {
+                                        String label = HHMMFormatter.format(selectedStartDate) + " ~ " + HHMMFormatter.format(recalculateBefore30Minute(currentReservationList.get(i).getStartDate()));
+                                        resultList.add(label);
+                                    }
+                                }
+                            }
+                        } else {
+                            //현재 시간보다 openTime이 클 경우 ex) 현재 - 18:00, openTime - 19:00
+                            if (selectedStartDate.getTime() < openCloseTimeList.get(0).getEndDate().getTime()) {
+                                if (check30Minute(selectedStartDate.getTime(), openCloseTimeList.get(0).getEndDate().getTime())) {
+                                    String label = HHMMFormatter.format(selectedStartDate) + " ~ " + HHMMFormatter.format(openCloseTimeList.get(0).getEndDate());
+                                    resultList.add(label);
+                                }
+                            }
+                            /*String label = HHMMFormatter.format(openCloseTimeList.get(1).getStartDate()) + " ~ " + HHMMFormatter.format(reservationList.get(i).getStartDate());
+                            resultList.add(label);*/
+                        }
+                    }
+
+                    if (i != currentReservationList.size() -1) {
+
+                        if (ymdFormatter.format(currentReservationList.get(i).getEndDate()).equals(today)) {
+                            if (ymdFormatter.format(currentReservationList.get(i+1).getEndDate()).equals(today)) {
+                                if (check30Minute(recalculateAfter30Minute(currentReservationList.get(i).getEndDate()).getTime(), recalculateBefore30Minute(currentReservationList.get(i+1).getStartDate()).getTime())) {
+                                    String label = HHMMFormatter.format(recalculateAfter30Minute(currentReservationList.get(i).getEndDate())) + " ~ "
+                                            + HHMMFormatter.format(recalculateBefore30Minute(currentReservationList.get(i+1).getStartDate()));
+                                    resultList.add(label);
+                                }
+
+                            } else {
+                                if (check30Minute(recalculateAfter30Minute(currentReservationList.get(i).getEndDate()).getTime(), openCloseTimeList.get(0).getEndDate().getTime())) {
+                                    String label = HHMMFormatter.format(recalculateAfter30Minute(currentReservationList.get(i).getEndDate())) + " ~ "
+                                            + HHMMFormatter.format(openCloseTimeList.get(0).getEndDate());
+                                    resultList.add(label);
+                                }
+                            }
+                        }
+                        //내일 예약일 때
+                        else if (ymdFormatter.format(currentReservationList.get(i).getStartDate()).equals(tomorrow)
+                                && ymdFormatter.format(currentReservationList.get(i).getEndDate()).equals(tomorrow)) {
+                            if (tomorrowReservationExist > 1) {
+                                if (check30Minute(recalculateAfter30Minute(currentReservationList.get(i).getEndDate()).getTime(), recalculateBefore30Minute(currentReservationList.get(i+1).getStartDate()).getTime())) {
+                                    String label = HHMMFormatter.format(recalculateAfter30Minute(currentReservationList.get(i).getEndDate())) + " ~ "
+                                            + HHMMFormatter.format(recalculateBefore30Minute(currentReservationList.get(i+1).getStartDate()));
+                                    resultList.add(label);
+                                }
+
+                            } else {
+
+                                if (check30Minute(openCloseTimeList.get(1).getStartDate().getTime(), recalculateBefore30Minute(currentReservationList.get(i).getStartDate()).getTime())) {
+                                    String label = HHMMFormatter.format(openCloseTimeList.get(1).getStartDate()) + " ~ "
+                                            + HHMMFormatter.format(recalculateBefore30Minute(currentReservationList.get(i).getStartDate()));
+                                    resultList.add(label);
+                                }
+
+                                if (check30Minute(recalculateAfter30Minute(currentReservationList.get(i).getEndDate()).getTime(), recalculateBefore30Minute(currentReservationList.get(i+1).getStartDate()).getTime())) {
+                                    String label = HHMMFormatter.format(recalculateAfter30Minute(currentReservationList.get(i).getEndDate())) + " ~ "
+                                            + HHMMFormatter.format(recalculateBefore30Minute(currentReservationList.get(i+1).getStartDate()));
+                                    resultList.add(label);
+                                }
+                            }
+                        }
+                    }
+
+                    //마지막 예약
+                    if (i == currentReservationList.size() -1) {
+
+                        if (tomorrowReservationExist > 1) {
+                            if (check30Minute(recalculateAfter30Minute(currentReservationList.get(i).getEndDate()).getTime(), openCloseTimeList.get(1).getEndDate().getTime())) {
+                                String label = HHMMFormatter.format(recalculateAfter30Minute(currentReservationList.get(i).getEndDate())) + " ~ "
+                                        + HHMMFormatter.format(openCloseTimeList.get(1).getEndDate());
+                                resultList.add(label);
+                            }
+
+                        } else if (tomorrowReservationExist == 1) {
+                            if (check30Minute(openCloseTimeList.get(1).getStartDate().getTime(), recalculateBefore30Minute(currentReservationList.get(i).getStartDate()).getTime())) {
+                                String label = HHMMFormatter.format(openCloseTimeList.get(1).getStartDate()) + " ~ "
+                                        + HHMMFormatter.format(recalculateBefore30Minute(currentReservationList.get(i).getStartDate()).getTime());
+                                resultList.add(label);
+                            }
+
+                            if (check30Minute(recalculateAfter30Minute(currentReservationList.get(i).getEndDate()).getTime(), openCloseTimeList.get(1).getEndDate().getTime())) {
+                                String label = HHMMFormatter.format(recalculateAfter30Minute(currentReservationList.get(i).getEndDate())) + " ~ "
+                                        + HHMMFormatter.format(openCloseTimeList.get(1).getEndDate());
+                                resultList.add(label);
+                            }
+
+                        } else {
+                            if (check30Minute(recalculateAfter30Minute(currentReservationList.get(i).getEndDate()).getTime(), openCloseTimeList.get(1).getEndDate().getTime())) {
+                                String label = HHMMFormatter.format(recalculateAfter30Minute(currentReservationList.get(i).getEndDate())) + " ~ "
+                                        + HHMMFormatter.format(openCloseTimeList.get(1).getEndDate());
+                                resultList.add(label);
+                            }
+
+                            String label = HHMMFormatter.format(openCloseTimeList.get(1).getStartDate()) + " ~ "
+                                    + HHMMFormatter.format(openCloseTimeList.get(1).getEndDate());
+                            resultList.add(label);
+                        }
+                    }
+                }
+            }
         }
 
-        return dateTime;
+        return resultList;
+    }
+
+    /**
+     * 예약은 전후 30분 불가능하므로 시간 재계산
+     * */
+    //예약 시작 시간 30분 전 Date 구하기
+    private Date recalculateBefore30Minute(Date originDate) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(originDate);
+        calendar.add(Calendar.MINUTE, -30);
+
+        return calendar.getTime();
+    }
+
+    //예약 종료 시간 30분 후 Date 구하기
+    private Date recalculateAfter30Minute(Date originDate) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(originDate);
+        calendar.add(Calendar.MINUTE, 30);
+
+        return calendar.getTime();
+    }
+
+    //이용 가능 시간 라벨 구하기 위해 충전기 Open/Close Time List , 현재 예약 List 구하기
+    private void addReservationList(String startDateString, String endDateString, String arrayType) {
+
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = fullDateFormatter.parse(startDateString);
+            endDate = fullDateFormatter.parse(endDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.setTime(startDate);
+
+        CurrentReservationModel currentReservationModel = new CurrentReservationModel();
+        currentReservationModel.setStartDate(startDate);
+        currentReservationModel.setEndDate(endDate);
+
+        if (arrayType.equals("reservation")) {
+            currentReservationList.add(currentReservationModel);
+        } else if (arrayType.equals("openClose")) {
+            openCloseTimeList.add(currentReservationModel);
+        }
+    }
+
+    //최소 충전 가능 시간 30분 체크
+    private boolean check30Minute(long startTime, long endTime) {
+
+        if (endTime - startTime < 1800000) {
+            return false;
+        }
+
+        return true;
     }
 
     public void setLinearLayoutText(LinearLayout layoutText, Context context, String txt) {
@@ -1955,7 +2054,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         //해당페이지 이벤트 막기
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        handler.postDelayed(r, 2000); // 1초 뒤에 Runnable 객체 수행
+        handler.postDelayed(r, 1000); // 1초 뒤에 Runnable 객체 수행
 
     }
 

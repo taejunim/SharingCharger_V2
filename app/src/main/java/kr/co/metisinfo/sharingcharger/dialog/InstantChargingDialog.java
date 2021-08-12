@@ -107,8 +107,8 @@ public class InstantChargingDialog extends Dialog  {
 
             //예약 실패
             else{
-                Toast.makeText(context, "예약에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-                Log.e("metis", "예약에 실패하였습니다.");
+                Toast.makeText(context, "충전에 실패하였습니다.\n이용 가능 시간을 다시 확인해주세요.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_LONG).show();
+                Log.e("metis", "충전에 실패하였습니다.");
             }
 
             this.dismiss();

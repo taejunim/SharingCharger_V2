@@ -673,14 +673,12 @@
 
             <!-- 마커 클릭시-->
 
-
-            <ImageView
-                android:id="@+id/image_loading"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:src="@mipmap/spinner_loading" />
+            <ProgressBar
+                android:visibility="invisible"
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

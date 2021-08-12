@@ -217,7 +217,7 @@ public class ChargerReservationActivity extends BaseActivity {
             //예약 실패
             else{
 
-                Toast.makeText(ChargerReservationActivity.this, "예약에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChargerReservationActivity.this, "예약에 실패하였습니다.\n이용 가능 시간을 다시 확인해주세요.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_LONG).show();
                 isReservationBtnClick = false;
                 Log.e(TAG, "예약에 실패하였습니다.");
 
