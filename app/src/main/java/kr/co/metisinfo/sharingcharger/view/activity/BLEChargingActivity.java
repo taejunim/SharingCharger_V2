@@ -105,13 +105,13 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             // Connect 성공
             if (bd.getBoolean("Connect")) {
 
-                hideLoading();
+                hideLoading(binding.loading);
 
                 setAlertDialog("Connect","충전기 연결 성공","충전기와 연결되었습니다.");
 
             }else if(bd.getBoolean("Stop")) {
 
-                hideLoading();
+                hideLoading(binding.loading);
 
                 setAlertDialog("Stop","충전기 종료 성공","충전기가 종료되었습니다.");
 
@@ -148,7 +148,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
     @Override
     public void initViewModel() {
 
-        showLoading();
+        showLoading(binding.loading);
 
     }
 
@@ -328,25 +328,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         mHandler.sendMessage(msg);     //메세지를 핸들러로 넘긴다.
     }
 
-    private void showLoading() {
-
-        binding.imageLoading.setVisibility(View.VISIBLE);
-        gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-        Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
-
-        //해당페이지 이벤트 막기
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-    }
-
-    private void hideLoading() {
-        binding.imageLoading.setVisibility(View.INVISIBLE);
-
-        //이벤트 다시 풀기
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-    }
-
     //BLEConnect
     public void BLEConnect() {
 
@@ -516,7 +497,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             @Override
             public void disConnect(int code) {
 
-                Toast.makeText(BLEChargingActivity.this,"BLEDisConnect",Toast.LENGTH_LONG).show();
+                Toast.makeText(BLEChargingActivity.this,"충전기 연결이 끊어졌습니다.",Toast.LENGTH_LONG).show();
                 Log.e("metis", "BLEDisConnect Code = "+code);
                 finish();
 
@@ -602,6 +583,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                 //hideLoading();
                 Log.e("metis", "BLEStart Fail Code = "+code);
                 Toast.makeText(BLEChargingActivity.this, "BLEStart 충전 시작에 실패하였습니다.\n다시 시도하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                hideLoading(binding.loading);
                 timerFinish();
             }
 
@@ -643,7 +625,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             @Override
             public void Success() {
                 Log.e("metis", "BLESetTag Success");
-                hideLoading();
+                hideLoading(binding.loading);
                 searchChargerBtnEnabled();
                 timerFinish();
                 chargerFrameClick(binding.frameEnd);
@@ -651,7 +633,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
             @Override
             public void Fail(int code, String msg) {
-                hideLoading();
+                hideLoading(binding.loading);
                 Log.e("metis", "BLESetTag Fail Code = "+code);
                 Toast.makeText(BLEChargingActivity.this, "BLESetTag 충전기 연결에 실패하였습니다.\n충전기 연결을 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                 timerFinish();
@@ -821,7 +803,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
         isBackPressed = false;
 
-        showLoading();
+        showLoading(binding.loading);
 
         timer = new CountDownTimer(time, 1000) {
 
@@ -911,7 +893,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             @Override
             public void PlugState(int code) {
                 Toast.makeText(getApplicationContext(), "충전기에 플러그가 꼽혀있지 않습니다.\n충전기에 플러그를 꼽고 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
-                hideLoading();
+                hideLoading(binding.loading);
                 Log.e("metis", "PlugState Plug = "+ code);
             }
         });

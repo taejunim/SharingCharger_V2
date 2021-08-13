@@ -69,11 +69,11 @@ public class OwnerActivity extends BaseActivity {
                 Log.e("metis","Connect handler");
 
               //  BLEStart();
-                hideLoading();
+                hideLoading(binding.loading);
 
             }else if(bd.getBoolean("Stop")) {
 
-                hideLoading();
+                hideLoading(binding.loading);
 
                 setAlertDialog("Stop","충전기 종료 성공","충전기가 종료되었습니다.");
 
@@ -92,7 +92,7 @@ public class OwnerActivity extends BaseActivity {
                 mCurData.useTime = "2";
                 BLEConnect();
             }else if(resultCode == RESULT_CANCELED){
-                hideLoading();
+                hideLoading(binding.loading);
             }
 
         }
@@ -123,13 +123,13 @@ public class OwnerActivity extends BaseActivity {
         //충전기 시작 버튼 누름
         binding.frameStart.setOnClickListener(view -> {
 
-            showLoading();
+            showLoading(binding.loading);
             getBLEScan();
         });
 
         //충전기 종료 버튼 누름
         binding.frameEnd.setOnClickListener(view -> {
-            showLoading();
+            showLoading(binding.loading);
             BLEStop();
         });
 
@@ -151,7 +151,7 @@ public class OwnerActivity extends BaseActivity {
         mEB = new EvzBLE(OwnerActivity.this);
         mCurData = new EvzBLEData();
 
-        hideLoading();
+        hideLoading(binding.loading);
 
         chargerFrameClick(binding.frameStart);
 
@@ -179,7 +179,7 @@ public class OwnerActivity extends BaseActivity {
 
                 } else {
                     Log.e("metis", "onScan = 0");
-                    hideLoading();
+                    hideLoading(binding.loading);
                 }
 
             }
@@ -187,7 +187,7 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void onScanFailed(int errorCode) {
                 Log.e("metis", "onScanFailed");
-                hideLoading();
+                hideLoading(binding.loading);
             }
         });
 
@@ -261,7 +261,7 @@ public class OwnerActivity extends BaseActivity {
         mHandler.sendMessage(msg);     //메세지를 핸들러로 넘긴다.
     }
 
-    private void showLoading() {
+    /*private void showLoading() {
 
         binding.imageLoading.setVisibility(View.VISIBLE);
         gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
@@ -278,7 +278,7 @@ public class OwnerActivity extends BaseActivity {
 
         //이벤트 다시 풀기
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-    }
+    }*/
 
     //BLEConnect
     public void BLEConnect() {
@@ -315,7 +315,7 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void disConnect(int code) {
 
-                Toast.makeText(OwnerActivity.this,"BLEDisConnect",Toast.LENGTH_LONG).show();
+                Toast.makeText(OwnerActivity.this,"충전기 연결이 끊어졌습니다.",Toast.LENGTH_LONG).show();
                 Log.e("metis", "BLEDisConnect Code = "+code);
                 //finish();
 
@@ -340,7 +340,7 @@ public class OwnerActivity extends BaseActivity {
 
             @Override
             public void Fail(int code, String msg) {
-                hideLoading();
+                hideLoading(binding.loading);
                 Log.e("metis", "BLEStart Fail Code = "+code);
             }
 
@@ -353,13 +353,13 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void Success() {
                 Log.e("metis", "BLESetTag Success");
-                hideLoading();
+                hideLoading(binding.loading);
                 chargerFrameClick(binding.frameEnd);
             }
 
             @Override
             public void Fail(int code, String msg) {
-                hideLoading();
+                hideLoading(binding.loading);
                 Log.e("metis", "BLESetTag Fail Code = "+code);
             }
         });
@@ -386,7 +386,7 @@ public class OwnerActivity extends BaseActivity {
 
             @Override
             public void Fail(int code, String msg) {
-                hideLoading();
+                hideLoading(binding.loading);
                 Log.e("metis", "BLEStop Fail Code = "+code);
             }
 
@@ -458,7 +458,7 @@ public class OwnerActivity extends BaseActivity {
             @Override
             public void PlugState(int code) {
                 Toast.makeText(getApplicationContext(), "충전기에 플러그가 꼽혀있지 않습니다.\n충전기에 플러그를 꼽고 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
-                hideLoading();
+                hideLoading(binding.loading);
                 Log.e("metis", "PlugState Plug = "+ code);
             }
         });

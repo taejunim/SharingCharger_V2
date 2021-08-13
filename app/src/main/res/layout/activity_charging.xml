@@ -13,7 +13,7 @@
             android:layout_width="fill_parent"
             android:layout_height="46dp" />
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/image_loading"
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -21,7 +21,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
-            android:src="@mipmap/spinner_loading" />
+            android:src="@mipmap/spinner_loading" />-->
 
         <TextView
             android:id="@+id/list_text_dummy1"
@@ -84,17 +84,24 @@
             android:textColor="@color/gray"
             android:text="종료시간" />
 
-        <TextView
-            android:id="@+id/charging_timer"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:00:00"
-            android:textColor="@color/black"
-            android:textSize="45dp"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:id="@+id/charging_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00:00"
+                android:textColor="@color/black"
+                android:textSize="45dp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/linear_charger_img_layout"
@@ -187,6 +194,13 @@
             android:text="다른 충전기 사용"
             android:textColor="@color/white"
             android:textSize="18dp" />
+
+        <ProgressBar
+            android:visibility="invisible"
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
 
     </RelativeLayout>
 </layout>

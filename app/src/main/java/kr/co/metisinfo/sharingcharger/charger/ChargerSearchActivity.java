@@ -2,6 +2,7 @@ package kr.co.metisinfo.sharingcharger.charger;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -37,13 +38,13 @@ public class ChargerSearchActivity extends BaseActivity {
 
     ActivitySearchChargerBinding binding;
 
-    GlideDrawableImageViewTarget gifImage;
-
     ApiUtils apiUtils = new ApiUtils();
 
     ReservationModel reservationModel;
     //임시 5분충전
     String reservationTime;
+
+    CountDownTimer timer;
 
     EvzBluetooth mEvzBluetooth;
 
@@ -98,7 +99,7 @@ public class ChargerSearchActivity extends BaseActivity {
             * 강제로 활성화 시킨 후 2.5초 후 scan 시작함(바로 시작 시 에러남)
             * */
             mEvzBluetooth.setBluetooth(true);
-            showLoading();
+            showLoading(binding.loading);
 
             new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
                 @Override
@@ -128,6 +129,8 @@ public class ChargerSearchActivity extends BaseActivity {
 
     public void getBLEScan() {
 
+        countDown(1000 * 5);
+
         mScanner.startScan(new EVZScanCallbacks() {
 
             @Override
@@ -145,17 +148,15 @@ public class ChargerSearchActivity extends BaseActivity {
                             mEVZScanResult = mScData.get(i);
                             passingMEVZScanResult();
                             break;
+                        } else if(i == mScData.size() -1  && !reservationModel.bleNumber.equals(mScData.get(i).getDevice().getAddress())){
+                            Log.e("metis", "mScData.size() > 0 / onScan = 0");
+                            scanFailed();
                         }
                     }
-
-                    // api 적용시 예약된 BLE로 바로 보내줌
-                    /*mEVZScanResult = mScData.get(0);
-                    passingMEVZScanResult();*/
                 } else {
                     Log.e("metis", "onScan = 0");
                     scanFailed();
                 }
-
             }
 
             @Override
@@ -168,7 +169,7 @@ public class ChargerSearchActivity extends BaseActivity {
     }
 
     private void scanFailed() {
-        hideLoading();
+        hideLoading(binding.loading);
         CustomDialog customDialog = new CustomDialog(this, "연결 가능한 충전기를 찾지 못했습니다.\n다시 검색하시겠습니까?");
 
         customDialog.show();
@@ -176,43 +177,41 @@ public class ChargerSearchActivity extends BaseActivity {
         customDialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
             Log.e("metis", "customDialog_ok_btn");
             customDialog.dismiss();
-            showLoading();
+            showLoading(binding.loading);
             getBLEScan();
         });
-    }
-
-    private void showLoading() {
-
-        binding.imageLoading.setVisibility(View.VISIBLE);
-        gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-        Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);
-
-        //해당페이지 이벤트 막기
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-    }
-
-    private void hideLoading() {
-        binding.imageLoading.setVisibility(View.INVISIBLE);
-
-        //이벤트 다시 풀기
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     private void passingMEVZScanResult() {
 
         Intent intent = new Intent(ChargerSearchActivity.this, BLEChargingActivity.class);
-
         intent.putExtra("mEVZScanResult", mEVZScanResult);
-
         intent.putExtra("reservationModel", reservationModel);
-
         intent.putExtra("reservationTime", reservationTime);
-
         startActivity(intent);
-
         finish();
+    }
+
+    /**
+     * 카운트 다운 타이머
+     * @param time 시간 ex) 3초 : 3000
+     */
+    public void countDown(long time) {
+
+        showLoading(binding.loading);
+
+        timer = new CountDownTimer(time, 1000) {
+
+            // 특정 시간마다 뷰 변경
+            public void onTick(long millisUntilFinished) {
+            }
+
+            // 제한시간 종료시
+            public void onFinish() {
+                hideLoading(binding.loading);
+            }
+
+        }.start();
     }
 
     @Override

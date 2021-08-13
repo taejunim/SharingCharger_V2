@@ -437,6 +437,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 Log.e("metis", "chgrDetailStart ParseException : " + e);
             }
 
+            hideLayout();
+
         });
 
         //예약취소 버튼 클릭
@@ -594,6 +596,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                 startActivityForResult(intent, Constants.PAGE_RESERVE);
             }
+
+            hideLayout();
         });
 
         // 충전기 길 안내
@@ -1164,6 +1168,10 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) { // 마커 밖에 지도 클릭 했을 경우.
 
+        hideLayout();
+    }
+
+    private void hideLayout() {
         if (clickPOIIndex != -1) {
 
             clickPOIIndex = -1;
