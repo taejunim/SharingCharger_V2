@@ -129,6 +129,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
+        <!-- 전자지갑 - 포인트구매 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.PurchaseWebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
+
         <!-- 충전기 검색 다이얼로그 -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.ChargerDialog"
@@ -174,6 +180,12 @@
         <!-- 이력 조건 검색 -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.HistorySearchConditionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarTransparent" />
+
+        <!-- 관리자 페이지 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.AdminMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 

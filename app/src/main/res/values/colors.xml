@@ -18,6 +18,9 @@
 
     <color name="yellow">#F1C40F</color>
 
+    <color name="purple">#8e44ad</color>
+    <color name="light_green">#3AB532</color>
+
     <color name="header_dummy">#EFEFEF</color>
     <color name="transparent">#00ff0000</color>
     <color name="transparent2">#1A000000</color>

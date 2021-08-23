@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/footer_line"
+            style="@style/sign_up_header"
+            android:layout_marginBottom="0dp"
+            android:height="2dp" />
+
+        <RelativeLayout
+            android:id="@+id/footer_body"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/footer_line"
+            android:layout_marginTop="0dp">
+
+            <RelativeLayout
+                android:id="@+id/btn_dashboard"
+                android:layout_width="76dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true">
+
+                <ImageView
+                    android:id="@+id/btn_dashboard_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="40dp"
+                    android:src="@mipmap/btn_dropdown"
+                    android:button="@android:color/transparent" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/btn_charger_manage"
+                android:layout_width="76dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/btn_charger_manage_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/btn_dropdown"
+                    android:button="@android:color/transparent" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/btn_alarm"
+                android:layout_width="76dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true">
+
+                <ImageView
+                    android:id="@+id/btn_alarm_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="40dp"
+                    android:src="@mipmap/btn_dropdown"
+                    android:button="@android:color/transparent" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</layout>

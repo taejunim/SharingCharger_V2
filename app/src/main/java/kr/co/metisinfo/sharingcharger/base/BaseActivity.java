@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -39,13 +38,13 @@ import java.util.List;
 import java.util.Locale;
 
 import kr.co.metisinfo.sharingcharger.R;
-import kr.co.metisinfo.sharingcharger.ble.BleTestActivity;
-import kr.co.metisinfo.sharingcharger.ble.ScanActivity;
 import kr.co.metisinfo.sharingcharger.model.MenuHeaderVO;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.userManagement.ChargerFavoriteActivity;
 import kr.co.metisinfo.sharingcharger.charger.ChargerUseHistoryActivity;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
+import kr.co.metisinfo.sharingcharger.view.activity.AdminMainActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;
 import kr.co.metisinfo.sharingcharger.digitalWalletManagement.WalletActivity;
@@ -236,8 +235,16 @@ public abstract class BaseActivity extends AppCompatActivity {
             } else if (groupPosition == 4) {
 
                 //고객센터
-                Intent tt = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:0647256800"));
-                startActivity(tt);
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:0647256800"));
+                startActivity(intent);
+
+            } else if (groupPosition == 5) {
+
+                //충전기 관리
+                Intent intent = new Intent(startClass, AdminMainActivity.class);
+                startActivity(intent);
+                closeDrawer();
+
             }
 
             return false;
@@ -281,7 +288,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         String[] array = getResources().getStringArray(R.array.nav_drawer_items);
 
-        for (int i = 0; i < Arrays.asList(array).size(); i++) {
+        int listSize = Arrays.asList(array).size();
+
+        //UserType 가져와서 개인사업자 (Personal) 일때만 충전기 관리 표출
+        PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+        if(!preferenceUtil.getString("userType").equals("Personal"))
+            listSize --;
+
+        for (int i = 0; i < listSize; i++) {
 
             MenuHeaderVO vo = new MenuHeaderVO();
             vo.setMenuHeaderNm(array[i]);

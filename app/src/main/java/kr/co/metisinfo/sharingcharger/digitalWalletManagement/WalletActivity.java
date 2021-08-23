@@ -1,7 +1,9 @@
 package kr.co.metisinfo.sharingcharger.digitalWalletManagement;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 
@@ -13,7 +15,9 @@ import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityWalletBinding;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
-import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
+import kr.co.metisinfo.sharingcharger.view.activity.PurchaseDialog;
+import kr.co.metisinfo.sharingcharger.view.activity.PurchaseWebViewActivity;
 
 /**
  * @ Class Name   : WalletActivity.java
@@ -30,6 +34,8 @@ import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
 public class WalletActivity extends BaseActivity {
 
     ActivityWalletBinding binding;                                                                  //Databinding을 사용하기 위한 변수 선언
+
+    private final int REQUEST_CODE = 100;                                                           //포인트 구매후 포인트 잔액을 받아오기 위한 임의의 요청번호
 
     ApiUtils apiUtils = new ApiUtils();
 
@@ -63,15 +69,52 @@ public class WalletActivity extends BaseActivity {
         //충전하기
         binding.purchasePoint.setOnClickListener(view -> {
 
-            Intent intent = new Intent(this, PointChargeActivity.class);
-            startActivity(intent);
+            PurchaseDialog purchaseDialog = new PurchaseDialog(this);
+            purchaseDialog.setDialogListener(new PurchaseDialog.PurchaseDialogListener() {
+                @Override
+                public void onPurchaseButtonClicked(String cost) {
+                    openWebView(cost);
+                }
+            });
+
+            purchaseDialog.show();
         });
     }
 
+    public void openWebView(String cost){
+        Log.d("metis","값 전달 되는지?   -> " + cost);
+
+        //로그인 값 가져오기
+        PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+
+        String url = "https://devevzone.evzcharge.com/api/user/jeju_pay?product_amt=" + cost;
+
+        //진우 API에서 didkey 전달되면 sp_user_define1 값에 넣어줘야함.
+        url += "&sp_user_define1=" + preferenceUtil.getInt("userId");
+        Log.d("metis","값 전달 되는지?   -> " + cost);
+
+        Intent intent = new Intent(this, PurchaseWebViewActivity.class);
+        intent.putExtra("url", url);
+        //값을 다시 받기위한 임의의 번호 (1000)
+        startActivityForResult(intent,REQUEST_CODE);
+    }
     @Override
     public void init() {
 
         binding.includeHeader.txtTitle.setText("전자지갑");                                           //HEADER TXT SET
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            if(data != null ) {
+                String totalPoint = data.getStringExtra("totalPoint");
+                binding.txtWalletPoint.setText(totalPoint);
+                Toast.makeText(getApplicationContext(), "결제가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**

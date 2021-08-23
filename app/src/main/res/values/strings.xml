@@ -60,6 +60,7 @@
     <!-- 포인트 -->
     <string name="point">p</string>
     <string name="point_charge">포인트 충전</string>
+    <string name="point_charge_message">결제하실 금액을 선택하여 주십시오.</string>
 
     <!-- 충전기 검색-->
     <string name="search_device">충전기 검색</string>
@@ -77,6 +78,20 @@
     <string name="bookmark_navigation">지도보기</string>
     <string name="bookmark_delete">삭제</string>
 
+    <!-- 소유주 대시보드 -->
+    <string name="dashboard_title">대시보드</string>
+    <string name="dashboard_charger_count">충전기 대수\n(가능/전체)</string>
+    <string name="dashboard_monthly_use_count">이달의\n이용 건수</string>
+    <string name="dashboard_monthly_error_count">이달의\nERROR 건수</string>
+    <string name="dashboard_monthly_profit_point">이달의\n수익 포인트</string>
+    <string name="dashboard_monthly_reservation_count">이달의\n예약 건수</string>
+    <string name="dashboard_monthly_charge_amount">이달의\n충전량</string>
+
+    <!-- 소유주 충전기 관리 -->
+    <string name="charger_manage_title">충전기 관리</string>
+    <string name="charger_manage_waiting">대기중</string>
+    <string name="charger_manage_using">사용중</string>
+
     <!-- 기타-->
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
@@ -88,7 +103,10 @@
     <string name="from_to">&#160;~&#160;</string>
     <string name="charge">충전</string>
     <string name="minute30">30분</string>
+    <string name="Edit">수정</string>
 
     <!-- 메세지-->
     <string name="m_password_confirm_text">비밀번호를 변경하시겠습니까?</string>
+
+
 </resources>

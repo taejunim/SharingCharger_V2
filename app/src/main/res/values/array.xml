@@ -20,6 +20,7 @@
         <item>즐겨찾기</item>
         <item>회원 증명서</item>
         <item>고객센터</item>
+        <item>충전기 관리</item>
     </string-array>
 
     <string-array name="history_charging"/>
