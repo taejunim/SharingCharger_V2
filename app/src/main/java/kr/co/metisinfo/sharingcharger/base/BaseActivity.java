@@ -51,6 +51,7 @@ import kr.co.metisinfo.sharingcharger.digitalWalletManagement.WalletActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
 
 import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_SEARCH_KEYWORD;
+import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_SETTING;
 
 /**
  * 추상화 클래스로 해당 클래스를 extends 하면 initLayout(), initViewModel(), setOnClickListener(), init() 함수들을 추가해야됨
@@ -341,9 +342,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         //설정화면
         Intent intent = new Intent(startClass, SettingActivity.class);
-
-        startActivity(intent);
-
+        startActivityForResult(intent, PAGE_SETTING);
         closeDrawer();
 
     }

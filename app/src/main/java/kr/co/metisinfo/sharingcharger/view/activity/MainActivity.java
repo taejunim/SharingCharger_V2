@@ -1,5 +1,6 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -282,6 +283,18 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     goSearchPosition(model);
 
+                }
+
+                break;
+
+            //소유주 전환 완료 -> 사이드 메뉴 다시 그리기
+            case Constants.PAGE_SETTING:
+                if (resultCode == Activity.RESULT_OK) {
+                    boolean isUserTypeChange = data.getBooleanExtra("isUserTypeChange",false);
+
+                    if (isUserTypeChange) {
+                        setUpDrawer(binding.drawerLayout.getId(), binding.listSlidermenu.getId());
+                    }
                 }
 
                 break;

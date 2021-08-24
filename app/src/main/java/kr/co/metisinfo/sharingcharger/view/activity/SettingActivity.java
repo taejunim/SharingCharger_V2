@@ -1,5 +1,6 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,22 +30,23 @@ import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
 import lombok.val;
+import retrofit2.Response;
 
 import static kr.co.metisinfo.sharingcharger.base.Constants.CHANGE_USER_TYPE;
 
 public class SettingActivity extends BaseActivity {
 
-    private static final String TAG = SettingActivity.class.getSimpleName();
-
     ActivitySettingBinding binding;
 
     private boolean isRegisterBtnClick = false;     // 버튼 더블클릭 막기 위한 boolean 타입 변수
 
-    private UserViewModel userViewModel;
-
     private String getType = null;
 
     ApiUtils apiUtils = new ApiUtils();
+
+    PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+
+    private boolean isUserTypeChange = false;
 
     Handler handler = new Handler() {
         @Override
@@ -58,7 +60,66 @@ public class SettingActivity extends BaseActivity {
                     final int resultCode = msg.arg1;
 
                     if (resultCode == 201) {
-                        Toast.makeText(SettingActivity.this, "소유주로 전환 되었습니다.\n소유중인 충전기를 등록해주세요.", Toast.LENGTH_LONG).show();
+                        UserModel userModel = new UserModel();
+
+                        userModel.loginId = preferenceUtil.getString("email");
+                        userModel.password = preferenceUtil.getString("password");
+
+                        try{
+                            Response<UserModel> response = apiUtils.login(userModel);
+
+                            //로그인 성공
+                            if (response.code() == 200 && response.body() != null){
+
+                                UserModel user = response.body();
+
+                                if(!user.getUserType().equals("General")){
+                                    user.email = user.getUsername();
+                                    user.loginId = user.getUsername();
+
+                                } else if (user.getUserType().equals("General")) {
+                                    user.loginId = user.getEmail();
+                                }
+
+                                user.setPassword(userModel.password);
+                                user.autoLogin = true;
+
+                                //로그인 값 가져오기
+                                preferenceUtil.putBoolean("isLogin", true);
+                                preferenceUtil.putInt("userId", user.getId());
+                                preferenceUtil.putString("name", user.getName());
+                                preferenceUtil.putString("email", user.getUserType().equals("General") ? user.getEmail() : user.getUsername());
+                                preferenceUtil.putString("password", userModel.getPassword());
+                                preferenceUtil.putString("userType", user.getUserType());
+                                preferenceUtil.putString("username", user.getUsername());
+
+                                ThisApplication.staticUserModel = user;
+
+                                Toast.makeText(SettingActivity.this, "소유주로 전환 되었습니다.\n소유중인 충전기를 등록해주세요.", Toast.LENGTH_LONG).show();
+
+                                isUserTypeChange = true;
+
+                            }
+                            //로그인정보가 맞지 않을 때
+                            else if (response.code() == 204) {
+                                isRegisterBtnClick = false; // 버튼 다시 클릭 가능하도록 false로 전환
+
+                                Toast.makeText(SettingActivity.this, R.string.setting_change_user_type_error, Toast.LENGTH_SHORT).show();
+                            }
+                            //로그인 실패
+                            else{
+                                isRegisterBtnClick = false; // 버튼 다시 클릭 가능하도록 false로 전환
+
+                                Toast.makeText(SettingActivity.this, R.string.setting_change_user_type_error, Toast.LENGTH_SHORT).show();
+                            }
+
+                            isRegisterBtnClick = false;
+                        }catch (Exception e) {
+
+                            isRegisterBtnClick = false;
+                            Log.e("metis","getLogin Exception : "+ e);
+                        }
+
                     } else if (resultCode == 400) {
                         Toast.makeText(SettingActivity.this, "소유주 전환에 실패하였습니다.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_LONG).show();
                     } else {
@@ -75,8 +136,6 @@ public class SettingActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
 
         changeStatusBarColor(false);
-
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
     }
 
     @Override
@@ -97,7 +156,12 @@ public class SettingActivity extends BaseActivity {
     @Override
     public void setOnClickListener() {
 
-        binding.includeHeader.btnBack.setOnClickListener(view -> finish());
+        binding.includeHeader.btnBack.setOnClickListener(view ->  {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("isUserTypeChange", isUserTypeChange);
+            setResult(Activity.RESULT_OK, resultIntent);
+            finish();
+        });
         binding.settingPasswordLayout.setOnClickListener(view -> goChangePassword());
 
         binding.settingChangeUserTypeLayout.setOnClickListener(view -> changeUserType());
