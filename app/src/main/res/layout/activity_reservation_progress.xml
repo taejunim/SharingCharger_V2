@@ -97,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/reservation_progress_remaining_point_title"
-            android:background="@color/whitegray"
+            android:background="@color/dark_gray"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             style="@style/margin_start_end_20"/>
@@ -140,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/reservation_point_deduction_txt"
-            android:background="@color/whitegray"
+            android:background="@color/dark_gray"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             style="@style/margin_start_end_20"/>

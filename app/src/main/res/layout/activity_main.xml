@@ -372,7 +372,7 @@
                             android:layout_below="@+id/reservation_detail_detail_time"
                             android:layout_marginTop="30dp"
                             android:layout_marginBottom="40dp"
-                            android:background="@color/whitegray" />
+                            android:background="@color/dark_gray" />
 
                         <TextView
                             android:id="@+id/txt_chgr__detail_nm"

@@ -88,7 +88,7 @@
             android:layout_height="1dp"
             android:layout_below="@+id/charge_history_point_img"
             android:layout_marginTop="20dp"
-            android:background="@color/whitegray"/>
+            android:background="@color/dark_gray"/>
 
     </RelativeLayout>
 

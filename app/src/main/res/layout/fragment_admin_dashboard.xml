@@ -41,17 +41,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dashboard_charger_count"
+                            android:text="@string/dashboard_charger_count_text"
                             android:textColor="@color/gray"
                             android:textSize="12sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/dashboard_charger_count"
+                            style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_charger_count_text"
-                            android:layout_alignBottom="@id/footer_line1"
-                            android:layout_marginBottom="10dp"
-                            android:text="44/45 대" />
+                            android:layout_alignBottom="@id/footer_line1"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start1"
@@ -93,17 +91,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dashboard_monthly_use_count"
+                            android:text="@string/dashboard_monthly_use_count_text"
                             android:textColor="@color/colorAccent"
                             android:textSize="12sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/dashboard_monthly_use_count"
+                            style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_use_count_text"
-                            android:layout_alignBottom="@id/footer_line2"
-                            android:layout_marginBottom="10dp"
-                            android:text="44/45 대" />
+                            android:layout_alignBottom="@id/footer_line2"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start2"
@@ -149,17 +145,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dashboard_monthly_error_count"
+                            android:text="@string/dashboard_monthly_error_count_text"
                             android:textColor="@color/thick_blue"
                             android:textSize="12sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/dashboard_monthly_error_count"
+                            style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_error_count_text"
-                            android:layout_alignBottom="@id/footer_line3"
-                            android:layout_marginBottom="10dp"
-                            android:text="44/45 대" />
+                            android:layout_alignBottom="@id/footer_line3"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start3"
@@ -201,17 +195,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dashboard_monthly_profit_point"
+                            android:text="@string/dashboard_monthly_profit_point_text"
                             android:textColor="@color/red"
                             android:textSize="12sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/dashboard_monthly_profit_point"
+                            style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_profit_point_text"
-                            android:layout_alignBottom="@id/footer_line4"
-                            android:layout_marginBottom="10dp"
-                            android:text="44/45 대" />
+                            android:layout_alignBottom="@id/footer_line4"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start4"
@@ -258,17 +250,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dashboard_monthly_reservation_count"
+                            android:text="@string/dashboard_monthly_reservation_count_text"
                             android:textColor="@color/light_green"
                             android:textSize="12sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/dashboard_monthly_reservation_count"
+                            style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_reservation_count_text"
-                            android:layout_alignBottom="@id/footer_line5"
-                            android:layout_marginBottom="10dp"
-                            android:text="0 건" />
+                            android:layout_alignBottom="@id/footer_line5"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start5"
@@ -310,17 +300,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dashboard_monthly_charge_amount"
+                            android:text="@string/dashboard_monthly_charge_amount_text"
                             android:textColor="@color/yellow"
                             android:textSize="12sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/dashboard_monthly_charge_amount"
+                            style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_charge_amount_text"
-                            android:layout_alignBottom="@id/footer_line6"
-                            android:layout_marginBottom="10dp"
-                            android:text="0 kWh" />
+                            android:layout_alignBottom="@id/footer_line6"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start6"

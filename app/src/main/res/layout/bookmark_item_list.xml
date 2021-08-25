@@ -70,7 +70,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             android:layout_below="@+id/bookmark_bottom_linear_layout"
-            android:background="@color/whitegray"/>
+            android:background="@color/dark_gray"/>
 
     </RelativeLayout>
 

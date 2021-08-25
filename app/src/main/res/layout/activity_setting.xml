@@ -84,7 +84,7 @@
             android:layout_below="@id/setting_password_layout"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="25dp"
-            android:background="@color/whitegray" />
+            android:background="@color/dark_gray" />
 
         <RelativeLayout
             android:visibility="gone"
@@ -119,7 +119,7 @@
             android:layout_height="1dp"
             android:layout_below="@id/setting_card_layout"
             android:layout_marginBottom="25dp"
-            android:background="@color/whitegray" />
+            android:background="@color/dark_gray" />
 
         <RelativeLayout
             android:id="@+id/setting_time_layout"

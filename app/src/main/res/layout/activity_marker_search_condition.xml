@@ -127,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/layout_1"
-                android:background="@color/whitegray" />
+                android:background="@color/dark_gray" />
 
             <RelativeLayout
                 android:id="@+id/layout_start_charging"
@@ -184,7 +184,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/layout_start_charging"
-                android:background="@color/whitegray" />
+                android:background="@color/dark_gray" />
 
             <RelativeLayout
                 android:id="@+id/layout_end_charging"
@@ -264,7 +264,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/txt_search_condition"
-                android:background="@color/whitegray" />
+                android:background="@color/dark_gray" />
 
             <RelativeLayout
                 android:id="@+id/layout_range"

@@ -164,4 +164,8 @@ public interface WebServiceAPI {
     // 소유주 전환
     @POST("/api/v1/userType/Personal/{id}")
     Call<Object> changeUserType(@Path("id") int id);
+
+    // 예약조회
+    @GET("/api/v1/dashboard/personal/{userId}/card")
+    Call<Object> getAdminDashboard(@Path("userId") int userId);
 }

@@ -24,7 +24,7 @@
             android:layout_below="@+id/point_charge_text_dummy"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/whitegray">
+            android:background="@color/dark_gray">
 
         <TextView
             android:id="@+id/point_charge_setting_txt"

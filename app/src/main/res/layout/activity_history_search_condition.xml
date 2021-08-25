@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/history_search_top_layout"
-                android:background="@color/whitegray" />
+                android:background="@color/dark_gray" />
 
             <TextView
                 android:id="@+id/history_search_date_title"
@@ -159,7 +159,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/history_search_date_layout"
                 android:layout_marginTop="20dp"
-                android:background="@color/whitegray" />
+                android:background="@color/dark_gray" />
 
             <TextView
                 android:id="@+id/history_search_type_title"
@@ -231,7 +231,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/history_search_type_layout"
                 android:layout_marginTop="20dp"
-                android:background="@color/whitegray" />
+                android:background="@color/dark_gray" />
 
             <TextView
                 android:id="@+id/history_search_array_title"

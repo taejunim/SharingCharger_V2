@@ -20,6 +20,7 @@ import java.util.Map;
 import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.base.WebServiceAPI;
+import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
 import kr.co.metisinfo.sharingcharger.model.AuthenticateModel;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
 import kr.co.metisinfo.sharingcharger.model.PointModel;
@@ -481,6 +482,45 @@ public class ApiUtils {
         } else {
            return response.code();
         }
+    }
+
+    /**
+     * 예약 상태 확인
+     **/
+    public AdminDashboardModel getAdminDashboard() {
+
+        AdminDashboardModel adminDashboardModel = new AdminDashboardModel();
+
+        try {
+            Response<Object> response = webServiceAPI.getAdminDashboard(ThisApplication.staticUserModel.id).execute();
+
+            if (response.code() == 200) {
+
+                JSONObject json = new JSONObject((Map) response.body());
+
+                Gson gson = new Gson();
+
+                adminDashboardModel = gson.fromJson(json.toString(), AdminDashboardModel.class);
+                adminDashboardModel.setResponseCode(response.code());
+            } else if (response.code() == 204) {
+                adminDashboardModel.setMessage("사용자가 존재하지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 400) {
+                adminDashboardModel.setMessage("요청 파라미터가 올바르지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 404) {
+                adminDashboardModel.setMessage("요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 500) {
+                adminDashboardModel.setMessage("서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", " getAdminDashboard Exception1 : " + e);
+
+            adminDashboardModel.setMessage("오류가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+
+            return adminDashboardModel;
+        }
+
+        return adminDashboardModel;
     }
 
     /**

@@ -54,7 +54,7 @@
             android:layout_below="@+id/current_point_txt"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/whitegray"/>
+            android:background="@color/dark_gray"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/charge_history_recycler"

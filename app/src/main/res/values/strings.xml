@@ -81,12 +81,18 @@
 
     <!-- 소유주 대시보드 -->
     <string name="dashboard_title">대시보드</string>
-    <string name="dashboard_charger_count">충전기 대수\n(가능/전체)</string>
-    <string name="dashboard_monthly_use_count">이달의\n이용 건수</string>
-    <string name="dashboard_monthly_error_count">이달의\nERROR 건수</string>
-    <string name="dashboard_monthly_profit_point">이달의\n수익 포인트</string>
-    <string name="dashboard_monthly_reservation_count">이달의\n예약 건수</string>
-    <string name="dashboard_monthly_charge_amount">이달의\n충전량</string>
+    <string name="dashboard_charger_count_text">충전기 대수\n(가능/전체)</string>
+    <string name="dashboard_charger_count">%1$s/%2$s 대</string>
+    <string name="dashboard_monthly_use_count_text">이달의\n이용 건수</string>
+    <string name="dashboard_monthly_use_count">%1$s 건</string>
+    <string name="dashboard_monthly_error_count_text">이달의\nERROR 건수</string>
+    <string name="dashboard_monthly_error_count">%1$s 건</string>
+    <string name="dashboard_monthly_profit_point_text">이달의\n수익 포인트</string>
+    <string name="dashboard_monthly_profit_point">%1$s P</string>
+    <string name="dashboard_monthly_reservation_count_text">이달의\n예약 건수</string>
+    <string name="dashboard_monthly_reservation_count">%1$s 건</string>
+    <string name="dashboard_monthly_charge_amount_text">이달의\n충전량</string>
+    <string name="dashboard_monthly_charge_amount">%1$s KWh</string>
 
     <!-- 소유주 충전기 관리 -->
     <string name="charger_manage_title">충전기 관리</string>

@@ -135,7 +135,7 @@ public class ChargerReservationActivity extends BaseActivity {
         binding.reservationProgressCurrentPoint.setBackgroundResource(R.drawable.border_red_30);
         binding.reservationProgressPoint.setTextColor(ContextCompat.getColor(this, R.color.red));
 
-        binding.reservationProgressBtn.setBackground(ContextCompat.getDrawable(this, R.color.whitegray));
+        binding.reservationProgressBtn.setBackground(ContextCompat.getDrawable(this, R.color.dark_gray));
         binding.reservationProgressBtn.setEnabled(false);
     }
 

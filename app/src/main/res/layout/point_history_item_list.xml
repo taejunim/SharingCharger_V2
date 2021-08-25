@@ -47,7 +47,7 @@
             android:layout_height="1dp"
             android:layout_below="@+id/point_history_point"
             android:layout_marginTop="15dp"
-            android:background="@color/whitegray"/>
+            android:background="@color/dark_gray"/>
 
     </RelativeLayout>
 

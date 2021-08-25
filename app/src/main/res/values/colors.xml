@@ -7,7 +7,7 @@
     <color name="white">#ffffff</color>
     <color name="black">#FF000000</color>
     <color name="gray">#66000000</color>
-    <color name="whitegray">#33000000</color>
+    <color name="dark_gray">#33000000</color>
 
     <color name="include_header">#010101</color>
     <color name="blue_button">#3498DB</color>
@@ -26,7 +26,7 @@
     <color name="transparent2">#1A000000</color>
     <color name="gray_button">#5E5E5E</color>
 
-    <color name="white_gray">#EAEAEA</color>
+    <color name="bright_white">#EAEAEA</color>
 
     <color name="thick_blue">#0081C5</color>
 

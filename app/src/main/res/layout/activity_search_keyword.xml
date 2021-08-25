@@ -107,7 +107,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/search_condition_layout"
             android:padding="5dp"
-            android:background="@color/whitegray"/>
+            android:background="@color/dark_gray"/>
 
     </RelativeLayout>
 
