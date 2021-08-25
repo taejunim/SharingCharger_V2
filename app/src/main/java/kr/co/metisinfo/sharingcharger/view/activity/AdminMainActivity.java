@@ -1,5 +1,6 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,6 +33,10 @@ public class AdminMainActivity extends BaseActivity {
     @Override
     public void initLayout() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_admin_main);
+
+        binding.includeHeader.layoutHeaderMenu.setBackground(getDrawable(R.mipmap.add));
+        binding.includeHeader.layoutHeaderMenu.getLayoutParams().width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+        binding.includeHeader.layoutHeaderMenu.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
 
         //선택된 메뉴 버튼 색 변경을 위해 배열에 담기
         footerButtonList.add(binding.includeFooter.btnDashboardImage);
@@ -134,7 +139,7 @@ public class AdminMainActivity extends BaseActivity {
                     fragmentTransaction.replace(R.id.fragment_container, adminChargerManageFragment);
                     break;
                 case 2 : //알림 설정
-                    Toast.makeText(this,"알림설정 구현?", Toast.LENGTH_SHORT);
+                    Toast.makeText(this,"알림설정 구현해야됨", Toast.LENGTH_SHORT).show();
                     break;
             }
 
@@ -183,13 +188,7 @@ public class AdminMainActivity extends BaseActivity {
 
     public void selectChargerManageMenu(int position){
         //recyclerView에서 무슨 값을 받아와야할지 모르니까, 일단 샘플성으로 position 받아옴
-        binding.includeChargerManageMenu.chargerManageMenu.setVisibility(View.VISIBLE);
-        AdminChargerDetailInformationFragment adminChargerDetailInformationFragment = new AdminChargerDetailInformationFragment();
-
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, adminChargerDetailInformationFragment);
-        fragmentTransaction.commit();
-        binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
+        setFragment("subMenu", binding.includeChargerManageMenu.btnChargerDetailInformation);
     }
 
 }

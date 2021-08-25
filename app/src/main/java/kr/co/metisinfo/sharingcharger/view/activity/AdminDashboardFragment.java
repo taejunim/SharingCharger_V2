@@ -1,6 +1,5 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,14 +9,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import kr.co.metisinfo.sharingcharger.R;
-import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminDashboardBinding;
 import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+
 
 
 public class AdminDashboardFragment extends Fragment {
@@ -65,6 +65,14 @@ public class AdminDashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //icon 하얗게
+        binding.iconChargerCount.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
+        binding.iconMonthlyUseCount.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
+        binding.iconMonthlyErrorCount.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
+        binding.iconMonthlyProfitPoint.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
+        binding.iconMonthlyReservationCount.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
+        binding.iconMonthlyChargeAmount.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
     }
 
     @Override

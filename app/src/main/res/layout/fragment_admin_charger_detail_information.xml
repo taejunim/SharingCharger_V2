@@ -21,7 +21,7 @@
             android:id="@+id/image_ble_number"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/button_border_gray"
+            android:src="@mipmap/bluetooth"
             android:layout_below="@id/charger_detail_information_title"
             android:layout_marginTop="30dp"
             android:layout_alignStart="@id/charger_detail_information_title" />
@@ -42,7 +42,7 @@
             android:id="@+id/image_place_name"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/button_border_gray"
+            android:src="@mipmap/building"
             android:layout_below="@id/image_ble_number"
             android:layout_marginTop="20dp"
             android:layout_alignStart="@id/charger_detail_information_title" />
@@ -63,7 +63,7 @@
             android:id="@+id/image_address"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/button_border_gray"
+            android:src="@mipmap/paper_map"
             android:layout_below="@id/image_place_name"
             android:layout_marginTop="40dp"
             android:layout_alignStart="@id/charger_detail_information_title" />
@@ -113,7 +113,7 @@
             android:id="@+id/image_parking"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/button_border_gray"
+            android:src="@mipmap/car"
             android:layout_below="@id/text_address"
             android:layout_marginTop="30dp"
             android:layout_alignStart="@id/charger_detail_information_title" />
@@ -163,7 +163,7 @@
             android:id="@+id/image_description"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/button_border_gray"
+            android:src="@mipmap/car"
             android:layout_below="@id/text_free_parking_detail"
             android:layout_marginTop="30dp"
             android:layout_alignStart="@id/charger_detail_information_title" />

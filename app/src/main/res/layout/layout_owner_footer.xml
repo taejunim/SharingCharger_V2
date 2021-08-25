@@ -30,7 +30,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="40dp"
-                    android:src="@mipmap/btn_dropdown"
+                    android:src="@mipmap/bar_chart"
                     android:button="@android:color/transparent" />
 
             </RelativeLayout>
@@ -48,7 +48,7 @@
                     android:layout_height="30dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/btn_dropdown"
+                    android:src="@mipmap/charger"
                     android:button="@android:color/transparent" />
 
             </RelativeLayout>
@@ -66,7 +66,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="40dp"
-                    android:src="@mipmap/btn_dropdown"
+                    android:src="@mipmap/bell"
                     android:button="@android:color/transparent" />
 
             </RelativeLayout>

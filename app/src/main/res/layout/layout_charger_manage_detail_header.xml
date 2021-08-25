@@ -13,25 +13,28 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/back"/>
+            android:src="@mipmap/home"/>
 
         <ImageView
             android:id="@+id/btn_charger_price_information"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_toLeftOf="@+id/btn_charger_time_setting"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/back" />
+            android:src="@mipmap/credit_card2" />
 
         <ImageView
             android:id="@+id/btn_charger_time_setting"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/btn_charger_price_information"
             android:layout_toLeftOf="@+id/btn_charger_information_edit"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/back" />
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:src="@mipmap/clock_black" />
 
         <ImageView
             android:id="@+id/btn_charger_information_edit"
@@ -39,9 +42,8 @@
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/back" />
+            android:layout_marginTop="7dp"
+            android:src="@mipmap/edit" />
     </RelativeLayout>
 
 </layout>

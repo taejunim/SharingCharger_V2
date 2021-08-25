@@ -82,7 +82,6 @@ public class WalletActivity extends BaseActivity {
     }
 
     public void openWebView(String cost){
-        Log.d("metis","값 전달 되는지?   -> " + cost);
 
         //로그인 값 가져오기
         PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
@@ -91,11 +90,10 @@ public class WalletActivity extends BaseActivity {
 
         //진우 API에서 didkey 전달되면 sp_user_define1 값에 넣어줘야함.
         url += "&sp_user_define1=" + preferenceUtil.getInt("userId");
-        Log.d("metis","값 전달 되는지?   -> " + cost);
 
         Intent intent = new Intent(this, PurchaseWebViewActivity.class);
         intent.putExtra("url", url);
-        //값을 다시 받기위한 임의의 번호 (1000)
+        //값을 다시 받기위한 임의의 번호 (100)
         startActivityForResult(intent,REQUEST_CODE);
     }
     @Override

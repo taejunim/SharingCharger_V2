@@ -27,9 +27,9 @@
                     android:layout_height="wrap_content">
 
                     <RelativeLayout
-                        android:layout_width="170dp"
+                        android:layout_width="150dp"
                         android:layout_height="90dp"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="25dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/white"
@@ -49,7 +49,10 @@
                             android:id="@+id/dashboard_charger_count"
                             style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_charger_count_text"
-                            android:layout_alignBottom="@id/footer_line1"/>
+                            android:layout_alignBottom="@id/footer_line1"
+                            android:layout_marginBottom="10dp"
+                            android:text="44/45 대"
+                            android:textColor="@color/gray"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start1"
@@ -58,14 +61,16 @@
                             android:layout_alignTop="@id/dashboard_charger_count_text"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="20dp"
-                            android:background="@color/gray">
+                            android:background="@drawable/circle_background"
+                            android:backgroundTint="@color/gray">
 
                             <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginTop="5dp"
-                                android:src="@mipmap/charge_start_img" />
+                                android:id="@+id/icon_charger_count"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:src="@mipmap/charger" />
 
                         </FrameLayout>
 
@@ -76,11 +81,11 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:layout_width="170dp"
+                        android:layout_width="150dp"
                         android:layout_height="90dp"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_marginEnd="25dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/white"
                         android:elevation="10dp">
@@ -99,7 +104,10 @@
                             android:id="@+id/dashboard_monthly_use_count"
                             style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_use_count_text"
-                            android:layout_alignBottom="@id/footer_line2"/>
+                            android:layout_alignBottom="@id/footer_line2"
+                            android:layout_marginBottom="10dp"
+                            android:text="0 건"
+                            android:textColor="@color/gray"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start2"
@@ -108,14 +116,16 @@
                             android:layout_alignTop="@id/dashboard_monthly_use_count_text"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="20dp"
-                            android:background="@color/colorAccent">
+                            android:background="@drawable/circle_background"
+                            android:backgroundTint="@color/colorAccent">
 
                             <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginTop="5dp"
-                                android:src="@mipmap/charge_start_img" />
+                                android:id="@+id/icon_monthly_use_count"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:src="@mipmap/line_chart" />
 
                         </FrameLayout>
 
@@ -131,9 +141,9 @@
                     android:layout_height="wrap_content">
 
                     <RelativeLayout
-                        android:layout_width="170dp"
+                        android:layout_width="150dp"
                         android:layout_height="90dp"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="25dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/white"
@@ -153,7 +163,10 @@
                             android:id="@+id/dashboard_monthly_error_count"
                             style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_error_count_text"
-                            android:layout_alignBottom="@id/footer_line3"/>
+                            android:layout_alignBottom="@id/footer_line3"
+                            android:layout_marginBottom="10dp"
+                            android:text="0 건"
+                            android:textColor="@color/gray"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start3"
@@ -162,14 +175,16 @@
                             android:layout_alignTop="@id/dashboard_monthly_error_count_text"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="20dp"
-                            android:background="@color/thick_blue">
+                            android:background="@drawable/circle_background"
+                            android:backgroundTint="@color/thick_blue">
 
                             <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginTop="5dp"
-                                android:src="@mipmap/charge_start_img" />
+                                android:id="@+id/icon_monthly_error_count"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:src="@mipmap/plug" />
 
                         </FrameLayout>
 
@@ -180,11 +195,11 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:layout_width="170dp"
+                        android:layout_width="150dp"
                         android:layout_height="90dp"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_marginEnd="25dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/white"
                         android:elevation="10dp">
@@ -203,7 +218,10 @@
                             android:id="@+id/dashboard_monthly_profit_point"
                             style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_profit_point_text"
-                            android:layout_alignBottom="@id/footer_line4"/>
+                            android:layout_alignBottom="@id/footer_line4"
+                            android:layout_marginBottom="10dp"
+                            android:text="0 P"
+                            android:textColor="@color/gray"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start4"
@@ -212,14 +230,16 @@
                             android:layout_alignTop="@id/dashboard_monthly_profit_point_text"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="20dp"
-                            android:background="@color/red">
+                            android:background="@drawable/circle_background"
+                            android:backgroundTint="@color/red">
 
                             <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginTop="5dp"
-                                android:src="@mipmap/charge_start_img" />
+                                android:id="@+id/icon_monthly_profit_point"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:src="@mipmap/coins" />
 
                         </FrameLayout>
 
@@ -236,9 +256,9 @@
                     android:layout_height="wrap_content">
 
                     <RelativeLayout
-                        android:layout_width="170dp"
+                        android:layout_width="150dp"
                         android:layout_height="90dp"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="25dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/white"
@@ -258,7 +278,10 @@
                             android:id="@+id/dashboard_monthly_reservation_count"
                             style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_reservation_count_text"
-                            android:layout_alignBottom="@id/footer_line5"/>
+                            android:layout_alignBottom="@id/footer_line5"
+                            android:layout_marginBottom="10dp"
+                            android:text="0 건"
+                            android:textColor="@color/gray"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start5"
@@ -267,14 +290,16 @@
                             android:layout_alignTop="@id/dashboard_monthly_reservation_count_text"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="20dp"
-                            android:background="@color/light_green">
+                            android:background="@drawable/circle_background"
+                            android:backgroundTint="@color/light_green">
 
                             <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginTop="5dp"
-                                android:src="@mipmap/charge_start_img" />
+                                android:id="@+id/icon_monthly_reservation_count"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:src="@mipmap/calendar" />
 
                         </FrameLayout>
 
@@ -283,13 +308,12 @@
                             style="@style/admin_dashboard_underline"
                             android:background="@color/light_green" />
                     </RelativeLayout>
-
                     <RelativeLayout
-                        android:layout_width="170dp"
+                        android:layout_width="150dp"
                         android:layout_height="90dp"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_marginEnd="25dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/white"
                         android:elevation="10dp">
@@ -308,7 +332,10 @@
                             android:id="@+id/dashboard_monthly_charge_amount"
                             style="@style/admin_dashboard_text"
                             android:layout_alignStart="@id/dashboard_monthly_charge_amount_text"
-                            android:layout_alignBottom="@id/footer_line6"/>
+                            android:layout_alignBottom="@id/footer_line6"
+                            android:layout_marginBottom="10dp"
+                            android:text="0 kWh"
+                            android:textColor="@color/gray"/>
 
                         <FrameLayout
                             android:id="@+id/frame_start6"
@@ -317,14 +344,16 @@
                             android:layout_alignTop="@id/dashboard_monthly_charge_amount_text"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="20dp"
-                            android:background="@color/yellow">
+                            android:background="@drawable/circle_background"
+                            android:backgroundTint="@color/yellow">
 
                             <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginTop="5dp"
-                                android:src="@mipmap/charge_start_img" />
+                                android:id="@+id/icon_monthly_charge_amount"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:src="@mipmap/thunder" />
 
                         </FrameLayout>
 
