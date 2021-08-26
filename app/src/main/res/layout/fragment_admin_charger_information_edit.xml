@@ -187,7 +187,7 @@
             android:layout_marginTop="30dp"
             android:layout_alignStart="@id/charger_information_edit_title"
             android:textSize="17sp"
-            android:text="케이블 존재 여부"/>
+            android:text="주차요금 설명"/>
 
         <EditText
             android:id="@+id/edit_parking_fee_description"

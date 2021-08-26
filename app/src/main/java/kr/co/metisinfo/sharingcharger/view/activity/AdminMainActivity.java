@@ -61,7 +61,7 @@ public class AdminMainActivity extends BaseActivity {
 
         //충전기 정보 등록
         binding.includeHeader.btnMenu.setOnClickListener(view -> {
-            //구현해야됨
+            setFragment("registerMenu", binding.includeFooter.btnDashboardImage);
         });
 
         //대시보드 버튼
@@ -143,7 +143,18 @@ public class AdminMainActivity extends BaseActivity {
                     break;
             }
 
-        } else {
+        } else if(type == "registerMenu"){
+
+            binding.includeHeader.txtTitle.setText("충전기 등록");
+            //충전기 정보 등록 숨기기
+            binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
+            //submenu 숨기기
+            binding.includeChargerManageMenu.chargerManageMenu.setVisibility(View.GONE);
+            fragmentTransaction = fragmentManager.beginTransaction();
+            AdminChargerRegisterStep1Fragment adminChargerRegisterStep1Fragment = new AdminChargerRegisterStep1Fragment();
+            fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep1Fragment);
+
+        }else {
 
             binding.includeHeader.txtTitle.setText("충전기 관리");
             //충전기 정보 등록 숨기기
@@ -189,6 +200,24 @@ public class AdminMainActivity extends BaseActivity {
     public void selectChargerManageMenu(int position){
         //recyclerView에서 무슨 값을 받아와야할지 모르니까, 일단 샘플성으로 position 받아옴
         setFragment("subMenu", binding.includeChargerManageMenu.btnChargerDetailInformation);
+    }
+
+    public void chargerRegisterNextStep(int step){
+        fragmentTransaction = fragmentManager.beginTransaction();
+
+        switch (step){
+            case 1 :
+                AdminChargerRegisterStep2Fragment adminChargerRegisterStep2Fragment = new AdminChargerRegisterStep2Fragment();
+                fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep2Fragment);
+                break;
+            case 2 :
+                AdminChargerRegisterStep3Fragment adminChargerRegisterStep3Fragment = new AdminChargerRegisterStep3Fragment();
+                fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep3Fragment);
+                break;
+        }
+
+        fragmentTransaction.commit();
+
     }
 
 }

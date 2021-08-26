@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <include
+            android:id="@+id/include_charger_register_menu"
+            layout="@layout/layout_charger_register_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/image_company_name"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/include_charger_register_menu"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/building"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/edit_text_company_name"
+            android:layout_above="@id/edit_text_company_name"
+            android:textColor="@color/black"
+            android:text="업체명"/>
+
+        <EditText
+            android:id="@+id/edit_text_company_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@id/image_company_name"
+            android:layout_alignBottom="@id/image_company_name"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/header_dummy"
+            android:paddingLeft="10dp"/>
+
+        <ImageView
+            android:id="@+id/image_charger_name"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/image_company_name"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/nav_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/edit_text_charger_name"
+            android:layout_above="@id/edit_text_charger_name"
+            android:textColor="@color/black"
+            android:text="충전기 명"/>
+
+        <EditText
+            android:id="@+id/edit_text_charger_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@id/image_charger_name"
+            android:layout_alignBottom="@id/image_charger_name"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/header_dummy"
+            android:paddingLeft="10dp"/>
+
+        <ImageView
+            android:id="@+id/image_description"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/image_charger_name"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/document"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/edit_text_description"
+            android:layout_above="@id/edit_text_description"
+            android:textColor="@color/black"
+            android:text="상세 설명"/>
+
+        <EditText
+            android:id="@+id/edit_text_description"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_toEndOf="@id/image_description"
+            android:layout_alignTop="@id/image_description"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="내용을 입력해주세요"
+            android:gravity="top"
+            android:background="@color/header_dummy"
+            android:paddingLeft="10dp"/>
+
+        <include
+            android:id="@+id/include_charger_register_footer"
+            layout="@layout/layout_charger_register_footer"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</layout>

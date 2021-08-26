@@ -46,6 +46,8 @@ import kr.co.metisinfo.sharingcharger.charger.ChargerUseHistoryActivity;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.activity.AdminMainActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
+import kr.co.metisinfo.sharingcharger.view.activity.PurchaseDialog;
+import kr.co.metisinfo.sharingcharger.view.activity.PurchaseWebViewActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;
 import kr.co.metisinfo.sharingcharger.digitalWalletManagement.WalletActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
@@ -384,11 +386,22 @@ public abstract class BaseActivity extends AppCompatActivity {
             //충전하기
             goCharging.setOnClickListener(view -> {
 
-                Intent intent = new Intent(startClass, PointChargeActivity.class);
-
-                startActivity(intent);
-
                 closeDrawer();
+
+                PurchaseDialog purchaseDialog = new PurchaseDialog(this);
+                purchaseDialog.setDialogListener(new PurchaseDialog.PurchaseDialogListener() {
+                    @Override
+                    public void onPurchaseButtonClicked(String cost) {
+                        if(cost.equals("")) Toast.makeText(getApplicationContext(), "구매하실 금액을 입력하여 주십시오.", Toast.LENGTH_SHORT).show();
+                        else if(cost.equals("0")) Toast.makeText(getApplicationContext(), "포인트 구매는 0원부터 가능합니다.", Toast.LENGTH_SHORT).show();
+                        else {
+                            Log.d("metis", Integer.parseInt(cost) + "입니당");
+                            openWebView(cost);
+                        }
+                    }
+                });
+                purchaseDialog.show();
+
             });
 
         });
@@ -553,6 +566,22 @@ public abstract class BaseActivity extends AppCompatActivity {
                 txtReserveSpot.setText("");
             }
         }
+    }
+
+    public void openWebView(String cost){
+
+        //로그인 값 가져오기
+        PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+
+        String url = "https://devevzone.evzcharge.com/api/user/jeju_pay?product_amt=" + cost;
+
+        //진우 API에서 didkey 전달되면 sp_user_define1 값에 넣어줘야함.
+        url += "&sp_user_define1=" + preferenceUtil.getInt("userId");
+
+        Intent intent = new Intent(this, PurchaseWebViewActivity.class);
+        intent.putExtra("url", url);
+        //값을 다시 받기위한 임의의 번호 (100)
+        startActivityForResult(intent,100);
     }
 
     public void showLoading(ProgressBar progressBar) {

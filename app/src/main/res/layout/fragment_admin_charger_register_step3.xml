@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <include
+            android:id="@+id/include_charger_register_menu"
+            layout="@layout/layout_charger_register_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/image_company_name"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/include_charger_register_menu"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/paper_map"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/edit_text_company_name"
+            android:layout_above="@id/edit_text_company_name"
+            android:textColor="@color/black"
+            android:text="주소"/>
+
+        <EditText
+            android:id="@+id/edit_text_company_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@id/image_company_name"
+            android:layout_alignBottom="@id/image_company_name"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/header_dummy"/>
+
+        <ImageView
+            android:id="@+id/image_charger_name"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/image_company_name"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/map_marker"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/edit_text_charger_name"
+            android:layout_above="@id/edit_text_charger_name"
+            android:textColor="@color/black"
+            android:text="상세주소"/>
+
+        <EditText
+            android:id="@+id/edit_text_charger_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@id/image_charger_name"
+            android:layout_alignBottom="@id/image_charger_name"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/header_dummy"/>
+
+        <ImageView
+            android:id="@+id/image_parking_fee_yn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/image_charger_name"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/car"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/label_parking_fee_y"
+            android:layout_above="@id/switch_parking_fee_yn"
+            android:textColor="@color/black"
+            android:text="주차요금 여부"/>
+
+        <TextView
+            android:id="@+id/label_parking_fee_y"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_alignBottom="@id/image_parking_fee_yn"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/image_parking_fee_yn"
+            android:textSize="17sp"
+            android:text="없음"/>
+        <Switch
+            android:id="@+id/switch_parking_fee_yn"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:showText="false"
+            android:layout_alignBottom="@id/image_parking_fee_yn"
+            android:layout_toEndOf="@id/label_parking_fee_y"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <TextView
+            android:id="@+id/label_parking_fee_n"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/image_parking_fee_yn"
+            android:layout_toEndOf="@id/switch_parking_fee_yn"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="있음"/>
+
+        <ImageView
+            android:id="@+id/image_cable_exist_yn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/image_parking_fee_yn"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/car"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/label_cable_exist_y"
+            android:layout_above="@id/switch_cable_exist_yn"
+            android:textColor="@color/black"
+            android:text="케이블 존재 여부"/>
+
+        <TextView
+            android:id="@+id/label_cable_exist_y"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_alignBottom="@id/image_cable_exist_yn"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/image_cable_exist_yn"
+            android:textSize="17sp"
+            android:text="없음"/>
+        <Switch
+            android:id="@+id/switch_cable_exist_yn"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:showText="false"
+            android:layout_alignBottom="@id/label_cable_exist_y"
+            android:layout_toEndOf="@id/label_cable_exist_y"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <TextView
+            android:id="@+id/label_cable_exist_n"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/image_cable_exist_yn"
+            android:layout_toEndOf="@id/switch_cable_exist_yn"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="있음"/>
+
+        <ImageView
+            android:id="@+id/image_parking_fee_description"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/image_cable_exist_yn"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/document"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/edit_parking_fee_description"
+            android:layout_above="@id/edit_parking_fee_description"
+            android:textColor="@color/black"
+            android:text="주차요금 설명"/>
+
+        <EditText
+            android:id="@+id/edit_parking_fee_description"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@id/image_parking_fee_description"
+            android:layout_alignBottom="@id/image_parking_fee_description"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/header_dummy"/>
+
+        <include
+            android:id="@+id/include_charger_register_footer"
+            layout="@layout/layout_charger_register_footer"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</layout>

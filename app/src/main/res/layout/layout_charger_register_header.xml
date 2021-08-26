@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/footer_body"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="0dp">
+            <TextView
+                android:id="@+id/step_line"
+                style="@style/sign_up_header"
+                android:layout_marginStart="100dp"
+                android:layout_centerInParent="true"
+                android:height="5dp" />
+            <RelativeLayout
+                android:id="@+id/btn_dashboard"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true">
+
+                <FrameLayout
+                    android:id="@+id/circle_step1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginStart="45dp"
+                    android:background="@drawable/circle_background"
+                    android:backgroundTint="@color/deep_purple"
+                    android:elevation="20dp">
+                    <TextView
+                        android:id="@+id/text_step1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+
+                </FrameLayout>
+                <TextView
+                    android:id="@+id/bottom_text_step1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="충전기 찾기"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/circle_step1"
+                    android:textColor="@color/purple"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/btn_charger_manage"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true">
+
+                <FrameLayout
+                    android:id="@+id/circle_step2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="45dp"
+                    android:background="@drawable/circle_background"
+                    android:backgroundTint="@color/neutral_tint"
+                    android:elevation="20dp">
+                    <TextView
+                        android:id="@+id/text_step2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="2"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+                </FrameLayout>
+                <TextView
+                    android:id="@+id/bottom_text_step2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="충전기 기초 정보"
+                    android:layout_centerInParent="true"
+                    android:layout_below="@id/circle_step2"
+                    android:layout_marginTop="10dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/btn_alarm"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true">
+
+                <FrameLayout
+                    android:id="@+id/circle_step3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginEnd="45dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/circle_background"
+                    android:backgroundTint="@color/neutral_tint"
+                    android:elevation="20dp">
+                    <TextView
+                        android:id="@+id/text_step3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="3"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+                </FrameLayout>
+                <TextView
+                    android:id="@+id/bottom_text_step3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="충전기 추가 정보"
+                    android:layout_below="@id/circle_step3"
+                    android:layout_marginTop="10dp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</layout>

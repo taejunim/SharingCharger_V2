@@ -73,7 +73,12 @@ public class WalletActivity extends BaseActivity {
             purchaseDialog.setDialogListener(new PurchaseDialog.PurchaseDialogListener() {
                 @Override
                 public void onPurchaseButtonClicked(String cost) {
-                    openWebView(cost);
+                    if(cost.equals("")) Toast.makeText(getApplicationContext(), "구매하실 금액을 입력하여 주십시오.", Toast.LENGTH_SHORT).show();
+                    else if(cost.equals("0")) Toast.makeText(getApplicationContext(), "포인트 구매는 0원부터 가능합니다.", Toast.LENGTH_SHORT).show();
+                    else {
+                        Log.d("metis", Integer.parseInt(cost) + "입니당");
+                        openWebView(cost);
+                    }
                 }
             });
 
@@ -81,6 +86,7 @@ public class WalletActivity extends BaseActivity {
         });
     }
 
+    //포인트 충전 웹뷰 열기
     public void openWebView(String cost){
 
         //로그인 값 가져오기

@@ -87,13 +87,10 @@ public class PurchaseDialog extends Dialog {
         //확인버튼
         findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
             String cost =  textView.getText().toString();
-            if(cost == "") {
-                Toast.makeText(this.getContext(), "구매할 금액을 입력하여 주십시오.", Toast.LENGTH_SHORT);
-                return;
-            }
 
-            purchaseDialogListener.onPurchaseButtonClicked(cost.replace(",",""));
+            purchaseDialogListener.onPurchaseButtonClicked(cost.replace(",", ""));
             this.dismiss();
+
         });
         //취소버튼
         findViewById(R.id.dialog_no_btn).setOnClickListener(view -> this.dismiss());
