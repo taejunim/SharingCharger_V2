@@ -15,7 +15,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
@@ -39,7 +38,6 @@ import kr.co.metisinfo.sharingcharger.userManagement.SignInActivity;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.NetworkStatusInterface;
-import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
 import retrofit2.Response;
 
 public class IntroActivity extends BaseActivity implements NetworkStatusInterface {
@@ -48,8 +46,6 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
     ActivityIntroBinding binding;
 
     Handler handler = new Handler();
-
-    private UserViewModel userViewModel;
 
     private boolean isLoginSuccess = false;
 
@@ -98,8 +94,6 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
         Log.d(TAG, "Hash key : " + getKeyHash(getApplicationContext()));
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_intro);
-
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         changeStatusBarColor(false);
 
@@ -340,7 +334,6 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
                 UserModel user = response.body();
 
-                user.pkId = userModel.pkId;
                 if (user.getUserType().equals("General")) {
                     user.loginId = userModel.getEmail();
                 } else {

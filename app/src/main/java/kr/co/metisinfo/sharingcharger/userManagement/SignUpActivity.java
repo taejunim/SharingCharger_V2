@@ -71,7 +71,6 @@ public class SignUpActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_user_register);
 
         changeStatusBarColor(false);
-
     }
 
     @Override
@@ -93,7 +92,8 @@ public class SignUpActivity extends BaseActivity {
                 String phone = binding.registerPhoneInput.getText().toString().trim();
                 Log.e("metis", "phone : " + phone);
 
-
+                //추후 수정해야 함
+                isCertificationBtn = true;
             }
 
         });
@@ -124,13 +124,6 @@ public class SignUpActivity extends BaseActivity {
             if (!isRegisterBtnClick) {   // 중복 클릭 막기 위함.
 
                 isRegisterBtnClick = true;
-
-
-                //임시
-                isCertificationBtn = true;
-                checkPersonalInfo1 = true;
-                checkPersonalInfo2 = true;
-
                 userJoin();
             }
         });

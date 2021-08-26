@@ -25,7 +25,7 @@ import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.activity.CustomDialog;
-import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
+
 import retrofit2.Response;
 
 public class ChangePasswordActivity extends BaseActivity {
@@ -33,8 +33,6 @@ public class ChangePasswordActivity extends BaseActivity {
     private static final String TAG = ChangePasswordActivity.class.getSimpleName();
 
     ActivityPasswordChangeBinding binding;
-
-    private UserViewModel userViewModel;
 
     private String tagNames = "";
 
@@ -48,11 +46,7 @@ public class ChangePasswordActivity extends BaseActivity {
     public void initLayout() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_password_change);
-
         changeStatusBarColor(false);
-
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-
     }
 
     @Override

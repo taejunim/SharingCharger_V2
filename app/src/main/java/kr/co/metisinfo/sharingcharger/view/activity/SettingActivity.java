@@ -2,22 +2,15 @@ package kr.co.metisinfo.sharingcharger.view.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
@@ -28,8 +21,7 @@ import kr.co.metisinfo.sharingcharger.userManagement.ChangePasswordActivity;
 import kr.co.metisinfo.sharingcharger.userManagement.SignInActivity;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
-import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
-import lombok.val;
+
 import retrofit2.Response;
 
 import static kr.co.metisinfo.sharingcharger.base.Constants.CHANGE_USER_TYPE;

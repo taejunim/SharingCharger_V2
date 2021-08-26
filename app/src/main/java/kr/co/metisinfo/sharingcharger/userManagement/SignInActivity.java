@@ -1,14 +1,12 @@
 package kr.co.metisinfo.sharingcharger.userManagement;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
@@ -20,7 +18,6 @@ import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.activity.MainActivity;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.NetworkStatusInterface;
-import kr.co.metisinfo.sharingcharger.viewModel.UserViewModel;
 import retrofit2.Response;
 
 public class SignInActivity extends BaseActivity implements NetworkStatusInterface {
@@ -30,8 +27,6 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
     ActivityLoginBinding binding;
 
     private boolean isRegisterBtnClick = false;     // 버튼 더블클릭 막기 위한 boolean 타입 변수
-
-    private UserViewModel userViewModel;
 
     NetworkStatus networkStatus;
 
@@ -47,9 +42,6 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         changeStatusBarColor(false);
-
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-
     }
 
     @Override
