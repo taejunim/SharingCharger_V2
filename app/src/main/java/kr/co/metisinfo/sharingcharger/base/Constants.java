@@ -56,4 +56,5 @@ public class Constants {
     public static double currentLocationLat;
 
     public final static int CHANGE_USER_TYPE = 0x01;
+    public final static int CHANGE_PRICE = 0x02;
 }

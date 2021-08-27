@@ -17,6 +17,7 @@
     <string name="register_user_phone">전화번호</string>
     <string name="register_phone_hint">-제외하고 숫자만 입력</string>
     <string name="register_email_hint">example@gmail.com</string>
+    <string name="register_check_duplicate">중복체크</string>
     <string name="register_certification_number">인증번호</string>
     <string name="register_certification">인증요청</string>
     <string name="register_certification_hint">인증번호 입력</string>

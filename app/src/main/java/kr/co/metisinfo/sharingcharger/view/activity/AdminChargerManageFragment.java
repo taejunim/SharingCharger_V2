@@ -13,10 +13,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kr.co.metisinfo.sharingcharger.Adapter.ItemAdminChargerManageRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerManageBinding;
-
+import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
+import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
 public class AdminChargerManageFragment extends Fragment implements ItemAdminChargerManageRecyclerViewAdapter.OnListItemSelected {
 
@@ -25,33 +29,50 @@ public class AdminChargerManageFragment extends Fragment implements ItemAdminCha
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private FragmentAdminChargerManageBinding binding;
+
+    ApiUtils apiUtils = new ApiUtils();
+
+    List<AdminChargerModel> adminChargerModelList = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_admin_charger_manage, container, false);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.charger_manage_recycler);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_manage, container, false);
+        View root = binding.getRoot();
+
+        mRecyclerView = binding.chargerManageRecycler;
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.scrollToPosition(0);
         itemAdminChargerManageRecyclerViewAdapter = new ItemAdminChargerManageRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(itemAdminChargerManageRecyclerViewAdapter);
-        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        return view;
+        try {
+            adminChargerModelList = apiUtils.getAdminCharger();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        itemAdminChargerManageRecyclerViewAdapter.setList(adminChargerModelList);
+
+        return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("metis","AdminChargerManageFragment - onViewCreated");
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
     public void sendViewDataToFragment(int position) {
-        Log.d("metis","플래그먼트로 값 전달 " + position);
-        ((AdminMainActivity) getActivity()).selectChargerManageMenu(position);
+        ((AdminMainActivity) getActivity()).selectChargerManageMenu(adminChargerModelList.get(position));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

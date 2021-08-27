@@ -4,6 +4,7 @@ import androidx.room.Ignore;
 
 import kr.co.metisinfo.sharingcharger.model.AuthenticateModel;
 import kr.co.metisinfo.sharingcharger.model.PointModel;
+import kr.co.metisinfo.sharingcharger.model.PriceModel;
 import kr.co.metisinfo.sharingcharger.model.RechargeEndModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
@@ -23,6 +24,10 @@ public interface WebServiceAPI {
     // 회원가입
     @POST("/api/v1/join")
     Call<UserModel> signUp(@Body UserModel user);
+
+    // 아이디 중복체크
+    @GET("/api/v1/check/{username}")
+    Call<UserModel> checkDuplicate(@Path("username") String username);
 
     // 개인정보처리방침 약관 정보를 가져오기 위한 API
     @GET("/api/v1/policy/privacy")
@@ -165,7 +170,15 @@ public interface WebServiceAPI {
     @POST("/api/v1/userType/Personal/{id}")
     Call<Object> changeUserType(@Path("id") int id);
 
+    // 소유주 전환
+    @PUT("/api/v1/chargers/{id}/prices")
+    Call<Object> changePrice(@Path("id") int id, @Body PriceModel priceModel);
+
     // 예약조회
     @GET("/api/v1/dashboard/personal/{userId}/card")
     Call<Object> getAdminDashboard(@Path("userId") int userId);
+
+    // 관리자 충전기 리스트 조회
+    @GET("/api/v1/chargers/owner/{hostId}/{hostType}")
+    Call<Object> getAdminCharger(@Path("hostId") String hostId, @Path("hostType") String hostType, @Query("currentStatusType") String currentStatusType, @Query("page") int page, @Query("sharedType") String sharedType, @Query("size") int size, @Query("sort") String sort);
 }

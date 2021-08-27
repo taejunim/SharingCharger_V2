@@ -1671,8 +1671,14 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                         for (int i=0; i<2; i++) {
                             AllowTimeOfDayModel allowTimeOfDayModel = new AllowTimeOfDayModel();
                             allowTimeOfDayModel.setId(i);
-                            allowTimeOfDayModel.setOpenTime(chargerAllowTimeObject.get("openTime").toString());
-                            allowTimeOfDayModel.setCloseTime(chargerAllowTimeObject.get("closeTime").toString());
+
+                            if (i == 0) {
+                                allowTimeOfDayModel.setOpenTime(chargerAllowTimeObject.get("todayOpenTime").toString());
+                                allowTimeOfDayModel.setCloseTime(chargerAllowTimeObject.get("todayCloseTime").toString());
+                            } else if (i == 1) {
+                                allowTimeOfDayModel.setOpenTime(chargerAllowTimeObject.get("tomorrowOpenTime").toString());
+                                allowTimeOfDayModel.setCloseTime(chargerAllowTimeObject.get("tomorrowCloseTime").toString());
+                            }
 
                             availableTimeList.add(allowTimeOfDayModel);
                         }

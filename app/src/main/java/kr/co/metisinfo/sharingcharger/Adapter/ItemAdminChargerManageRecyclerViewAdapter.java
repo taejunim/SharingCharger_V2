@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.metisinfo.sharingcharger.R;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ListAdminChargerManageItemBinding;
-import kr.co.metisinfo.sharingcharger.model.ChargerModel;
+import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 
 public class ItemAdminChargerManageRecyclerViewAdapter extends RecyclerView.Adapter<ItemAdminChargerManageRecyclerViewAdapter.CowViewHolder> {
 
@@ -24,7 +26,7 @@ public class ItemAdminChargerManageRecyclerViewAdapter extends RecyclerView.Adap
 
     public OnListItemSelected onListItemSelected;
 
-    private List<ChargerModel> list = new ArrayList<>();
+    private List<AdminChargerModel> list = new ArrayList<>();
 
     public ItemAdminChargerManageRecyclerViewAdapter(OnListItemSelected onListItemSelected){
         this.onListItemSelected = onListItemSelected;
@@ -43,17 +45,40 @@ public class ItemAdminChargerManageRecyclerViewAdapter extends RecyclerView.Adap
     public void onBindViewHolder(@NonNull ItemAdminChargerManageRecyclerViewAdapter.CowViewHolder cowViewHolder, int position) {
 
         ListAdminChargerManageItemBinding binding = cowViewHolder.binding;
-        binding.pointHistoryStateTxt.setText("충전중");
 
+        AdminChargerModel adminChargerModel = list.get(position);
+
+        binding.adminChargerName.setText(adminChargerModel.name);
+        binding.adminChargerNumber.setText(String.valueOf(position + 1));
+        binding.adminChargerDescription.setText(adminChargerModel.description);
+
+        String chargerStatusText = "대기중";
+
+        switch (adminChargerModel.currentStatusType) {
+            case "READY" :
+                chargerStatusText = "대기중";
+                break;
+
+            case "RESERVATION" :
+                chargerStatusText = "예약중";
+                binding.adminChargerStatus.setTextColor(ContextCompat.getColor(ThisApplication.context, R.color.red));
+                break;
+
+            case "CHARGING" :
+                chargerStatusText = "충전중";
+                binding.adminChargerStatus.setTextColor(ContextCompat.getColor(ThisApplication.context, R.color.red));
+                break;
+        }
+
+        binding.adminChargerStatus.setText(chargerStatusText);
     }
 
     @Override
     public int getItemCount() {
-        return 13;
-        //return list.size();
+        return list.size();
     }
 
-    public void setList(List<ChargerModel> list) {
+    public void setList(List<AdminChargerModel> list) {
 
         this.list.clear();
         this.list.addAll(list);
@@ -81,10 +106,8 @@ public class ItemAdminChargerManageRecyclerViewAdapter extends RecyclerView.Adap
                     if(position != RecyclerView.NO_POSITION){
                         Log.d("metis",position + "번째 row 클릭됨");
                         onListItemSelected.sendViewDataToFragment(position);
-
                     }
                 }
-
             });
         }
     }

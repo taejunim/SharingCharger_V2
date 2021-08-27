@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
@@ -20,10 +21,12 @@ import java.util.Map;
 import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.base.WebServiceAPI;
+import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
 import kr.co.metisinfo.sharingcharger.model.AuthenticateModel;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
 import kr.co.metisinfo.sharingcharger.model.PointModel;
+import kr.co.metisinfo.sharingcharger.model.PriceModel;
 import kr.co.metisinfo.sharingcharger.model.RechargeEndModel;
 import kr.co.metisinfo.sharingcharger.model.RechargeModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
@@ -56,6 +59,25 @@ public class ApiUtils {
         }
 
         return model;
+    }
+
+    /**
+     * 이메일 중복체크
+     */
+    public Boolean checkDuplicate(String userEmail) {
+
+        Response<UserModel> response = null;
+        try {
+            response = webServiceAPI.checkDuplicate(userEmail).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (response.code() == 204) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -485,6 +507,28 @@ public class ApiUtils {
     }
 
     /**
+     * 관리자 충전기 단가 변경
+     **/
+    public int changePrice(int chargerId, PriceModel priceModel) {
+
+        Response<Object> response = null;
+
+        try {
+            response = webServiceAPI.changePrice(chargerId, priceModel).execute();
+        } catch (Exception e) {
+            Log.e("metis", " changeUserType Exception1 : " + e);
+        }
+
+        if(response.code() == 200 && response.body() != null){
+            return response.code();
+        } else if (response.code() == 400) {
+            return response.code();
+        } else {
+            return response.code();
+        }
+    }
+
+    /**
      * 예약 상태 확인
      **/
     public AdminDashboardModel getAdminDashboard() {
@@ -521,6 +565,31 @@ public class ApiUtils {
         }
 
         return adminDashboardModel;
+    }
+
+    /**
+     * 관리자 충전기 리스트
+     **/
+    public List<AdminChargerModel> getAdminCharger() throws Exception {
+
+        List<AdminChargerModel> adminChargerModelList = new ArrayList<>();
+
+        Response<Object> response = webServiceAPI.getAdminCharger(String.valueOf(ThisApplication.staticUserModel.id), "Personal", "ALL", 1, "ALL", 10, "ASC").execute();
+
+        if (response.code() == 200) {
+
+            JSONObject json = new JSONObject((Map) response.body());
+            JSONArray jsonArray = json.getJSONArray("content");
+
+            Gson gson = new Gson();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                AdminChargerModel adminChargerModel = gson.fromJson(jsonArray.getJSONObject(i).toString(), AdminChargerModel.class);
+                adminChargerModelList.add(adminChargerModel);
+            }
+        }
+
+        return adminChargerModelList;
     }
 
     /**

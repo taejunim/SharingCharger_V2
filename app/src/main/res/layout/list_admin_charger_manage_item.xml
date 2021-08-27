@@ -10,7 +10,7 @@
 
 
         <TextView
-            android:id="@+id/list_number_text"
+            android:id="@+id/admin_charger_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
@@ -22,11 +22,11 @@
             android:textSize="20dp"/>
 
         <TextView
-            android:id="@+id/point_history_state_txt"
+            android:id="@+id/admin_charger_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/list_number_text"
-            android:layout_toStartOf="@id/point_history_point"
+            android:layout_toEndOf="@id/admin_charger_number"
+            android:layout_toStartOf="@id/admin_charger_status"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:textStyle="bold"
@@ -35,12 +35,12 @@
             android:textSize="16dp"/>
 
         <TextView
-            android:id="@+id/point_history_date_txt"
+            android:id="@+id/admin_charger_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/list_number_text"
-            android:layout_toStartOf="@id/point_history_point"
-            android:layout_below="@id/point_history_state_txt"
+            android:layout_toEndOf="@id/admin_charger_number"
+            android:layout_toStartOf="@id/admin_charger_status"
+            android:layout_below="@id/admin_charger_name"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:textSize="12dp"
@@ -48,11 +48,11 @@
             android:textColor="@color/gray"/>
 
         <TextView
-            android:id="@+id/point_history_point"
+            android:id="@+id/admin_charger_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/charger_manage_waiting"
-            android:layout_alignBaseline="@+id/list_number_text"
+            android:layout_alignBaseline="@+id/admin_charger_number"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="15dp"
             android:textColor="@color/purple"

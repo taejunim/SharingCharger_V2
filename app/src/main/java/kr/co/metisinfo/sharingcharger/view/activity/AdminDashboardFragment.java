@@ -1,7 +1,6 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,6 @@ import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminDashboardBinding;
 import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
-
-
 public class AdminDashboardFragment extends Fragment {
 
     private FragmentAdminDashboardBinding binding;
@@ -30,7 +27,6 @@ public class AdminDashboardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Log.d("metis", "AdminDashboardFragment");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_dashboard, container, false);
         View root = binding.getRoot();
 

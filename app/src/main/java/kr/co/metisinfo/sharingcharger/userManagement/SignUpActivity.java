@@ -2,6 +2,8 @@ package kr.co.metisinfo.sharingcharger.userManagement;
 
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -31,6 +33,8 @@ public class SignUpActivity extends BaseActivity {
     private String tempCertificateNo = "1234";      // 임시 인증 번호
 
     private boolean isRegisterBtnClick = false;     // 버튼 더블클릭 막기 위한 boolean 타입 변수
+
+    private boolean isPossibleSignUp = false;
 
     private boolean isCertificationBtn = false;
 
@@ -82,6 +86,38 @@ public class SignUpActivity extends BaseActivity {
     public void setOnClickListener() {
 
         binding.includeHeader.btnBack.setOnClickListener(view -> finish());
+
+        binding.registerDuplicationCheckButton.setOnClickListener(view -> {
+
+            if (checkDuplicate()) {
+                String userEmail = binding.registerEmailInput.getText().toString().trim();
+
+                isPossibleSignUp = apiUtils.checkDuplicate(userEmail);
+
+                if (isPossibleSignUp) {
+                    Toast.makeText(this, "사용 가능한 이메일입니다.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "이미 사용중인 이메일입니다.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        binding.registerEmailInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isPossibleSignUp = false;
+            }
+        });
 
         binding.registerCertificationBtn.setOnClickListener(view -> {
 
@@ -163,6 +199,12 @@ public class SignUpActivity extends BaseActivity {
 
         if (validationCheck()) {
 
+            if (!isPossibleSignUp) {
+                Toast.makeText(this, "이메일 중복 체크해주세요.", Toast.LENGTH_LONG).show();
+                isRegisterBtnClick = false;
+                return;
+            }
+
             UserModel userModel = new UserModel();
 
             userModel.name = binding.registerNameInput.getText().toString();
@@ -206,6 +248,26 @@ public class SignUpActivity extends BaseActivity {
             isRegisterBtnClick = false;
         }
 
+    }
+
+    /**
+     * 회원가입 이메일 중복 체크
+     */
+    private boolean checkDuplicate() {
+        if (binding.registerEmailInput.getText().toString().trim().equals("")) {     // 이메일 입력하지 않았을 경우
+
+            binding.registerEmailInput.setText("");
+            binding.registerEmailInput.requestFocus();
+            Toast.makeText(this, "이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+
+            return false;
+        } else if (!CommonUtils.isValidEmail(binding.registerEmailInput.getText().toString())) {
+            binding.registerEmailInput.requestFocus();
+            Toast.makeText(this, "이메일 형식으로 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 
     /**

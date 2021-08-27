@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerDetailInformationBinding;
+import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 
 public class AdminChargerDetailInformationFragment extends Fragment {
 
@@ -25,6 +26,17 @@ public class AdminChargerDetailInformationFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_detail_information, container, false);
         View view = binding.getRoot();
+
+        Bundle bundle = getArguments();
+        AdminChargerModel adminChargerModel = (AdminChargerModel) bundle.getSerializable("object");
+
+        binding.chargerDetailInformationTitle.setText(adminChargerModel.getName());
+        binding.textBleNumber.setText(adminChargerModel.getBleNumber());
+        binding.textPlaceName.setText(adminChargerModel.getProviderCompanyName());
+        binding.textAddress.setText(adminChargerModel.getAddress());
+        binding.textFreeParking.setText(adminChargerModel.isParkingFeeFlag() ? "유료주차" : "무료주차");
+        binding.textFreeParkingDetail.setText(adminChargerModel.getParkingFeeDescription());
+        binding.textDescription.setText(adminChargerModel.getDescription());
 
         return view;
     }
