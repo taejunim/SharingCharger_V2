@@ -6,184 +6,167 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <TextView
-            android:id="@+id/charger_price_setting_title"
+        <ProgressBar
+            android:visibility="invisible"
+            android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:textSize="20sp"
-            android:text="충전기 시간 설정"/>
+            android:layout_centerInParent="true"/>
 
-        <TextView
-            android:id="@+id/charger_price_setting_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_below="@id/charger_price_setting_title"
-            android:layout_marginTop="10dp"
-            android:layout_alignStart="@id/charger_price_setting_title"
-            android:textSize="17sp"
-            android:text="운영 시간 설정"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/modification_button">
 
-        <TextView
-            android:id="@+id/text_part_operate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_below="@id/charger_price_setting_label"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_price_setting_title"
-            android:textSize="17sp"
-            android:text="부분 운영"/>
-        <Switch
-            android:id="@+id/switch_operate_time"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:showText="false"
-            android:layout_alignBottom="@id/text_part_operate"
-            android:layout_toEndOf="@id/text_part_operate"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/text_part_operate"
-            android:layout_toEndOf="@id/switch_operate_time"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            android:text="항시 운영"/>
+                <TextView
+                    android:id="@+id/charger_price_setting_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:textSize="20sp"
+                    android:text="충전기 시간 설정"/>
 
-        <TextView
-            android:id="@+id/text_old_time"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:text="기존 시간"
-            android:textSize="17sp"
-            android:gravity="center"
-            android:layout_alignStart="@id/charger_price_setting_title"
-            android:layout_below="@id/text_part_operate"
-            android:layout_marginTop="30dp"/>
 
-        <EditText
-            android:id="@+id/edit_old_open_time"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/text_old_time"
-            android:layout_alignBottom="@id/text_old_time"
-            android:layout_marginStart="30dp"
-            android:text="09:00"
-            android:paddingLeft="10dp"
-            android:inputType="time"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:focusable="true"
-            android:enabled="false"
-            android:background="@color/header_dummy"/>
 
-        <TextView
-            android:id="@+id/text_old_between"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@id/edit_old_open_time"
-            android:layout_toEndOf="@id/edit_old_open_time"
-            android:textColor="@color/black"
-            android:layout_marginStart="20dp"
-            android:textSize="17sp"
-            android:text="~"/>
+                <TextView
+                    android:id="@+id/text_old_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="현재 운영 시간"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:layout_alignStart="@id/charger_price_setting_title"
+                    android:layout_below="@id/charger_price_setting_title"
+                    android:layout_marginTop="30dp"/>
 
-        <EditText
-            android:id="@+id/old_close_time"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/text_old_between"
-            android:layout_alignBottom="@id/text_old_time"
-            android:layout_marginStart="30dp"
-            android:text="09:00"
-            android:paddingLeft="10dp"
-            android:inputType="time"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:focusable="true"
-            android:enabled="false"
-            android:background="@color/header_dummy"/>
+                <TextView
+                    android:id="@+id/old_open_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toEndOf="@id/text_old_time"
+                    android:layout_alignBottom="@id/text_old_time"
+                    android:layout_marginStart="30dp"
+                    android:paddingStart="10dp"
+                    android:paddingRight="10dp"
+                    android:gravity="center"
+                    android:text="00:00"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:background="@color/neutral_tint"/>
 
-        <TextView
-            android:id="@+id/text_new_time"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:textSize="17sp"
-            android:text="변경 시간"
-            android:gravity="center"
-            android:layout_alignStart="@id/charger_price_setting_title"
-            android:layout_below="@id/text_old_time"
-            android:layout_marginTop="30dp"/>
+                <TextView
+                    android:id="@+id/text_old_between"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignBottom="@id/old_open_time"
+                    android:layout_toEndOf="@id/old_open_time"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:textSize="17sp"
+                    android:text="~"/>
 
-        <EditText
-            android:id="@+id/edit_new_open_time"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/text_new_time"
-            android:layout_alignBottom="@id/text_new_time"
-            android:layout_marginStart="30dp"
-            android:text="09:00"
-            android:paddingLeft="10dp"
-            android:inputType="time"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:focusable="true"
-            android:enabled="false"
-            android:background="@color/header_dummy"/>
+                <TextView
+                    android:id="@+id/old_close_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toEndOf="@id/text_old_between"
+                    android:layout_alignBottom="@id/text_old_time"
+                    android:paddingStart="10dp"
+                    android:paddingRight="10dp"
+                    android:text="23:59"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:background="@color/neutral_tint"/>
 
-        <TextView
-            android:id="@+id/text_new_between"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@id/edit_new_open_time"
-            android:layout_toEndOf="@id/edit_new_open_time"
-            android:textColor="@color/black"
-            android:layout_marginStart="20dp"
-            android:textSize="17sp"
-            android:text="~"/>
+                <TextView
+                    android:id="@+id/text_new_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:textSize="17sp"
+                    android:text="변경 예정 시간"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:layout_alignStart="@id/charger_price_setting_title"
+                    android:layout_below="@id/text_old_time"
+                    android:layout_marginTop="30dp"/>
 
-        <EditText
-            android:id="@+id/edit_new_close_time"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/text_new_between"
-            android:layout_alignBottom="@id/text_new_time"
-            android:layout_marginStart="30dp"
-            android:text="09:00"
-            android:paddingLeft="10dp"
-            android:inputType="time"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:focusable="true"
-            android:enabled="false"
-            android:background="@color/header_dummy"/>
+                <TextView
+                    android:id="@+id/new_open_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toEndOf="@id/text_new_time"
+                    android:layout_alignBottom="@id/text_new_time"
+                    android:layout_marginStart="30dp"
+                    android:paddingStart="10dp"
+                    android:paddingRight="10dp"
+                    android:text="00:00"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:background="@color/header_dummy"/>
 
-        <TextView
-            android:id="@+id/text_explanation"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_below="@id/text_new_time"
-            android:layout_alignStart="@id/charger_price_setting_title"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/red"
-            android:textSize="15sp"
-            android:text="* 부분 운영시 입력된 시간에만 충전기를 공유 할 수 있습니다."/>
+                <TextView
+                    android:id="@+id/text_new_between"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignBottom="@id/new_open_time"
+                    android:layout_toEndOf="@id/new_open_time"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textSize="17sp"
+                    android:text="~"/>
 
+                <TextView
+                    android:id="@+id/new_close_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toEndOf="@id/text_new_between"
+                    android:layout_alignBottom="@id/text_new_time"
+                    android:paddingStart="10dp"
+                    android:paddingRight="10dp"
+                    android:text="23:59"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:background="@color/header_dummy"/>
+
+                <TextView
+                    android:id="@+id/text_explanation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_new_time"
+                    android:layout_alignStart="@id/charger_price_setting_title"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/red"
+                    android:textSize="15sp"
+                    android:text="* 시간 변경시 2일 후 적용됩니다."/>
+
+            </RelativeLayout>
+
+        </ScrollView>
 
         <Button
+            android:id="@+id/modification_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="@string/change"
             android:textColor="@color/white"
             android:background="@color/purple"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="20dp"

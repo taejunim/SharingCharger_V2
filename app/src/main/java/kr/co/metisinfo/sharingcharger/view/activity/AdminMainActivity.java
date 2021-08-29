@@ -165,6 +165,14 @@ public class AdminMainActivity extends BaseActivity {
             //submenu 보이게
             binding.includeChargerManageMenu.chargerManageMenu.setVisibility(View.VISIBLE);
 
+            AdminChargerModel tempAdminChargerModel = (AdminChargerModel) object;
+
+            if (tempAdminChargerModel.sharedType.equals("SHARING")) {
+                binding.includeChargerManageMenu.btnChargerTimeSetting.setVisibility(View.GONE);
+            } else {
+                binding.includeChargerManageMenu.btnChargerTimeSetting.setVisibility(View.VISIBLE);
+            }
+
             int index = 0;
             for( int i = 0; i<  subMenuButtonList.size() ; i ++ ) {
 

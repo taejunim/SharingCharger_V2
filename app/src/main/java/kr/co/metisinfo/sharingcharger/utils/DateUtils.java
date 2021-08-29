@@ -14,8 +14,26 @@ public class DateUtils {
     public static final String DATE_SIMPLE_JS = "yyyyMMdd";
 
     public static final String TIME_SIMPLE = "HH:mm";
+    public static final String TIME_HMS = "HH:mm:ss";
 
     public static final String FULL_DATE_SIMPLE_JS = "yyyyMMddHHmm";
+
+    public static final SimpleDateFormat hmFormat = new SimpleDateFormat(TIME_SIMPLE);
+    public static final SimpleDateFormat hmsFormat = new SimpleDateFormat(TIME_HMS);
+
+    public static final String convertToHHMM(String originDateString) {
+
+        Date originDate = null;
+
+        try {
+            originDate = hmsFormat.parse(originDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return hmFormat.format(originDate);
+
+    }
 
     public static String nowDayView(boolean type) {
 

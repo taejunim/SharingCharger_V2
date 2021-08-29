@@ -23,6 +23,7 @@ import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.base.WebServiceAPI;
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
+import kr.co.metisinfo.sharingcharger.model.AllowTimeOfDayModel;
 import kr.co.metisinfo.sharingcharger.model.AuthenticateModel;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
 import kr.co.metisinfo.sharingcharger.model.PointModel;
@@ -529,7 +530,7 @@ public class ApiUtils {
     }
 
     /**
-     * 예약 상태 확인
+     * 관리자 대시보드 정보
      **/
     public AdminDashboardModel getAdminDashboard() {
 
@@ -590,6 +591,84 @@ public class ApiUtils {
         }
 
         return adminChargerModelList;
+    }
+
+    /**
+     * 관리자 충전기 이용 가능 시간 정보
+     **/
+    public AllowTimeOfDayModel getAllowTime(int chargerId) {
+
+        AllowTimeOfDayModel allowTimeOfDayModel = new AllowTimeOfDayModel();
+
+        try {
+            Response<Object> response = webServiceAPI.getAllowTime(chargerId).execute();
+
+            if (response.code() == 200) {
+
+                JSONObject json = new JSONObject((Map) response.body());
+
+                Gson gson = new Gson();
+
+                allowTimeOfDayModel = gson.fromJson(json.toString(), AllowTimeOfDayModel.class);
+                allowTimeOfDayModel.setResponseCode(response.code());
+            } else if (response.code() == 204) {
+                allowTimeOfDayModel.setMessage("충전기가 존재하지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 400) {
+                allowTimeOfDayModel.setMessage("요청 파라미터가 올바르지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 404) {
+                allowTimeOfDayModel.setMessage("요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 500) {
+                allowTimeOfDayModel.setMessage("서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", " getAdminDashboard Exception1 : " + e);
+
+            allowTimeOfDayModel.setMessage("오류가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+
+            return allowTimeOfDayModel;
+        }
+
+        return allowTimeOfDayModel;
+    }
+
+    /**
+     * 충전기 이용 가능 시간 수정
+     **/
+    public AllowTimeOfDayModel changeAllowTime(int chargerId, AllowTimeOfDayModel allowTimeOfDayModel) {
+
+        AllowTimeOfDayModel resultAllowTimeOfDayModel = new AllowTimeOfDayModel();
+
+        try {
+            Response<Object> response = webServiceAPI.changeAllowTime(chargerId, allowTimeOfDayModel).execute();
+
+            if (response.code() == 200) {
+
+                JSONObject json = new JSONObject((Map) response.body());
+
+                Gson gson = new Gson();
+
+                resultAllowTimeOfDayModel = gson.fromJson(json.toString(), AllowTimeOfDayModel.class);
+                resultAllowTimeOfDayModel.setResponseCode(response.code());
+            } else if (response.code() == 204) {
+                resultAllowTimeOfDayModel.setMessage("충전기가 존재하지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 400) {
+                resultAllowTimeOfDayModel.setMessage("요청 파라미터가 올바르지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 404) {
+                resultAllowTimeOfDayModel.setMessage("요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 500) {
+                resultAllowTimeOfDayModel.setMessage("서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", " getAdminDashboard Exception1 : " + e);
+
+            resultAllowTimeOfDayModel.setMessage("오류가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+
+            return resultAllowTimeOfDayModel;
+        }
+
+        return resultAllowTimeOfDayModel;
     }
 
     /**
