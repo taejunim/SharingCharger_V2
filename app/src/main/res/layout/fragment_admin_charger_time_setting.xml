@@ -181,7 +181,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="@string/Edit"
+            android:text="@string/change"
             android:textColor="@color/white"
             android:background="@color/purple"
             android:layout_marginStart="30dp"

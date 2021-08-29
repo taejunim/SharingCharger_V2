@@ -95,7 +95,7 @@ public class AdminChargerPriceSettingFragment extends Fragment {
 
         binding.modificationButton.setOnClickListener(v -> {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(((AdminMainActivity) getActivity()));
-            dialogBuilder.setMessage("설정한 단가로 변경하시겠습니까?");
+            dialogBuilder.setMessage("설정한 단가로 변경하시겠습니까?\n단가 정보 변경시 기존 예약건에 대해서는 적용되지 않고 신규 예약건에 대해서만 반영됩니다.\n변경하시겠습니까? ");
             dialogBuilder.setPositiveButton("확인", (dialog, which) ->{
 
                 showLoading(binding.loading);
