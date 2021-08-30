@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,9 +38,12 @@ import java.util.List;
 
 import kr.co.metisinfo.sharingcharger.ChargerDialogAdapter;
 import kr.co.metisinfo.sharingcharger.R;
-import kr.co.metisinfo.sharingcharger.base.ThisApplication;
-import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
+
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerRegisterStep1Binding;;
+
+import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
+import kr.co.metisinfo.sharingcharger.utils.ApiUtils;;
+
 
 public class AdminChargerRegisterStep1Fragment extends Fragment {
 
@@ -53,6 +57,9 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
     public static String selectedChargerBLEText = "";
     public static Dialog dialog;
+
+    ApiUtils apiUtils = new ApiUtils();
+    AdminChargerModel adminChargerModel = new AdminChargerModel();
 
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {  // 실행이 끝난후 확인 가능
@@ -112,16 +119,46 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
         binding.includeChargerRegisterMenu.circleStep2.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.neutral_tint)));
         binding.includeChargerRegisterMenu.circleStep3.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.neutral_tint)));
 
+        binding.includeChargerRegisterFooter.nextButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.bright_white)));
+
         binding.includeChargerRegisterFooter.previousButton.setEnabled(false);
-        binding.includeChargerRegisterFooter.nextButton.setEnabled(true);
+        binding.includeChargerRegisterFooter.nextButton.setEnabled(false);
 
         binding.includeChargerRegisterFooter.nextButton.setOnClickListener(view -> nextButton());
+
+        binding.chargerSearchButton.setOnClickListener(view -> checkChargerInformation());
     }
 
     private void nextButton(){
-        Log.d("metis", "AdminChargerRegisterStep1Fragment - nextButton");
         Log.d("metis", "AdminChargerRegisterStep1Fragment - nextButton bleNumber : " + selectedChargerBLEText);
-        ((AdminMainActivity) getActivity()).chargerRegisterNextStep(1);
+
+        //다음 화면으로 넘어갈때 보내는 값
+        Bundle bundle = new Bundle();
+        bundle.putString("bleNumber", (String)adminChargerModel.getBleNumber());
+        bundle.putInt("id", adminChargerModel.getId());
+        bundle.putInt("providerCompanyId", adminChargerModel.getProviderCompanyId());
+
+        ((AdminMainActivity) getActivity()).chargerRegisterNextStep(1, bundle);
+    }
+
+    private void checkChargerInformation(){
+
+        Log.d("metis", "checkChargerInformation");
+        String bleNumber = "A1:23:45:67:89:18".replaceAll(":","");
+
+        adminChargerModel = apiUtils.getChargerInformationFromBleNumber(bleNumber);
+
+        if(adminChargerModel.getResponseCode() == 200) {
+
+            binding.includeChargerRegisterFooter.nextButton.setEnabled(true);
+            binding.includeChargerRegisterFooter.nextButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.deep_purple)));
+
+        } else {
+
+            Log.d("metis", "차지인에 등록되지 않은 충전기");
+            Toast.makeText(getContext(), "등록할수 없는 충전기 입니다.",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void getBLEScan() {

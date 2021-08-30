@@ -230,17 +230,40 @@ public class AdminMainActivity extends BaseActivity {
         setFragment("subMenu", binding.includeChargerManageMenu.btnChargerDetailInformation, receivedAdminChargerModel);
     }
 
-    public void chargerRegisterNextStep(int step){
+    public void chargerRegisterNextStep(int step, Bundle bundle){
         fragmentTransaction = fragmentManager.beginTransaction();
 
         switch (step){
             case 1 :
                 AdminChargerRegisterStep2Fragment adminChargerRegisterStep2Fragment = new AdminChargerRegisterStep2Fragment();
+                adminChargerRegisterStep2Fragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep2Fragment);
                 break;
             case 2 :
                 AdminChargerRegisterStep3Fragment adminChargerRegisterStep3Fragment = new AdminChargerRegisterStep3Fragment();
+                adminChargerRegisterStep3Fragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep3Fragment);
+                break;
+            case 3 :
+                setFragment("footerMenu", binding.includeFooter.btnChargerManageImage, adminChargerModel);
+        }
+
+        if(step != 3) fragmentTransaction.commit();
+    }
+
+    public void chargerRegisterPreviousStep(int step, Bundle bundle){
+        fragmentTransaction = fragmentManager.beginTransaction();
+
+        switch (step){
+            case 2 :
+                AdminChargerRegisterStep1Fragment adminChargerRegisterStep1Fragment = new AdminChargerRegisterStep1Fragment();
+                adminChargerRegisterStep1Fragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep1Fragment);
+                break;
+            case 3 :
+                AdminChargerRegisterStep2Fragment adminChargerRegisterStep2Fragment = new AdminChargerRegisterStep2Fragment();
+                adminChargerRegisterStep2Fragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep2Fragment);
                 break;
         }
 

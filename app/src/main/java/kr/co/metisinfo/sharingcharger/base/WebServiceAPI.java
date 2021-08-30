@@ -195,4 +195,12 @@ public interface WebServiceAPI {
     // 충전기 정보 수정
     @PUT("/api/v1/chargers/{id}")
     Call<Object> changeChargerInformation(@Path("id") int chargerId, @Body AdminChargerModel adminChargerModel);
+
+    // 충전기 등록시 bleNumber로 차지인에 등록된 충전기인지 조회
+    @GET("/api/v1/chargers/ble-number")
+    Call<Object> getChargerInformationFromBleNumber(@Query("bleNumber") String bleNumber, @Query("sort") String sort, @Query("page") int page, @Query("size") int size);
+
+    // 소유자 충전기 등록
+    @PUT("/api/v1/chargers/app/{id}/assign")
+    Call<Object> assignCharger(@Path("id") int id, @Body AdminChargerModel adminCharger);
 }

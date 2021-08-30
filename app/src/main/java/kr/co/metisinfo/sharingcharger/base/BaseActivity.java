@@ -583,6 +583,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         //값을 다시 받기위한 임의의 번호 (100)
         startActivityForResult(intent,100);
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100) {
+            if(data != null ) {
+                Toast.makeText(getApplicationContext(), "결제가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     public void showLoading(ProgressBar progressBar) {
 

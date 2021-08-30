@@ -710,6 +710,87 @@ public class ApiUtils {
         return resultAdminChargerModel;
     }
 
+
+    /**
+     * 소유자 충전기 등록
+     **/
+    public AdminChargerModel assignCharger(AdminChargerModel adminChargerModel) {
+
+        try {
+
+            Response<Object> response = webServiceAPI.assignCharger(adminChargerModel.getId(), adminChargerModel).execute();
+
+            if (response.code() == 200) {
+                JSONObject json = new JSONObject((Map) response.body());
+
+                Gson gson = new Gson();
+
+                adminChargerModel = gson.fromJson(json.toString(), AdminChargerModel.class);
+                adminChargerModel.setResponseCode(response.code());
+
+            } else if (response.code() == 204) {
+                adminChargerModel.setMessage("해당 ID의 충전기가 존재하지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 400) {
+                adminChargerModel.setMessage("요청 파라미터가 올바르지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 404) {
+                adminChargerModel.setMessage("요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 500) {
+                adminChargerModel.setMessage("서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", " getChargerInformationFromBleNumber Exception1 : " + e);
+
+            adminChargerModel.setMessage("오류가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+
+            return adminChargerModel;
+        }
+
+        return adminChargerModel;
+    }
+
+    /**
+     * 충전기 등록시 bleNumber로 차지인에 등록된 충전기인지 조회
+     **/
+    public AdminChargerModel getChargerInformationFromBleNumber(String bleNumber) {
+
+        AdminChargerModel adminChargerModel = new AdminChargerModel();
+
+        try {
+            Response<Object> response = webServiceAPI.getChargerInformationFromBleNumber(bleNumber, "DESC", 1, 10).execute();
+            if (response.code() == 200) {
+
+                JSONObject json = new JSONObject((Map) response.body());
+
+                JSONArray content = json.getJSONArray("content");
+
+                if(content.length() > 0 ) {
+                    Gson gson = new Gson();
+                    adminChargerModel = gson.fromJson(content.getJSONObject(0).toString(), AdminChargerModel.class);
+                    adminChargerModel.setResponseCode(response.code());
+                }
+
+            } else if (response.code() == 204) {
+                adminChargerModel.setMessage("해당 ID의 충전기가 존재하지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 400) {
+                adminChargerModel.setMessage("요청 파라미터가 올바르지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 404) {
+                adminChargerModel.setMessage("요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 500) {
+                adminChargerModel.setMessage("서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", " getChargerInformationFromBleNumber Exception1 : " + e);
+
+            adminChargerModel.setMessage("오류가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+
+            return adminChargerModel;
+        }
+
+        return adminChargerModel;
+    }
+
     /**
      * 선택된 충전기 상태
      */
