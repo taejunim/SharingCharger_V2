@@ -2,6 +2,7 @@ package kr.co.metisinfo.sharingcharger.base;
 
 import androidx.room.Ignore;
 
+import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 import kr.co.metisinfo.sharingcharger.model.AllowTimeOfDayModel;
 import kr.co.metisinfo.sharingcharger.model.AuthenticateModel;
 import kr.co.metisinfo.sharingcharger.model.PointModel;
@@ -190,4 +191,8 @@ public interface WebServiceAPI {
     // 충전기 이용 가능 시간 수정
     @PUT("/api/v1/charger/{chargerId}/allowTime")
     Call<Object> changeAllowTime(@Path("chargerId") int chargerId, @Body AllowTimeOfDayModel allowTimeOfDayModel);
+
+    // 충전기 정보 수정
+    @PUT("/api/v1/chargers/{id}")
+    Call<Object> changeChargerInformation(@Path("id") int chargerId, @Body AdminChargerModel adminChargerModel);
 }

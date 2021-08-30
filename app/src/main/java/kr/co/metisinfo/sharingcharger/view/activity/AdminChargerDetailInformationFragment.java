@@ -32,11 +32,11 @@ public class AdminChargerDetailInformationFragment extends Fragment {
 
         binding.chargerDetailInformationTitle.setText(adminChargerModel.getName());
         binding.textBleNumber.setText(adminChargerModel.getBleNumber());
-        binding.textPlaceName.setText(adminChargerModel.getProviderCompanyName());
+        binding.textPlaceName.setText(adminChargerModel.getProviderCompanyName() == null ? "-" : adminChargerModel.getProviderCompanyName());
         binding.textAddress.setText(adminChargerModel.getAddress());
         binding.textFreeParking.setText(adminChargerModel.isParkingFeeFlag() ? "유료주차" : "무료주차");
-        binding.textFreeParkingDetail.setText(adminChargerModel.getParkingFeeDescription());
-        binding.textDescription.setText(adminChargerModel.getDescription());
+        binding.textFreeParkingDetail.setText(adminChargerModel.getParkingFeeDescription().equals("") ? "-" : adminChargerModel.getParkingFeeDescription());
+        binding.textDescription.setText(adminChargerModel.getDescription().equals("") ? "-" : adminChargerModel.getDescription());
 
         return view;
     }

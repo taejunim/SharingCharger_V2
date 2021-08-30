@@ -2,199 +2,193 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/charger_detail_information_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:textSize="25sp"
-            android:text="-"/>
-
-        <ImageView
-            android:id="@+id/image_ble_number"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@mipmap/bluetooth"
-            android:layout_below="@id/charger_detail_information_title"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_detail_information_title" />
-        <TextView
-            android:id="@+id/text_ble_number"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_alignBottom="@id/image_ble_number"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="bottom"
-            android:textSize="17sp"
-            android:text="0432F41A2EF8"
-            android:textColor="@color/black" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="30dp">
 
-        <ImageView
-            android:id="@+id/image_place_name"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@mipmap/building"
-            android:layout_below="@id/image_ble_number"
-            android:layout_marginTop="20dp"
-            android:layout_alignStart="@id/charger_detail_information_title" />
-        <TextView
-            android:id="@+id/text_place_name"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_alignBottom="@id/image_place_name"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="bottom"
-            android:textSize="17sp"
-            android:text="(주) 매티스정보"
-            android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/charger_detail_information_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:textSize="25sp"
+                android:text="-"/>
 
-        <ImageView
-            android:id="@+id/image_address"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/paper_map"
-            android:layout_below="@id/image_place_name"
-            android:layout_marginTop="40dp"
-            android:layout_alignStart="@id/charger_detail_information_title" />
-        <TextView
-            android:id="@+id/label_address"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_alignBottom="@id/image_address"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="bottom"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="주소"
-            android:textColor="@color/black" />
+            <ImageView
+                android:id="@+id/image_ble_number"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/bluetooth"
+                android:layout_below="@id/charger_detail_information_title"
+                android:layout_marginTop="30dp"
+                android:layout_alignStart="@id/charger_detail_information_title" />
+            <TextView
+                android:id="@+id/text_ble_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_alignBottom="@id/image_ble_number"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="left|center"
+                android:textSize="17sp"
+                android:text="0432F41A2EF8"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:id="@+id/text_zip_code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_below="@id/label_address"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="bottom"
-            android:textSize="13sp"
-            android:text="(우)63273"
-            android:textColor="@color/black" />
+            <ImageView
+                android:id="@+id/image_place_name"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/building"
+                android:layout_below="@id/image_ble_number"
+                android:layout_marginTop="30dp"
+                android:layout_alignStart="@id/charger_detail_information_title" />
+            <TextView
+                android:id="@+id/text_place_name"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_alignBottom="@id/image_place_name"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="left|center"
+                android:textSize="17sp"
+                android:text="(주) 매티스정보"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:id="@+id/text_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_below="@id/text_zip_code"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="bottom"
-            android:textSize="15sp"
-            android:text="제주특별자치도 제주시 첨단로 8길 40"
-            android:textColor="@color/black" />
+            <ImageView
+                android:id="@+id/image_address"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/paper_map"
+                android:layout_below="@id/image_place_name"
+                android:layout_marginTop="30dp"
+                android:layout_alignStart="@id/charger_detail_information_title" />
+            <TextView
+                android:id="@+id/label_address"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_alignBottom="@id/image_address"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="left|center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="주소"
+                android:textColor="@color/black" />
 
-        <ImageView
-            android:id="@+id/image_parking"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/car"
-            android:layout_below="@id/text_address"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_detail_information_title" />
-        <TextView
-            android:id="@+id/label_parking"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_alignBottom="@id/image_parking"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="bottom"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="주차"
-            android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/text_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_below="@id/label_address"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="left|center"
+                android:textSize="15sp"
+                android:text="제주특별자치도 제주시 첨단로 8길 40"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:id="@+id/text_free_parking"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_below="@id/label_parking"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="bottom"
-            android:textSize="13sp"
-            android:text="무료주차"
-            android:textColor="@color/purple" />
+            <ImageView
+                android:id="@+id/image_parking"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/car"
+                android:layout_below="@id/text_address"
+                android:layout_marginTop="30dp"
+                android:layout_alignStart="@id/charger_detail_information_title" />
+            <TextView
+                android:id="@+id/label_parking"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_alignBottom="@id/image_parking"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="left|center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="주차"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:id="@+id/text_free_parking_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_below="@id/text_free_parking"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="bottom"
-            android:textSize="15sp"
-            android:text="무료주차이지만, 장기주차시 차량이동 요청이 있을 수 있음"
-            android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/text_free_parking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_below="@id/label_parking"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="left|center"
+                android:textSize="13sp"
+                android:text="무료주차"
+                android:textColor="@color/purple" />
 
-        <ImageView
-            android:id="@+id/image_description"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/car"
-            android:layout_below="@id/text_free_parking_detail"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_detail_information_title" />
-        <TextView
-            android:id="@+id/label_description"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_alignBottom="@id/image_description"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="bottom"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="설명"
-            android:textColor="@color/black" />
-        <TextView
-            android:id="@+id/text_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/image_ble_number"
-            android:layout_below="@id/label_description"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="bottom"
-            android:textSize="15sp"
-            android:text="의료보건학부 주차장 지하 2층 3번째 기둥에 충전기 설치되어 있음"
-            android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/text_free_parking_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_below="@id/text_free_parking"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="left|center"
+                android:textSize="15sp"
+                android:text="무료주차이지만, 장기주차시 차량이동 요청이 있을 수 있음"
+                android:textColor="@color/black" />
 
+            <ImageView
+                android:id="@+id/image_description"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/car"
+                android:layout_below="@id/text_free_parking_detail"
+                android:layout_marginTop="30dp"
+                android:layout_alignStart="@id/charger_detail_information_title" />
+            <TextView
+                android:id="@+id/label_description"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_alignBottom="@id/image_description"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="left|center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="설명"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/text_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/image_ble_number"
+                android:layout_below="@id/label_description"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="left|center"
+                android:textSize="15sp"
+                android:text="의료보건학부 주차장 지하 2층 3번째 기둥에 충전기 설치되어 있음"
+                android:textColor="@color/black" />
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
 
 </layout>

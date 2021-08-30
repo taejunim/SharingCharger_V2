@@ -6,211 +6,246 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <TextView
-            android:id="@+id/charger_information_edit_title"
+        <ProgressBar
+            android:visibility="invisible"
+            android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:textSize="20sp"
-            android:text="충전기 정보 수정"/>
+            android:layout_centerInParent="true"/>
 
-        <TextView
-            android:id="@+id/label_charger_name"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_below="@id/charger_information_edit_title"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_information_edit_title"
-            android:textSize="17sp"
-            android:text="충전기명"/>
-        <EditText
-            android:id="@+id/edit_charger_name"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/label_charger_name"
-            android:layout_alignBottom="@id/label_charger_name"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:text="09:00"
-            android:paddingLeft="10dp"
-            android:inputType="time"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:focusable="true"
-            android:enabled="false"
-            android:background="@color/header_dummy"/>
+            android:layout_height="match_parent"
+            android:layout_above="@+id/modification_button">
 
-        <TextView
-            android:id="@+id/label_address"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_below="@id/label_charger_name"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_information_edit_title"
-            android:textSize="17sp"
-            android:text="주소"/>
-        <EditText
-            android:id="@+id/edit_address"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/label_address"
-            android:layout_alignBottom="@id/label_address"
-            android:layout_marginStart="30dp"
-            android:layout_alignEnd="@id/edit_charger_name"
-            android:text="09:00"
-            android:paddingLeft="10dp"
-            android:inputType="time"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:focusable="true"
-            android:enabled="false"
-            android:background="@color/header_dummy"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/label_detail_address"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_below="@id/label_address"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_information_edit_title"
-            android:textSize="17sp"
-            android:text="상세 주소"/>
-        <EditText
-            android:id="@+id/edit_detail_address"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/label_detail_address"
-            android:layout_alignBottom="@id/label_detail_address"
-            android:layout_marginStart="30dp"
-            android:layout_alignEnd="@id/edit_charger_name"
-            android:text="09:00"
-            android:paddingLeft="10dp"
-            android:inputType="time"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:focusable="true"
-            android:enabled="false"
-            android:background="@color/header_dummy"/>
+                <TextView
+                    android:id="@+id/charger_information_edit_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:textSize="20sp"
+                    android:text="충전기 정보 수정"/>
 
-        <TextView
-            android:id="@+id/label_parking_fee_yn"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_below="@id/label_detail_address"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_information_edit_title"
-            android:textSize="17sp"
-            android:text="주차 요금 여부"/>
+                <TextView
+                    android:id="@+id/label_charger_name"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="30dp"
+                    android:textColor="@color/black"
+                    android:layout_below="@id/charger_information_edit_title"
+                    android:layout_marginTop="30dp"
+                    android:layout_alignStart="@id/charger_information_edit_title"
+                    android:textSize="17sp"
+                    android:text="충전기명"/>
 
-        <TextView
-            android:id="@+id/label_parking_fee_y"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_alignBottom="@id/label_parking_fee_yn"
-            android:layout_marginStart="30dp"
-            android:layout_toEndOf="@id/label_parking_fee_yn"
-            android:textSize="17sp"
-            android:text="없음"/>
-        <Switch
-            android:id="@+id/switch_parking_fee_yn"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:showText="false"
-            android:layout_alignBottom="@id/label_parking_fee_yn"
-            android:layout_toEndOf="@id/label_parking_fee_y"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                <EditText
+                    android:id="@+id/edit_charger_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:layout_toEndOf="@id/label_charger_name"
+                    android:layout_alignBottom="@id/label_charger_name"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:paddingStart="10dp"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:background="@color/header_dummy"/>
 
-        <TextView
-            android:id="@+id/label_parking_fee_n"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/label_parking_fee_yn"
-            android:layout_toEndOf="@id/switch_parking_fee_yn"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            android:text="있음"/>
+                <TextView
+                    android:id="@+id/label_address"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="30dp"
+                    android:textColor="@color/black"
+                    android:layout_below="@id/label_charger_name"
+                    android:layout_marginTop="30dp"
+                    android:layout_alignStart="@id/charger_information_edit_title"
+                    android:textSize="17sp"
+                    android:text="주소"/>
 
-        <TextView
-            android:id="@+id/label_cable_exist_yn"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_below="@id/label_parking_fee_yn"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_information_edit_title"
-            android:textSize="17sp"
-            android:text="케이블 존재 여부"/>
+                <EditText
+                    android:id="@+id/edit_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:minHeight="60dp"
+                    android:layout_toEndOf="@id/label_address"
+                    android:layout_alignTop="@+id/label_address"
+                    android:layout_marginStart="30dp"
+                    android:layout_alignEnd="@id/edit_charger_name"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:background="@color/header_dummy"/>
 
-        <TextView
-            android:id="@+id/label_cable_exist_y"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_alignBottom="@id/label_cable_exist_yn"
-            android:layout_marginStart="30dp"
-            android:layout_toEndOf="@id/label_cable_exist_yn"
-            android:textSize="17sp"
-            android:text="없음"/>
-        <Switch
-            android:id="@+id/switch_cable_exist_yn"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:showText="false"
-            android:layout_alignBottom="@id/label_cable_exist_y"
-            android:layout_toEndOf="@id/label_cable_exist_y"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                <TextView
+                    android:id="@+id/label_detail_address"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="30dp"
+                    android:textColor="@color/black"
+                    android:layout_below="@id/edit_address"
+                    android:layout_marginTop="30dp"
+                    android:layout_alignStart="@id/charger_information_edit_title"
+                    android:textSize="17sp"
+                    android:text="상세 주소"/>
 
-        <TextView
-            android:id="@+id/label_cable_exist_n"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/label_cable_exist_yn"
-            android:layout_toEndOf="@id/switch_cable_exist_yn"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            android:text="있음"/>
+                <EditText
+                    android:id="@+id/edit_detail_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:layout_toEndOf="@id/label_detail_address"
+                    android:layout_alignBottom="@id/label_detail_address"
+                    android:layout_marginStart="30dp"
+                    android:layout_alignEnd="@id/edit_charger_name"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:background="@color/header_dummy"/>
 
-        <TextView
-            android:id="@+id/label_parking_fee_description"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_below="@id/label_cable_exist_yn"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@id/charger_information_edit_title"
-            android:textSize="17sp"
-            android:text="주차요금 설명"/>
+                <TextView
+                    android:id="@+id/label_parking_fee_yn"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="30dp"
+                    android:textColor="@color/black"
+                    android:layout_below="@id/label_detail_address"
+                    android:layout_marginTop="30dp"
+                    android:layout_alignStart="@id/charger_information_edit_title"
+                    android:textSize="17sp"
+                    android:text="주차 요금 여부"/>
 
-        <EditText
-            android:id="@+id/edit_parking_fee_description"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_toEndOf="@id/label_detail_address"
-            android:layout_alignTop="@id/label_parking_fee_description"
-            android:layout_marginStart="30dp"
-            android:layout_alignEnd="@id/edit_charger_name"
-            android:hint="내용을 입력하여 주십시오."
-            android:gravity="top"
-            android:padding="10dp"
-            android:focusable="true"
-            android:enabled="false"
-            android:background="@color/header_dummy"/>
+                <RadioGroup
+                    android:id="@+id/parking_fee_toggle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:layout_alignBottom="@id/label_parking_fee_yn"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@id/label_parking_fee_yn"
+                    android:checkedButton="@+id/parking_fee_false"
+                    android:background="@drawable/toggle_background"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/parking_fee_false"
+                        style="@style/CustomRadioGroup"
+                        android:layout_marginStart="2dp"
+                        android:text="없음"/>
+
+                    <RadioButton
+                        android:id="@+id/parking_fee_true"
+                        style="@style/CustomRadioGroup"
+                        android:layout_marginEnd="2dp"
+                        android:text="있음"/>
+
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/label_cable_exist_yn"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="30dp"
+                    android:textColor="@color/black"
+                    android:layout_below="@id/label_parking_fee_yn"
+                    android:layout_marginTop="30dp"
+                    android:layout_alignStart="@id/charger_information_edit_title"
+                    android:textSize="17sp"
+                    android:text="케이블 존재 여부"/>
+
+                <RadioGroup
+                    android:id="@+id/cable_exist_toggle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:layout_alignBottom="@id/label_cable_exist_yn"
+                    android:layout_toEndOf="@id/label_cable_exist_yn"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:checkedButton="@+id/cable_exist_false"
+                    android:background="@drawable/toggle_background"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/cable_exist_false"
+                        style="@style/CustomRadioGroup"
+                        android:layout_marginStart="2dp"
+                        android:text="없음"/>
+
+                    <RadioButton
+                        android:id="@+id/cable_exist_true"
+                        style="@style/CustomRadioGroup"
+                        android:layout_marginEnd="2dp"
+                        android:text="있음"/>
+
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/label_parking_fee_description"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="30dp"
+                    android:textColor="@color/black"
+                    android:layout_below="@id/label_cable_exist_yn"
+                    android:layout_marginTop="30dp"
+                    android:layout_alignStart="@id/charger_information_edit_title"
+                    android:textSize="17sp"
+                    android:text="주차요금 설명"/>
+
+                <EditText
+                    android:id="@+id/edit_parking_fee_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="60dp"
+                    android:layout_toEndOf="@id/label_parking_fee_description"
+                    android:layout_alignTop="@id/label_parking_fee_description"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textColorHint="@color/black"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:gravity="top"
+                    android:background="@color/header_dummy"/>
+
+            </RelativeLayout>
+
+        </ScrollView>
 
         <Button
+            android:id="@+id/modification_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="@string/change"
             android:textColor="@color/white"
             android:background="@color/purple"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="20dp"

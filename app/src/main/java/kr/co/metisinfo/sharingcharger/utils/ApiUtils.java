@@ -672,6 +672,45 @@ public class ApiUtils {
     }
 
     /**
+     * 충전기 정보 수정
+     **/
+    public AdminChargerModel changeChargerInformation(int chargerId, AdminChargerModel adminChargerModel) {
+
+        AdminChargerModel resultAdminChargerModel = new AdminChargerModel();
+
+        try {
+            Response<Object> response = webServiceAPI.changeChargerInformation(chargerId, adminChargerModel).execute();
+
+            if (response.code() == 200) {
+
+                JSONObject json = new JSONObject((Map) response.body());
+
+                Gson gson = new Gson();
+
+                resultAdminChargerModel = gson.fromJson(json.toString(), AdminChargerModel.class);
+                resultAdminChargerModel.setResponseCode(response.code());
+            } else if (response.code() == 204) {
+                resultAdminChargerModel.setMessage("충전기가 존재하지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 400) {
+                resultAdminChargerModel.setMessage("요청 파라미터가 올바르지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 404) {
+                resultAdminChargerModel.setMessage("요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+            } else if (response.code() == 500) {
+                resultAdminChargerModel.setMessage("서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", " AdminChargerModel Exception1 : " + e);
+
+            resultAdminChargerModel.setMessage("오류가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+
+            return resultAdminChargerModel;
+        }
+
+        return resultAdminChargerModel;
+    }
+
+    /**
      * 선택된 충전기 상태
      */
     public Response<Object> getChargerStatus(UserModel model) throws Exception {

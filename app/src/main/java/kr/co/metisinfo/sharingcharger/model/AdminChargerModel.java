@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-public class AdminChargerModel implements Serializable {
+public class AdminChargerModel extends ResponseModel implements Serializable {
     public String address;
     public String bleNumber;
     public boolean cableFlag;

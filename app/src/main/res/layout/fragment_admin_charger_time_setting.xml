@@ -33,8 +33,6 @@
                     android:textSize="20sp"
                     android:text="충전기 시간 설정"/>
 
-
-
                 <TextView
                     android:id="@+id/text_old_time"
                     android:layout_width="wrap_content"

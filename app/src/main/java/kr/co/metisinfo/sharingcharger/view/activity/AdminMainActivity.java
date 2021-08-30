@@ -17,6 +17,7 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityAdminMainBinding;
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
+import lombok.val;
 
 public class AdminMainActivity extends BaseActivity {
 
@@ -44,7 +45,7 @@ public class AdminMainActivity extends BaseActivity {
         //선택된 메뉴 버튼 색 변경을 위해 배열에 담기
         footerButtonList.add(binding.includeFooter.btnDashboardImage);
         footerButtonList.add(binding.includeFooter.btnChargerManageImage);
-        footerButtonList.add(binding.includeFooter.btnAlarmImage);
+        //footerButtonList.add(binding.includeFooter.btnAlarmImage);
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerDetailInformation);
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerPriceInformation);
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerTimeSetting);
@@ -52,14 +53,21 @@ public class AdminMainActivity extends BaseActivity {
     }
 
     @Override
-    public void initViewModel() {
-
-    }
+    public void initViewModel() {}
 
     @Override
     public void setOnClickListener() {
 
-        binding.includeHeader.btnBack.setOnClickListener(view -> finish());
+        binding.includeHeader.btnBack.setOnClickListener(view -> {
+            //finish();
+
+            if(fragmentManager.getBackStackEntryCount() == 0) {
+                finish();
+            } else {
+                fragmentManager.popBackStack("AdminChargerManageFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                setFragment("footerMenu", binding.includeFooter.btnChargerManageImage, adminChargerModel);
+            }
+        });
 
         //충전기 정보 등록
         binding.includeHeader.btnMenu.setOnClickListener(view -> {
@@ -68,6 +76,7 @@ public class AdminMainActivity extends BaseActivity {
 
         //대시보드 버튼
         binding.includeFooter.btnDashboard.setOnClickListener(view -> {
+            fragmentManager.popBackStack("AdminChargerManageFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             setFragment("footerMenu", binding.includeFooter.btnDashboardImage, adminChargerModel);
         });
         //충전기 관리
@@ -141,9 +150,9 @@ public class AdminMainActivity extends BaseActivity {
                     binding.includeHeader.btnMenu.setVisibility(View.VISIBLE);
                     fragmentTransaction.replace(R.id.fragment_container, adminChargerManageFragment);
                     break;
-                case 2 : //알림 설정
+                /*case 2 : //알림 설정
                     Toast.makeText(this,"알림설정 구현해야됨", Toast.LENGTH_SHORT).show();
-                    break;
+                    break;*/
             }
 
         } else if(type == "registerMenu"){
@@ -193,6 +202,7 @@ public class AdminMainActivity extends BaseActivity {
                     AdminChargerDetailInformationFragment adminChargerDetailInformationFragment = new AdminChargerDetailInformationFragment();
                     adminChargerDetailInformationFragment.setArguments(bundle);
                     fragmentTransaction.replace(R.id.fragment_container, adminChargerDetailInformationFragment);
+                    fragmentTransaction.addToBackStack("AdminChargerManageFragment");
                     break;
                 case 1 : //충전기 단가정보
                     AdminChargerPriceSettingFragment adminChargerPriceSettingFragment = new AdminChargerPriceSettingFragment();
