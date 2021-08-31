@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,13 +50,14 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
     private FragmentAdminChargerRegisterStep1Binding binding;
 
+    public static TextView chargerBleText;
+
     EvzBluetooth mEvzBluetooth;
     private EVZScanManager mScanner;
     List<EVZScanResult> mScData;
 
     CountDownTimer timer;
 
-    public static String selectedChargerBLEText = "";
     public static Dialog dialog;
 
     ApiUtils apiUtils = new ApiUtils();
@@ -84,6 +86,8 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
         mScanner = new EVZScanManager();
         mEvzBluetooth = new EvzBluetooth(getActivity());
         mEvzBluetooth.setBluetooth(true);
+
+        chargerBleText = root.findViewById(R.id.charger_search_ble_text);
 
         binding.chargerSearchButton.setOnClickListener(v -> {
             /*
@@ -119,18 +123,14 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
         binding.includeChargerRegisterMenu.circleStep2.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.neutral_tint)));
         binding.includeChargerRegisterMenu.circleStep3.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.neutral_tint)));
 
-        binding.includeChargerRegisterFooter.nextButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.bright_white)));
-
         binding.includeChargerRegisterFooter.previousButton.setEnabled(false);
-        binding.includeChargerRegisterFooter.nextButton.setEnabled(false);
 
-        binding.includeChargerRegisterFooter.nextButton.setOnClickListener(view -> nextButton());
+        binding.chargerSearchButton.setOnClickListener(view -> getBLEScan());
 
-        binding.chargerSearchButton.setOnClickListener(view -> checkChargerInformation());
+        binding.includeChargerRegisterFooter.nextButton.setOnClickListener(view -> checkChargerInformation());
     }
 
     private void nextButton(){
-        Log.d("metis", "AdminChargerRegisterStep1Fragment - nextButton bleNumber : " + selectedChargerBLEText);
 
         //다음 화면으로 넘어갈때 보내는 값
         Bundle bundle = new Bundle();
@@ -143,22 +143,17 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
     private void checkChargerInformation(){
 
-        Log.d("metis", "checkChargerInformation");
-        String bleNumber = "A1:23:45:67:89:18".replaceAll(":","");
+        String bleNumber = chargerBleText.getText().toString().replaceAll(":","");
 
         adminChargerModel = apiUtils.getChargerInformationFromBleNumber(bleNumber);
 
         if(adminChargerModel.getResponseCode() == 200) {
 
-            binding.includeChargerRegisterFooter.nextButton.setEnabled(true);
-            binding.includeChargerRegisterFooter.nextButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.deep_purple)));
+            nextButton();
 
         } else {
-
-            Log.d("metis", "차지인에 등록되지 않은 충전기");
             Toast.makeText(getContext(), "등록할수 없는 충전기 입니다.",Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public void getBLEScan() {
@@ -172,25 +167,20 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
                 mScData = results;
                 if (mScData.size() > 0) {
                     hideLoading(binding.loading);
-                    Log.e("metis", "onScan > 0");
 
                     String[] bleArray = new String[mScData.size()];
                     for (int i = 0; i < mScData.size(); i++) {
-                        Log.e("metis", "BLE : " + mScData.get(i).getDevice().getAddress());
-
                         bleArray[i] = mScData.get(i).getDevice().getAddress();
                     }
 
                     showAlertDialogTopic(bleArray);
                 } else {
-                    Log.e("metis", "onScan = 0");
                     scanFailed();
                 }
             }
 
             @Override
             public void onScanFailed(int errorCode) {
-                Log.e("metis", "onScanFailed");
                 scanFailed();
             }
         });
@@ -243,7 +233,6 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
         CustomDialog customDialog = new CustomDialog(getActivity(), "연결 가능한 충전기를 찾지 못했습니다.\n다시 검색하시겠습니까?");
         customDialog.show();
         customDialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
-            Log.e("metis", "customDialog_ok_btn");
             customDialog.dismiss();
             showLoading(binding.loading);
             getBLEScan();

@@ -27,7 +27,7 @@ public class ChargerDialogAdapter extends RecyclerView.Adapter<ChargerDialogAdap
                 @Override
                 public void onClick(View v) {
                     String bleText = mData.get(getAdapterPosition());
-                    AdminChargerRegisterStep1Fragment.selectedChargerBLEText = bleText;
+                    AdminChargerRegisterStep1Fragment.chargerBleText.setText(bleText);
                     AdminChargerRegisterStep1Fragment.dialog.dismiss(); // dialog 종료
                 }
             });

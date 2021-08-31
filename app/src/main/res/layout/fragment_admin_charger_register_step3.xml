@@ -44,7 +44,8 @@
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:singleLine="true"
-            android:background="@color/header_dummy"/>
+            android:background="@color/header_dummy"
+            android:textColor="@color/black"/>
 
         <ImageView
             android:id="@+id/image_shared_type"
@@ -197,7 +198,8 @@
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:singleLine="true"
-            android:background="@color/header_dummy"/>
+            android:background="@color/header_dummy"
+            android:textColor="@color/black"/>
     </RelativeLayout>
     </ScrollView>
         <include
