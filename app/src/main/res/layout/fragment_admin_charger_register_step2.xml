@@ -18,40 +18,10 @@
             android:layout_height="wrap_content" />
 
         <ImageView
-            android:id="@+id/image_company_name"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/include_charger_register_menu"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="20dp"
-            android:src="@mipmap/building"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@id/edit_text_company_name"
-            android:layout_above="@id/edit_text_company_name"
-            android:textColor="@color/black"
-            android:text="업체명"/>
-
-        <EditText
-            android:id="@+id/edit_text_company_name"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_company_name"
-            android:layout_alignBottom="@id/image_company_name"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:singleLine="true"
-            android:background="@color/header_dummy"
-            android:paddingLeft="10dp"
-            android:textColor="@color/black"/>
-
-        <ImageView
             android:id="@+id/image_charger_name"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@id/image_company_name"
+            android:layout_below="@id/include_charger_register_menu"
             android:layout_marginTop="40dp"
             android:layout_marginStart="20dp"
             android:src="@mipmap/nav_back"/>

@@ -126,22 +126,18 @@ public class AdminChargerRegisterStep2Fragment extends Fragment {
     }
 
     private void previousButton(){
-        Log.d("metis", "AdminChargerRegisterStep2Fragment - previousButton");
         Bundle bundle = new Bundle();
 
         ((AdminMainActivity) getActivity()).chargerRegisterPreviousStep(2, bundle);
     }
 
     private void nextButton(){
-        Log.d("metis", "AdminChargerRegisterStep2Fragment - nextButton");
-
-        String ownerName          = binding.editTextCompanyName.getText().toString();
         String chargerName        = binding.editTextChargerName.getText().toString();
         String chargerDescription = binding.editTextDescription.getText().toString();
 
 
         if(! hasGpsPermission) Toast.makeText(this.getContext(),"해당 서비스는 위치 권한이 필요한 서비스 입니다. 위치 권한을 허용해주세요.",Toast.LENGTH_SHORT).show();
-        else if(checkBlank(ownerName,chargerName)) {
+        else if(checkBlank(chargerName)) {
             //다음 화면으로 넘어갈때 보내는 값
             Bundle bundle = new Bundle();
 
@@ -149,7 +145,6 @@ public class AdminChargerRegisterStep2Fragment extends Fragment {
             bundle.putInt("id", getArguments().getInt("id"));
             bundle.putInt("providerCompanyId", getArguments().getInt("providerCompanyId"));
 
-            bundle.putString("ownerName", (String) ownerName);
             bundle.putString("chargerName", (String) chargerName);
             bundle.putString("chargerDescription", (String) chargerDescription);
 
@@ -160,13 +155,12 @@ public class AdminChargerRegisterStep2Fragment extends Fragment {
         }
     }
 
-    //필수값 체크 소유주명, 충전기명
-    private boolean checkBlank(String ownerName, String chargerName){
+    //필수값 체크 충전기명
+    private boolean checkBlank(String chargerName){
 
         boolean result = false;
 
-        if(ownerName.equals("")) Toast.makeText(getContext(), "업체명을 입력해 주십시오.",Toast.LENGTH_SHORT).show();
-        else if(chargerName.equals("")) Toast.makeText(getContext(), "충전기명을 입력해 주십시오.",Toast.LENGTH_SHORT).show();
+        if(chargerName.equals("")) Toast.makeText(getContext(), "충전기명을 입력해 주십시오.",Toast.LENGTH_SHORT).show();
         else result = true;
 
         return result;
