@@ -48,37 +48,28 @@ public class ChargerReservationActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
+        try{
 
-            case Constants.PAGE_POINT_CHARGE:
+            cPoint = apiUtils.getUserPoint();
 
-                if (resultCode == RESULT_OK) {
+            binding.reservationProgressCurrentPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint) + "p");
 
-                    try{
+            int chkPoint = cPoint - ePoint;
+            binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(chkPoint));
 
-                        cPoint = apiUtils.getUserPoint();
+            //예약가능
+            if (chkPoint >= 0) {
+                setPossibility();
+            }
+            //예약불가능
+            else {
+                setImpossibility();
+            }
 
-                        binding.reservationProgressCurrentPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint) + "p");
-
-                        int chkPoint = cPoint - ePoint;
-                        binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(chkPoint));
-
-                        //예약가능
-                        if (chkPoint >= 0) {
-                            setPossibility();
-                        }
-                        //예약불가능
-                        else {
-                            setImpossibility();
-                        }
-
-                    }catch (Exception e){
-                        Log.e("metis", "onActivityResult Exception : " + e);
-                    }
-                }
-
-                break;
+        }catch (Exception e){
+            Log.e("metis", "onActivityResult Exception : " + e);
         }
+
     }
 
     @Override
@@ -112,9 +103,7 @@ public class ChargerReservationActivity extends BaseActivity {
         //포인트 충전
         binding.reservationProgressPointBtn.setOnClickListener(view -> {
 
-            //포인트 충전 화면이동
-            Intent intent = new Intent(this, PointChargeActivity.class);
-            startActivityForResult(intent, PAGE_POINT_CHARGE);
+            openPurchaseDialog();
         });
 
     }

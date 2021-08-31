@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
+import kr.co.metisinfo.sharingcharger.view.activity.PurchaseDialog;
 
 /**
  * @ Class Name   : PointChargingDialog.java
@@ -28,6 +29,7 @@ import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
  **/
 public class PointChargingDialog extends Dialog  {
 
+    private PointChargingDialogListener pointChargingDialogListener;
     Context context;
 
     int getPoint = 0;
@@ -47,16 +49,20 @@ public class PointChargingDialog extends Dialog  {
 
         textView.setText("잔여 포인트 : "+ NumberFormat.getInstance(Locale.KOREA).format(getPoint)+"p");
 
-        findViewById(R.id.point_charging_ok_btn).setOnClickListener(view -> goPointOkBtn());        //포인트 충전
+        findViewById(R.id.point_charging_ok_btn).setOnClickListener(view -> {                      //포인트 충전
+
+            pointChargingDialogListener.onPointChargingOkBtnClicked();
+            this.dismiss();
+        });
         findViewById(R.id.point_charging_no_btn).setOnClickListener(view -> this.dismiss());        //취소
     }
 
-    //포인트 충전 버튼 CLICK.
-    public void goPointOkBtn(){
-
-        Intent intent = new Intent(context, PointChargeActivity.class);
-        context.startActivity(intent);
-        this.dismiss();
+    //인터페이스 설정
+    public interface PointChargingDialogListener{
+        void onPointChargingOkBtnClicked();
     }
-
+    //호출할 리스너 초기화
+    public void setDialogListener(PointChargingDialog.PointChargingDialogListener pointChargingDialogListener){
+        this.pointChargingDialogListener = pointChargingDialogListener;
+    }
 }

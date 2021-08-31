@@ -80,6 +80,7 @@ import kr.co.metisinfo.sharingcharger.model.SearchKeywordModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.FragmentDialogInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.BookmarkViewModel;
 import retrofit2.Response;
@@ -593,7 +594,14 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     //현재 포인트 보내줘야함
                     PointChargingDialog pcd = new PointChargingDialog(this, currentPoint);
                     pcd.setCancelable(false);                                                       //DIALOG BACKGROUND CLICK FALSE
+                    pcd.setDialogListener(new PointChargingDialog.PointChargingDialogListener() {
+                        @Override
+                        public void onPointChargingOkBtnClicked() {
+                            openPurchaseDialog();
+                        }
+                    });
                     pcd.show();
+
                 } else {
 
                     reservationTime = String.valueOf(reserveChargingMinute);                        //minute과 Time의 2개 있는 이유를 모르겠음..minute을 Time에 담아주는것도 없고..

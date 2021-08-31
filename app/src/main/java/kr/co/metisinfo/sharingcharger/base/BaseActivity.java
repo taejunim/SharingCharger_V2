@@ -387,20 +387,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             goCharging.setOnClickListener(view -> {
 
                 closeDrawer();
-
-                PurchaseDialog purchaseDialog = new PurchaseDialog(this);
-                purchaseDialog.setDialogListener(new PurchaseDialog.PurchaseDialogListener() {
-                    @Override
-                    public void onPurchaseButtonClicked(String cost) {
-                        if(cost.equals("")) Toast.makeText(getApplicationContext(), "구매하실 금액을 입력하여 주십시오.", Toast.LENGTH_SHORT).show();
-                        else if(cost.equals("0")) Toast.makeText(getApplicationContext(), "포인트 구매는 0원부터 가능합니다.", Toast.LENGTH_SHORT).show();
-                        else {
-                            Log.d("metis", Integer.parseInt(cost) + "입니당");
-                            openWebView(cost);
-                        }
-                    }
-                });
-                purchaseDialog.show();
+                openPurchaseDialog();
 
             });
 
@@ -411,6 +398,22 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
+    public void openPurchaseDialog(){
+
+        PurchaseDialog purchaseDialog = new PurchaseDialog(this);
+        purchaseDialog.setDialogListener(new PurchaseDialog.PurchaseDialogListener() {
+            @Override
+            public void onPurchaseButtonClicked(String cost) {
+                if(cost.equals("")) Toast.makeText(getApplicationContext(), "구매하실 금액을 입력하여 주십시오.", Toast.LENGTH_SHORT).show();
+                else if(cost.equals("0")) Toast.makeText(getApplicationContext(), "포인트 구매는 0원부터 가능합니다.", Toast.LENGTH_SHORT).show();
+                else {
+                    openWebView(cost);
+                }
+            }
+        });
+        purchaseDialog.show();
+
+    }
     public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         private Context _context;

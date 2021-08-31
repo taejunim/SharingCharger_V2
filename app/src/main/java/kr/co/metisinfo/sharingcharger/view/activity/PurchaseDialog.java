@@ -72,7 +72,6 @@ public class PurchaseDialog extends Dialog {
                         Selection.setSelection(etext, etext.length());
 
                     } else {
-                        Log.d("metis","언제탐..");
                     }
                 }
             }
