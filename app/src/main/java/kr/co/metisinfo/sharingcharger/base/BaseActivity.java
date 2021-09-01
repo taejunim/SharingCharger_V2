@@ -45,7 +45,6 @@ import kr.co.metisinfo.sharingcharger.userManagement.ChargerFavoriteActivity;
 import kr.co.metisinfo.sharingcharger.charger.ChargerUseHistoryActivity;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.activity.AdminMainActivity;
-import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.PurchaseDialog;
 import kr.co.metisinfo.sharingcharger.view.activity.PurchaseWebViewActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;

@@ -14,15 +14,11 @@ import java.util.Locale;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
-import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityReservationProgressBinding;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
-import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
-
-import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_POINT_CHARGE;
 
 public class ChargerReservationActivity extends BaseActivity {
 

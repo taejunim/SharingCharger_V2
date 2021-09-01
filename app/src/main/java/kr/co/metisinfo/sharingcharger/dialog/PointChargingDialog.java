@@ -2,7 +2,6 @@ package kr.co.metisinfo.sharingcharger.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -12,8 +11,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import kr.co.metisinfo.sharingcharger.R;
-import kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity;
-import kr.co.metisinfo.sharingcharger.view.activity.PurchaseDialog;
 
 /**
  * @ Class Name   : PointChargingDialog.java

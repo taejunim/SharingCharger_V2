@@ -159,12 +159,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
-        <!-- PointChargeActivity -->
-        <activity
-            android:name="kr.co.metisinfo.sharingcharger.view.activity.PointChargeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-
         <!-- 충전기 이력 화면 -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.charger.ChargerUseHistoryActivity"
