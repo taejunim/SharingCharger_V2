@@ -588,29 +588,47 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 Log.d(TAG, "보유 포인트: " + currentPoint);
                 Log.d(TAG, "계산 포인트: " + expectPoint);
 
-                /*21.01.04 즉시 충전 시, 포인트 체크 후 수정 START*/
-                if (currentPoint < expectPoint) {                                                   //포인트가 부족하면,
+                ChargerModel tempChargerModel = new ChargerModel();
+                try {
+                    tempChargerModel = apiUtils.getChargerInfo(chargerList.get(clickPOIIndex).id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                    //현재 포인트 보내줘야함
-                    PointChargingDialog pcd = new PointChargingDialog(this, currentPoint);
-                    pcd.setCancelable(false);                                                       //DIALOG BACKGROUND CLICK FALSE
-                    pcd.setDialogListener(new PointChargingDialog.PointChargingDialogListener() {
-                        @Override
-                        public void onPointChargingOkBtnClicked() {
-                            openPurchaseDialog();
-                        }
-                    });
-                    pcd.show();
-
-                } else {
-
+                //소유주 본인 충전기로 충전시 포인트 체크 안 함
+                if (ThisApplication.staticUserModel.getUserType().equals("Personal") && ThisApplication.staticUserModel.getEmail().equals(tempChargerModel.getOwnerName())) {
                     reservationTime = String.valueOf(reserveChargingMinute);                        //minute과 Time의 2개 있는 이유를 모르겠음..minute을 Time에 담아주는것도 없고..
 
                     InstantChargingDialog icd = new InstantChargingDialog(this, chargerList.get(clickPOIIndex).name, intntChgSTime + " ~ " + intntChgETime, rModel, reservationTime);
 
                     chkRecharge = "ChargerSearchActivity";
                     icd.setCancelable(false);                                                       //DIALOG BACKGROUND CLICK FALSE
-                    icd.show();                                                                     //충전하기 DIALOG SHOW
+                    icd.show();
+                } else {
+
+                    /*21.01.04 즉시 충전 시, 포인트 체크 후 수정 START*/
+                    if (currentPoint < expectPoint) {                                                   //포인트가 부족하면,
+
+                        //현재 포인트 보내줘야함
+                        PointChargingDialog pcd = new PointChargingDialog(this, currentPoint);
+                        pcd.setCancelable(false);                                                       //DIALOG BACKGROUND CLICK FALSE
+                        pcd.setDialogListener(new PointChargingDialog.PointChargingDialogListener() {
+                            @Override
+                            public void onPointChargingOkBtnClicked() {
+                                openPurchaseDialog();
+                            }
+                        });
+                        pcd.show();
+                    } else {
+
+                        reservationTime = String.valueOf(reserveChargingMinute);                        //minute과 Time의 2개 있는 이유를 모르겠음..minute을 Time에 담아주는것도 없고..
+
+                        InstantChargingDialog icd = new InstantChargingDialog(this, chargerList.get(clickPOIIndex).name, intntChgSTime + " ~ " + intntChgETime, rModel, reservationTime);
+
+                        chkRecharge = "ChargerSearchActivity";
+                        icd.setCancelable(false);                                                       //DIALOG BACKGROUND CLICK FALSE
+                        icd.show();                                                                     //충전하기 DIALOG SHOW
+                    }
                 }
                 /*21.01.04 즉시 충전 시, 포인트 체크 후 수정 END*/
             } else {
@@ -800,7 +818,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     //지도 움직일때마다 주소 가져오기
     private void SearchAddress() {
 
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(this, Locale.KOREA);
         List<Address> addresses = new ArrayList<>();
 
         try {
@@ -872,7 +890,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     private void setTime() {
 
         /*현재시간으로 수정 START*/
-        Calendar nowCal = Calendar.getInstance(Locale.getDefault());                                //시작시간을 위한 켈린더 선언
+        Calendar nowCal = Calendar.getInstance(Locale.KOREA);                                //시작시간을 위한 켈린더 선언
 
         if (isInstantCharge) {
             chargingStartYYYY = nowCal.get(Calendar.YEAR);

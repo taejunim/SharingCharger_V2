@@ -138,58 +138,76 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/text_old_price"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="기존 단가"
-                    android:layout_below="@id/layout_price_button"
-                    android:layout_marginTop="50dp"
-                    android:layout_alignStart="@id/charger_price_setting_title"
-                    android:textColor="@color/black"/>
+                    android:layout_below="@+id/layout_price_button"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="50dp">
 
-                <EditText
-                    android:id="@+id/edit_text_old_price"
-                    android:layout_width="200dp"
-                    android:layout_height="30dp"
-                    android:layout_toEndOf="@id/text_old_price"
-                    android:layout_alignBottom="@id/text_old_price"
-                    android:layout_marginStart="30dp"
-                    android:textColor="@color/black"
-                    android:text="2,000"
-                    android:paddingLeft="10dp"
-                    android:inputType="number"
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:focusable="true"
-                    android:enabled="false"
-                    android:background="@color/neutral_tint"/>
+                    <TextView
+                        android:id="@+id/text_old_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="30dp"
+                        android:gravity="center"
+                        android:text="현재 단가"
+                        android:textColor="@color/black"/>
 
-                <TextView
-                    android:id="@+id/text_new_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="변경 단가"
-                    android:layout_below="@id/text_old_price"
-                    android:layout_marginTop="30dp"
-                    android:layout_alignStart="@id/charger_price_setting_title"
-                    android:textColor="@color/black"/>
+                    <EditText
+                        android:id="@+id/edit_text_old_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="100dp"
+                        android:minHeight="30dp"
+                        android:gravity="right|center"
+                        android:layout_toEndOf="@id/text_old_price"
+                        android:layout_alignBottom="@id/text_old_price"
+                        android:layout_marginStart="30dp"
+                        android:textColor="@color/black"
+                        android:text="2,000"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:focusable="true"
+                        android:enabled="false"
+                        android:background="@color/neutral_tint"/>
 
-                <EditText
-                    android:id="@+id/new_price_input"
-                    android:layout_width="200dp"
-                    android:layout_height="30dp"
-                    android:layout_toEndOf="@id/text_new_price"
-                    android:layout_alignBottom="@id/text_new_price"
-                    android:layout_marginStart="30dp"
-                    android:textColor="@color/black"
-                    android:text="2,000"
-                    android:paddingLeft="10dp"
-                    android:inputType="number"
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:focusable="true"
-                    android:background="@color/header_dummy"/>
+                    <TextView
+                        android:id="@+id/text_new_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="30dp"
+                        android:gravity="center"
+                        android:text="변경 단가"
+                        android:layout_below="@id/text_old_price"
+                        android:layout_marginTop="30dp"
+                        android:layout_alignStart="@id/text_old_price"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/new_price_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="100dp"
+                        android:minHeight="30dp"
+                        android:gravity="right|center"
+                        android:layout_toEndOf="@id/text_new_price"
+                        android:layout_alignBottom="@id/text_new_price"
+                        android:layout_marginStart="30dp"
+                        android:textColor="@color/black"
+                        android:text="2,000"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:focusable="true"
+                        android:background="@color/header_dummy"/>
+
+                </RelativeLayout>
 
             </RelativeLayout>
 

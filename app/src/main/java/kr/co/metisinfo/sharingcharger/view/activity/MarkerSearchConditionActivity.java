@@ -79,8 +79,8 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
     private boolean isInstantCharge = true;
 
-    Calendar minDate = Calendar.getInstance(Locale.getDefault());
-    Calendar maxDate = Calendar.getInstance(Locale.getDefault());
+    Calendar minDate = Calendar.getInstance(Locale.KOREA);
+    Calendar maxDate = Calendar.getInstance(Locale.KOREA);
 
     List<CharSequence> distanceEntry = new ArrayList<>();
     List<CharSequence> typeEntry = new ArrayList<>();
@@ -650,8 +650,8 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
         int totalMinute = calculationMinute(time);
 
-        Calendar nowCal = Calendar.getInstance(Locale.getDefault());
-        Calendar addCal = Calendar.getInstance(Locale.getDefault());
+        Calendar nowCal = Calendar.getInstance(Locale.KOREA);
+        Calendar addCal = Calendar.getInstance(Locale.KOREA);
 
         Log.e("metis", "getMonth : " + nowCal.get(Calendar.MONTH));
 
@@ -675,24 +675,12 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
 
         }
 
-        Log.e("metis", "getMonth 끝 " + nowCal.get(Calendar.MONTH));
-
         addCal.add(Calendar.MINUTE, totalMinute);
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
-        nowCal.add(Calendar.MONTH, 1);
-        addCal.add(Calendar.MONTH, 1);
-
-        String getToday = getWeek(nowCal);
-        String addToday = getWeek(addCal);
-
-        nowCal.add(Calendar.MONTH, -1);
-        addCal.add(Calendar.MONTH, -1);
-        Log.e("metis", "getToday : " + getToday);
-        Log.e("metis", "addToday : " + addToday);
-
-        Log.e("metis", "nowCal.get(Calendar.MONTH) " + nowCal.get(Calendar.MONTH));
+        String getToday = getWeek(new SimpleDateFormat("yyyyMMdd").format(nowCal.getTime()));
+        String addToday = getWeek(new SimpleDateFormat("yyyyMMdd").format(addCal.getTime()));
 
         //같은 요일
         if (getToday.equals(addToday)) {
@@ -729,13 +717,9 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
         Log.e("metis", "selectEndFullDate : " + selectEndFullDate);
     }
 
-    private String getWeek(Calendar getCal) {
+    private String getWeek(String getDateString) {
 
-        return DateUtils.getWeek(
-                String.format(Locale.KOREA, "%02d", getCal.get(Calendar.YEAR))
-                        + String.format(Locale.KOREA, "%02d", getCal.get(Calendar.MONTH))
-                        + String.format(Locale.KOREA, "%02d", getCal.get(Calendar.DAY_OF_MONTH)));
-
+        return DateUtils.getWeek(getDateString);
     }
 
     public void chargeBtnClick(View view) {
@@ -772,7 +756,7 @@ public class MarkerSearchConditionActivity extends BaseActivity implements Adapt
             binding.txtSDate.setText(
                     String.format(Locale.KOREA, "%02d", Integer.parseInt(selectStartFullDate.substring(4, 6)))
                             + "/" + String.format(Locale.KOREA, "%02d", Integer.parseInt(selectStartFullDate.substring(6, 8)))
-                            + " " + getWeek(getWeekCal)
+                            + " " + getWeek(selectStartFullDate.substring(0, 8))
                             + " " + String.format(Locale.KOREA, "%02d", Integer.parseInt(selectStartFullDate.substring(8, 10)))
                             + ":" + String.format(Locale.KOREA, "%02d", Integer.parseInt(selectStartFullDate.substring(10, 12))));
 

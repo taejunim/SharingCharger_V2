@@ -76,7 +76,7 @@ public class DateUtils {
      */
     public static int getDateYyyy() {
 
-        Calendar cal = Calendar.getInstance(Locale.getDefault());
+        Calendar cal = Calendar.getInstance(Locale.KOREA);
 
         return cal.get(Calendar.YEAR);
     }
@@ -86,7 +86,7 @@ public class DateUtils {
      */
     public static int getDateMm() {
 
-        Calendar cal = Calendar.getInstance(Locale.getDefault());
+        Calendar cal = Calendar.getInstance(Locale.KOREA);
 
         return cal.get(Calendar.MONTH) + 1;
     }
@@ -96,7 +96,7 @@ public class DateUtils {
      */
     public static int getDateDd() {
 
-        return Calendar.getInstance(Locale.getDefault()).get(Calendar.DATE);
+        return Calendar.getInstance(Locale.KOREA).get(Calendar.DATE);
     }
 
     /**
@@ -106,7 +106,7 @@ public class DateUtils {
      */
     public static String getDateHour() {
 
-        return String.format("%02d", Calendar.getInstance(Locale.getDefault()).get(Calendar.HOUR_OF_DAY));
+        return String.format("%02d", Calendar.getInstance(Locale.KOREA).get(Calendar.HOUR_OF_DAY));
     }
 
     /**
@@ -116,7 +116,7 @@ public class DateUtils {
      */
     public static String getDateMinute() {
 
-        return String.format("%02d", Calendar.getInstance(Locale.getDefault()).get(Calendar.MINUTE));
+        return String.format("%02d", Calendar.getInstance(Locale.KOREA).get(Calendar.MINUTE));
     }
 
     public static String toDayKo() {

@@ -16,6 +16,8 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityReservationProgressBinding;
+import kr.co.metisinfo.sharingcharger.dialog.InstantChargingDialog;
+import kr.co.metisinfo.sharingcharger.model.ChargerModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
@@ -40,6 +42,8 @@ public class ChargerReservationActivity extends BaseActivity {
 
     ApiUtils apiUtils = new ApiUtils();
 
+    private boolean isFreeCharge = false;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -51,7 +55,12 @@ public class ChargerReservationActivity extends BaseActivity {
             binding.reservationProgressCurrentPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint) + "p");
 
             int chkPoint = cPoint - ePoint;
-            binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(chkPoint));
+
+            if (isFreeCharge) {
+                binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint));
+            } else {
+                binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(chkPoint));
+            }
 
             //예약가능
             if (chkPoint >= 0) {
@@ -132,13 +141,27 @@ public class ChargerReservationActivity extends BaseActivity {
 
         String possibility = getIntent().getStringExtra("reservation");
 
-        //예약 진행 가능
-        if (Boolean.parseBoolean(possibility)) {
-            setPossibility();
+
+        ChargerModel tempChargerModel = new ChargerModel();
+        try {
+            tempChargerModel = apiUtils.getChargerInfo(getIntent().getIntExtra("chargerId", -1));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //잔액부족
-        else {
-            setImpossibility();
+
+        //소유주 본인 충전기로 충전시 포인트 체크 안 함
+        if (ThisApplication.staticUserModel.getUserType().equals("Personal") && ThisApplication.staticUserModel.getEmail().equals(tempChargerModel.getOwnerName())) {
+            isFreeCharge = true;
+            setPossibility();
+        } else {
+            //예약 진행 가능
+            if (Boolean.parseBoolean(possibility)) {
+                setPossibility();
+            }
+            //잔액부족
+            else {
+                setImpossibility();
+            }
         }
 
         binding.reservationProgressPlaceName.setText(getIntent().getStringExtra("chargerName"));
@@ -158,9 +181,14 @@ public class ChargerReservationActivity extends BaseActivity {
         ePoint = getIntent().getIntExtra("expectPoint", 0);
 
         binding.reservationProgressCurrentPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint) + "p");
-        binding.reservationPointDeductionTxt.setText(NumberFormat.getInstance(Locale.KOREA).format(ePoint));
 
-        binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint - ePoint));
+        if (isFreeCharge) {
+            binding.reservationPointDeductionTxt.setText("0");
+            binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint));
+        } else {
+            binding.reservationPointDeductionTxt.setText(NumberFormat.getInstance(Locale.KOREA).format(ePoint));
+            binding.reservationProgressPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(cPoint - ePoint));
+        }
     }
 
     private void goReservation() {

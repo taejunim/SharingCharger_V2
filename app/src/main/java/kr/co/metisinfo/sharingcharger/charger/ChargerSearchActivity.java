@@ -7,13 +7,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.charzin.evzsdk.EvzBluetooth;
 import com.evzlife.android.blescanner.EVZScanCallbacks;
 import com.evzlife.android.blescanner.EVZScanManager;
@@ -177,7 +174,7 @@ public class ChargerSearchActivity extends BaseActivity {
         customDialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
             Log.e("metis", "customDialog_ok_btn");
             customDialog.dismiss();
-            showLoading(binding.loading);
+            //showLoading(binding.loading);
             getBLEScan();
         });
     }

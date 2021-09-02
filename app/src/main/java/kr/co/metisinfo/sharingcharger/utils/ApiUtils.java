@@ -571,16 +571,24 @@ public class ApiUtils {
     /**
      * 관리자 충전기 리스트
      **/
-    public List<AdminChargerModel> getAdminCharger() throws Exception {
+    public Map<String, Object> getAdminCharger(int page, List<AdminChargerModel> adminChargerModelList) throws Exception {
 
-        List<AdminChargerModel> adminChargerModelList = new ArrayList<>();
+        //List<AdminChargerModel> adminChargerModelList = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        Log.e("metis", " getAdminCharger");
 
-        Response<Object> response = webServiceAPI.getAdminCharger(String.valueOf(ThisApplication.staticUserModel.id), "Personal", "ALL", 1, "ALL", 10, "ASC").execute();
+        Response<Object> response = webServiceAPI.getAdminCharger(String.valueOf(ThisApplication.staticUserModel.id), "Personal", "ALL", page, "ALL", 10, "ASC").execute();
 
         if (response.code() == 200) {
 
             JSONObject json = new JSONObject((Map) response.body());
             JSONArray jsonArray = json.getJSONArray("content");
+
+            if (jsonArray.length() == 0) {
+                map.put("chkList", false);
+            } else {
+                map.put("chkList", true);
+            }
 
             Gson gson = new Gson();
 
@@ -588,9 +596,11 @@ public class ApiUtils {
                 AdminChargerModel adminChargerModel = gson.fromJson(jsonArray.getJSONObject(i).toString(), AdminChargerModel.class);
                 adminChargerModelList.add(adminChargerModel);
             }
+
+            map.put("list", adminChargerModelList);
         }
 
-        return adminChargerModelList;
+        return map;
     }
 
     /**

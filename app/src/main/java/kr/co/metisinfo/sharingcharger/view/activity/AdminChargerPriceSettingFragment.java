@@ -53,6 +53,8 @@ public class AdminChargerPriceSettingFragment extends Fragment {
 
                     if (resultCode == 200) {
                         Toast.makeText(ThisApplication.context, "설정한 단가로 변경되었습니다.", Toast.LENGTH_LONG).show();
+                        binding.editTextOldPrice.setText(binding.newPriceInput.getText());
+                        binding.newPriceInput.setText("");
                     } else if (resultCode == 400) {
                         Toast.makeText(ThisApplication.context, "단가 변경에 실패하였습니다.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_LONG).show();
                     } else {
@@ -72,6 +74,9 @@ public class AdminChargerPriceSettingFragment extends Fragment {
 
         Bundle bundle = getArguments();
         adminChargerModel = (AdminChargerModel) bundle.getSerializable("object");
+
+        binding.editTextOldPrice.addTextChangedListener(new CustomTextWatcher(binding.editTextOldPrice));
+        binding.editTextOldPrice.setText(adminChargerModel.getRangeOfFee().replaceAll("p",""));
 
         binding.newPriceInput.addTextChangedListener(new CustomTextWatcher(binding.newPriceInput));
 

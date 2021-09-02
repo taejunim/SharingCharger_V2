@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import kr.co.metisinfo.sharingcharger.Adapter.ItemAdminChargerManageRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
@@ -35,6 +36,9 @@ public class AdminChargerManageFragment extends Fragment implements ItemAdminCha
 
     List<AdminChargerModel> adminChargerModelList = new ArrayList<>();
 
+    private int page = 1;
+    private boolean chkList = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,14 +54,73 @@ public class AdminChargerManageFragment extends Fragment implements ItemAdminCha
         itemAdminChargerManageRecyclerViewAdapter = new ItemAdminChargerManageRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(itemAdminChargerManageRecyclerViewAdapter);
 
-        try {
-            adminChargerModelList = apiUtils.getAdminCharger();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        itemAdminChargerManageRecyclerViewAdapter.setList(adminChargerModelList);
+        getChargerList(page);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                Log.e("metis", "onScrolled");
+                super.onScrolled(recyclerView, dx, dy);
+
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+
+                Log.e("metis", "lastVisibleItemPosition : " + lastVisibleItemPosition);
+                Log.e("metis", "itemTotalCount : " + itemTotalCount);
+
+                try {
+                    if (lastVisibleItemPosition == itemTotalCount) {
+                        if (chkList) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // 해당 작업을 처리함.
+                                            page++;
+                                            getChargerList(page);
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e("metis", "onScrolled Exception : " + e);
+                }
+            }
+
+        });
 
         return root;
+    }
+
+    private void getChargerList(int page) {
+
+        try {
+
+            Map<String, Object> map = apiUtils.getAdminCharger(page, adminChargerModelList);
+
+            chkList = (boolean) map.get("chkList");
+
+            adminChargerModelList = (List) map.get("list");
+
+            Log.e("metis", "chkList : " + chkList);
+            Log.e("metis", "List : " + adminChargerModelList);
+
+            itemAdminChargerManageRecyclerViewAdapter.setList(adminChargerModelList);
+
+        } catch (Exception e) {
+            Log.e("metis", "getChargeHistoryList Exception : " + e);
+        }
     }
 
     @Override

@@ -399,6 +399,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                         binding.chargerRechargeIdTxt.setVisibility(View.VISIBLE);*/
 
                         chargerFrameClick(binding.frameEnd);
+                        hideLoading(binding.loading);
                     }
                     //현재 충전중 X
                     else {
