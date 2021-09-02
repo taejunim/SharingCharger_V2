@@ -80,7 +80,6 @@ import kr.co.metisinfo.sharingcharger.model.SearchKeywordModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
-import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.FragmentDialogInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.BookmarkViewModel;
 import retrofit2.Response;
@@ -284,6 +283,11 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     goSearchPosition(model);
 
+                } else {                                                                            //즐겨찾기화면
+                    if (isPageOpen) {
+                        //충전기 즐겨찾기 후 상세창 닫지않고 바로 즐겨찾기 화면으로 가서 삭제헌 경우
+                        setChargerInfo();
+                    }
                 }
 
                 break;
