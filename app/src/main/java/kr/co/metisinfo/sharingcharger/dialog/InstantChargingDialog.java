@@ -88,7 +88,7 @@ public class InstantChargingDialog extends Dialog  {
             if(model != null){
 
                 if (ThisApplication.staticUserModel.getUserType().equals("Personal")) {
-                    SharedPreferences pref = context.getSharedPreferences("reservation", MODE_PRIVATE);
+                    SharedPreferences pref = context.getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putString("activity", "BLEChargingActivity");
                     editor.commit();

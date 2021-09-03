@@ -36,6 +36,7 @@ import java.util.TimerTask;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityChargingBinding;
 import kr.co.metisinfo.sharingcharger.dialog.ChargerFinishDialog;
@@ -45,6 +46,7 @@ import kr.co.metisinfo.sharingcharger.model.RechargeModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.FragmentDialogInterface;
 
 public class BLEChargingActivity extends BaseActivity implements FragmentDialogInterface {
@@ -52,6 +54,10 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
     private static final String TAG = BLEChargingActivity.class.getSimpleName();
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    SimpleDateFormat rechargeTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+    PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
 
     //start 함수가 두번 실행되서 임시로 한번만 실행되도록 막음
     //boolean checkStart = false;
@@ -367,7 +373,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
                     //현재 충전중
                     if (reservationModel != null && reservationModel.state.equals("KEEP")) {
-                        SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+                        SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
                         String oldTime = pref.getString("time", "");
 
                         Log.e("metis", "mCurData : " + mCurData.bleName);
@@ -379,6 +385,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                         stChargingTime = oldTime;
                         if (!oldTime.equals("")) {
 
+                            ChargerTime = preferenceUtil.getString("ChargerTime");
                             //초 계산 값 가져오기
                             sec = cu.getSecond(oldTime, ChargerTime);
 
@@ -500,7 +507,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
                 Toast.makeText(BLEChargingActivity.this,"충전기 연결이 끊어졌습니다.",Toast.LENGTH_LONG).show();
                 Log.e("metis", "BLEDisConnect Code = "+code);
-                finish();
+                //finish();
 
             }
         });
@@ -540,6 +547,20 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                         boolean result = apiUtils.getAuthenticateCharger(reservationModel.chargerId, model);
 
                         if(result){
+
+                            Date currentDate = new Date();
+                            Date endDate = dateFormatter.parse(reservationModel.getEndDate());
+
+                            long diff = endDate.getTime() - currentDate.getTime();
+                            long minute = diff / (60 * 1000);
+
+                            if (minute > 0) {
+                                ChargerTime = String.valueOf(minute);
+                                mCurData.useTime = ChargerTime;
+                                preferenceUtil.putString("ChargerTime", ChargerTime);
+
+                            }
+
                             chk = true;
 
                             //충전 시작 인증
@@ -600,7 +621,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
     public void setSharedPreferences(boolean check) {
 
-        SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
         if (check) {
@@ -609,12 +630,14 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             Log.e("metis", "setSharedPreferences rechargeId: " + rechargeId);
             editor.putInt("rechargeId", rechargeId);
             editor.putString("time", format.format(now));
+            editor.putString("rechargeStartTime", rechargeTimeFormat.format(now));
             editor.putString("activity", "BLEChargingActivity");
 
             stChargingTime = format.format(now);
         } else {
             editor.putInt("rechargeId", 0);
             editor.putString("time", null);
+            editor.putString("rechargeStartTime", null);
             editor.putString("activity", null);
         }
         editor.commit();
@@ -630,6 +653,11 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                 searchChargerBtnEnabled();
                 timerFinish();
                 chargerFrameClick(binding.frameEnd);
+
+                if (preferenceUtil.getInt("rechargeId") > 0) {
+                    binding.chargerListStartTime.setText("충전 시작 : " + preferenceUtil.getString("rechargeStartTime"));    
+                }
+
             }
 
             @Override

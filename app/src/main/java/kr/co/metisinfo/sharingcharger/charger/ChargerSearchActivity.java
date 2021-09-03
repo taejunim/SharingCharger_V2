@@ -96,9 +96,10 @@ public class ChargerSearchActivity extends BaseActivity {
             * 강제로 활성화 시킨 후 2.5초 후 scan 시작함(바로 시작 시 에러남)
             * */
             mEvzBluetooth.setBluetooth(true);
-            showLoading(binding.loading);
 
-            new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
+            getBLEScan();
+
+            /*new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
                 @Override
                 public void run() {
                     Message msg = mHandler.obtainMessage();  //사용할 핸들러를 이용해서 보낼 메시지 객체 생성
@@ -109,7 +110,7 @@ public class ChargerSearchActivity extends BaseActivity {
                     mHandler.sendMessage(msg);     //메세지를 핸들러로 넘긴다.
 
                 }
-            }, 2500);
+            }, 2500);*/
 
         });
     }

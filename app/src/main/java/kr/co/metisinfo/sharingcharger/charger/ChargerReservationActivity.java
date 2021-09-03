@@ -212,7 +212,7 @@ public class ChargerReservationActivity extends BaseActivity {
             if(model != null){
 
                 if (ThisApplication.staticUserModel.getUserType().equals("Personal")) {
-                    SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+                    SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putString("activity", "BLEChargingActivity");
                     editor.commit();

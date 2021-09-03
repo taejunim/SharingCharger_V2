@@ -403,10 +403,10 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
              * */
 
             //소유주의 충전기일 경우 바로 소유주화면이동
-            Log.e("metis", "gerUserType : " + gerUserType);
+            /*Log.e("metis", "gerUserType : " + gerUserType);
             if (gerUserType != null && gerUserType.equals("Personal")) {
 
-                SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+                SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
 
                 String getActivity = pref.getString("activity", "");
                 Log.e("metis", "getActivity : " + getActivity);
@@ -417,7 +417,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     startOwnerActivity();
                     return;
                 }
-            }
+            }*/
 
             Log.e("metis", "chgrDetailStart return : ");
 
@@ -511,7 +511,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
              * 4. 예상 포인트 가져오기
              * 5. 현재 - 예상 : 충전가능한지 확인
              * */
-            Log.e("metis", "gerUserType : " + gerUserType);
+            /*Log.e("metis", "gerUserType : " + gerUserType);
             if (gerUserType != null && gerUserType.equals("Personal")) {
                 Log.e("metis", "personalChargeList.size() : " + personalChargeList.size());
                 for (int i = 0; i < personalChargeList.size(); i++) {
@@ -526,7 +526,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                         return;
                     }
                 }
-            }
+            }*/
 
             //소유주일 경우 바로 소유주화면이동
 
@@ -725,7 +725,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                 if(result){
                     if (ThisApplication.staticUserModel.getUserType().equals("Personal")) {
-                        SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+                        SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putString("activity", null);
                         editor.commit();
@@ -1517,7 +1517,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 binding.chgrDetailCancel.setVisibility(View.GONE);
                 binding.chgrDetailStart.setText("충전기 연결");
 
-                SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+                /*SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
 
                 // UserType이 소유주 이고
                 if (gerUserType != null && gerUserType.equals("Personal") && !chkRecharge.equals("onResume")) {
@@ -1527,7 +1527,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     if (getActivity.equals("OwnerActivity")) {
                         startOwnerActivity();
                     }
-                }
+                }*/
 
             }
             //충전중인 상황에서 자동종료
@@ -1565,7 +1565,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         try {
 
-            SharedPreferences pref = getSharedPreferences("reservation", MODE_PRIVATE);
+            SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
             String prefTime = pref.getString("time", "");
 
             ownerResult = true;
