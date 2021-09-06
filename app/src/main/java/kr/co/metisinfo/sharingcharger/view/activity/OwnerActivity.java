@@ -220,7 +220,7 @@ public class OwnerActivity extends BaseActivity {
 
     }
 
-    //충전시작, 충전완료 버튼
+    //충전시작, 충전종료 버튼
     public void chargerFrameClick(View view) {
 
         if (view.getId() == R.id.frame_start) {

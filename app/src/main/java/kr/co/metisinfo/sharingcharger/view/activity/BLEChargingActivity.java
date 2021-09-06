@@ -187,7 +187,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
         });
 
-        // 충전 완료 버튼
+        // 충전 종료 버튼
         binding.frameEnd.setOnClickListener(view -> {
             /*showLoading();
             BLEStop();*/
@@ -281,7 +281,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
     }
 
-    //충전시작, 충전완료 버튼
+    //충전시작, 충전종료 버튼
     public void chargerFrameClick(View view) {
 
         if (view.getId() == R.id.frame_start) {

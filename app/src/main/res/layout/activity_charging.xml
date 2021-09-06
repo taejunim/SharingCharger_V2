@@ -166,7 +166,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:text="충전 완료"
+                android:text="충전 종료"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="35dp"
