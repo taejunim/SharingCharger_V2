@@ -26,26 +26,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/admin_charger_number"
-            android:layout_toStartOf="@id/admin_charger_status"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:textStyle="bold"
-            android:text="관광대학교 주차장"
+            android:text="-"
             android:textColor="@color/black"
             android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/admin_charger_ble_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/admin_charger_name"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:text="@string/charger_manage_charger_ble_text"
+            android:textColor="@color/black"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/admin_charger_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/admin_charger_name"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toStartOf="@id/admin_charger_status"
+            android:layout_toEndOf="@id/admin_charger_number"
+            android:text="충전기 주소"
+            android:textColor="@color/gray"
+            android:textSize="12dp" />
 
         <TextView
             android:id="@+id/admin_charger_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/admin_charger_number"
-            android:layout_toStartOf="@id/admin_charger_status"
-            android:layout_below="@id/admin_charger_name"
+            android:layout_below="@id/admin_charger_address"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:textSize="12dp"
+            android:layout_toStartOf="@id/admin_charger_status"
+            android:layout_toEndOf="@id/admin_charger_number"
             android:text="충전기 설명"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray"
+            android:textSize="12dp" />
 
         <TextView
             android:id="@+id/admin_charger_status"
