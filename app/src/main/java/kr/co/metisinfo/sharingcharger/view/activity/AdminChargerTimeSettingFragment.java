@@ -108,8 +108,8 @@ public class AdminChargerTimeSettingFragment extends Fragment {
                 showLoading(binding.loading);
 
                 AllowTimeOfDayModel allowTimeOfDayModel = new AllowTimeOfDayModel();
-                allowTimeOfDayModel.setOpenTime(binding.newOpenTime.getText().toString());
-                allowTimeOfDayModel.setCloseTime(binding.newCloseTime.getText().toString());
+                allowTimeOfDayModel.setOpenTime(binding.newOpenTime.getText().toString() + ":00");
+                allowTimeOfDayModel.setCloseTime(binding.newCloseTime.getText().toString().indexOf(":59") != -1 ? binding.newCloseTime.getText().toString() + ":59" : binding.newCloseTime.getText().toString() + ":00");
 
                 allowTimeOfDayModel = apiUtils.changeAllowTime(adminChargerModel.getId(), allowTimeOfDayModel);
 
@@ -136,14 +136,13 @@ public class AdminChargerTimeSettingFragment extends Fragment {
             if (textView == binding.newOpenTime) {
                 textView.setText(new SimpleDateFormat("HH:mm").format(calendar.getTime()));
             } else if (textView == binding.newCloseTime) {
+                textView.setText(new SimpleDateFormat("HH:mm").format(calendar.getTime()).equals("00:00") ? "23:59" : new SimpleDateFormat("HH:mm").format(calendar.getTime()));
+            }
 
-                if (isTimeValid(new SimpleDateFormat("HH:mm").format(calendar.getTime()))) {
-                    textView.setText(new SimpleDateFormat("HH:mm").format(calendar.getTime()).equals("00:00") ? "23:59" : new SimpleDateFormat("HH:mm").format(calendar.getTime()));
-                } else {
-                    Toast.makeText(ThisApplication.context, "시간 설정이 올바르지 않습니다.\n다시 설정해주세요.", Toast.LENGTH_SHORT).show();
-                    binding.newOpenTime.setText("00:00");
-                    binding.newCloseTime.setText("23:59");
-                }
+            if (!isTimeValid(binding.newCloseTime.getText().toString())) {
+                Toast.makeText(ThisApplication.context, "시간 설정이 올바르지 않습니다.\n다시 설정해주세요.", Toast.LENGTH_SHORT).show();
+                binding.newOpenTime.setText("00:00");
+                binding.newCloseTime.setText("23:59");
             }
         };
 
@@ -166,7 +165,7 @@ public class AdminChargerTimeSettingFragment extends Fragment {
             Date openTime = simpleDateFormat.parse(binding.newOpenTime.getText().toString());
             Date closeTime = simpleDateFormat.parse(closeTimeString);
 
-            if (closeTime.getTime() - openTime.getTime() < 1800000) {
+            if (closeTime.getTime() - openTime.getTime() <= 1800000) {
                 return false;
             }
 
