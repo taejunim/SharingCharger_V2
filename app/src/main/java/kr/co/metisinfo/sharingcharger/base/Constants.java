@@ -47,9 +47,10 @@ public class Constants {
     public static final int PAGE_SEARCH_CHARGER = 10007;        // 충전기 검색
 
     public static final int PAGE_SETTING_GPS = 10008;          // gps 설정
-    public static final int PAGE_PERSONAL_INFORMATION = 10009;          // 개인정보 확인
-    public static final int PAGE_POINT_CHARGE = 10010;       //포인트 충전
-    public static final int PAGE_SETTING = 10011;        // 설정 확인
+    public static final int PAGE_PERSONAL_INFORMATION = 10009; // 개인정보 확인
+    public static final int PAGE_POINT_CHARGE = 10010;         //포인트 충전
+    public static final int PAGE_SETTING = 10011;              // 설정 확인
+    public static final int PAGE_FAVORITE = 10012;             // 즐겨찾기
 
     public static GpsService gpsService;
     public static double currentLocationLng;

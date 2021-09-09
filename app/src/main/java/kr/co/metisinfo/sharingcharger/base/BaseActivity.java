@@ -52,6 +52,7 @@ import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;
 import kr.co.metisinfo.sharingcharger.digitalWalletManagement.WalletActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
 
+import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_FAVORITE;
 import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_SEARCH_KEYWORD;
 import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_SETTING;
 
@@ -226,7 +227,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 //즐겨찾기
                 Intent intent = new Intent(startClass, ChargerFavoriteActivity.class);
                 //startActivity(intent);
-                startActivityForResult(intent, PAGE_SEARCH_KEYWORD);
+                startActivityForResult(intent, PAGE_FAVORITE);
                 closeDrawer();
 
 

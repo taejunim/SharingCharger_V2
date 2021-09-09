@@ -264,34 +264,36 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
             //키워드 검색, 즐겨찾기
             case Constants.PAGE_SEARCH_KEYWORD:
+            case Constants.PAGE_FAVORITE:
 
                 // 내 위치중심, 지도중심 구분해야함
                 if (resultCode == RESULT_OK) {
 
                     SearchKeywordModel model = (SearchKeywordModel) data.getSerializableExtra("keyword");
 
+                    centerLocation = data.getStringExtra("centerLocation");
+                    binding.editSearch.setText(model.placeName);
+                    searchKeyword = model.placeName;
+                    binding.layoutTop1.requestFocus();
+
+
                     //키워드검색인지 즐겨찾기 인지 구분
                     String getType = data.getStringExtra("type");
 
-                    centerLocation = data.getStringExtra("centerLocation");
+                    //즐겨찾기 일때는 Zoom 크게
+                    if(getType != null) goSearchPosition(model, true);
 
-                    binding.editSearch.setText(model.placeName);
-
-                    searchKeyword = model.placeName;
-
-                    binding.layoutTop1.requestFocus();
-
-                    goSearchPosition(model);
+                    //아닐때는 보통
+                    else  goSearchPosition(model, false);
 
                 } else {                                                                            //즐겨찾기화면
                     if (isPageOpen) {
-                        //충전기 즐겨찾기 후 상세창 닫지않고 바로 즐겨찾기 화면으로 가서 삭제헌 경우
+                        //충전기 즐겨찾기 후 상세창 닫지않고 바로 즐겨찾기 화면으로 이동했다 다시 돌아온 경우
                         setChargerInfo();
                     }
                 }
 
                 break;
-
             //소유주 전환 완료 -> 사이드 메뉴 다시 그리기
             case Constants.PAGE_SETTING:
                 if (resultCode == Activity.RESULT_OK) {
@@ -1310,7 +1312,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
      *
      * @param model searchKeywordModel
      */
-    private void goSearchPosition(SearchKeywordModel model) {
+    private void goSearchPosition(SearchKeywordModel model, boolean isFavoriteResult) {
 
         isSearchKeywordMarkerClick = true;
 
@@ -1319,11 +1321,9 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         double latPoint = Double.parseDouble(model.y);
         double lngPoint = Double.parseDouble(model.x);
 
-        int padding = 5;
-        float minZoomLevel = 3;
-        float maxZoomLevel = 10;
-        MapPointBounds bounds = new MapPointBounds(MapPoint.mapPointWithGeoCoord(latPoint, lngPoint), MapPoint.mapPointWithGeoCoord(latPoint, lngPoint));
-        binding.mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, padding, minZoomLevel, maxZoomLevel));
+        binding.mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latPoint, lngPoint),true);
+
+        if(isFavoriteResult) binding.mapView.setZoomLevel( 1, true);
     }
 
     /**
