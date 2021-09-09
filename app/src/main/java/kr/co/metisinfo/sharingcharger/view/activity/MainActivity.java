@@ -1002,17 +1002,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         mapView.removeAllPOIItems();
         MapPOIItem mDefaultMarker = new MapPOIItem();
 
-        /*mDefaultMarker.setItemName("마커 기준 조건 검색");
-        mDefaultMarker.setTag(0);
-        mDefaultMarker.setMapPoint(pointList.get(0));
-        mDefaultMarker.setSelectedMarkerType(MapPOIItem.MarkerType.CustomImage);
-        mDefaultMarker.setCustomSelectedImageResourceId(R.mipmap.current_location_48);
-        mDefaultMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-        mDefaultMarker.setCustomImageResourceId(R.mipmap.current_location_48);
-        mDefaultMarker.setShowCalloutBalloonOnTouch(false);                     // POI 클릭시 말풍선 보여주는지 여부
-
-        mapView.addPOIItem(mDefaultMarker);*/
-
         for (int i = 0; i < pointList.size(); i++) {
 
             mDefaultMarker = new MapPOIItem();
@@ -1042,6 +1031,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         mapPOIItems = mapView.getPOIItems();
 
         hideLoading(binding.loading);
+        Log.d("metis", "마커 갱신 완료");
     }
 
     private void showAll() {
@@ -1063,6 +1053,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+
+        setAddress(mapPOIItem.getMapPoint());
 
         int chargerId;
 
@@ -1262,7 +1254,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-        setAddress(mapPoint);
+        
     }
 
     private void setAddress(MapPoint mapPoint) {
@@ -1469,21 +1461,18 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
             boolean result = (boolean) map.get("result");
 
-            ArrayList<ChargerModel> tempChargerList = (ArrayList<ChargerModel>) map.get("list");
             if(result){
-                //if (chargerList.size() != tempChargerList.size()) {
 
-                    chargerList = tempChargerList;
+                chargerList = (ArrayList<ChargerModel>) map.get("list");
 
-                    pointList.clear();
+                pointList.clear();
 
-                    for (int i = 0; i < chargerList.size(); i++) {
+                for (int i = 0; i < chargerList.size(); i++) {
 
-                        pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
-                    }
+                    pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
+                }
 
-                    createDefaultMarker(binding.mapView);
-                //}
+                createDefaultMarker(binding.mapView);
 
             }else{
                 Toast.makeText(getApplicationContext(), "충전기 목록을 가져오는데 실패하였습니다. 충전기 검색을 다시 해주세요.", Toast.LENGTH_SHORT).show();
