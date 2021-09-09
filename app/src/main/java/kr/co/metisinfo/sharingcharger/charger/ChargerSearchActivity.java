@@ -1,10 +1,7 @@
 package kr.co.metisinfo.sharingcharger.charger;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -41,26 +38,12 @@ public class ChargerSearchActivity extends BaseActivity {
     //임시 5분충전
     String reservationTime;
 
-    CountDownTimer timer;
-
     EvzBluetooth mEvzBluetooth;
 
     //스캔 관련.
     private EVZScanManager mScanner;
     List<EVZScanResult> mScData;
     EVZScanResult mEVZScanResult;
-
-    Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {  // 실행이 끝난후 확인 가능
-            Bundle bd = msg.getData();
-
-            // bluetooth 활성화
-            if (bd.getBoolean("bluetooth")) {
-
-                getBLEScan();
-            }
-        }
-    };
 
     @Override
     public void initLayout() {
@@ -70,15 +53,11 @@ public class ChargerSearchActivity extends BaseActivity {
         changeStatusBarColor(false);
 
         binding.includeHeader.txtTitle.setText("충전기 검색");
-        binding.includeHeader.btnBack.setVisibility(View.INVISIBLE);
+        //binding.includeHeader.btnBack.setVisibility(View.INVISIBLE);
+        binding.includeHeader.btnBack.setOnClickListener(view -> finish());
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
 
-        //reservationModel = (ReservationModel) getIntent().getSerializableExtra("reservationModel");
-
         reservationTime = getIntent().getStringExtra("reservationTime");
-
-        // reservationTime = getIntent().getStringExtra("reservationTime");
-
     }
 
     @Override
@@ -127,7 +106,7 @@ public class ChargerSearchActivity extends BaseActivity {
 
     public void getBLEScan() {
 
-        countDown(1000 * 5);
+        showLoading(binding.loading);
 
         mScanner.startScan(new EVZScanCallbacks() {
 
@@ -167,6 +146,7 @@ public class ChargerSearchActivity extends BaseActivity {
     }
 
     private void scanFailed() {
+
         hideLoading(binding.loading);
         CustomDialog customDialog = new CustomDialog(this, "연결 가능한 충전기를 찾지 못했습니다.\n다시 검색하시겠습니까?");
 
@@ -188,28 +168,6 @@ public class ChargerSearchActivity extends BaseActivity {
         intent.putExtra("reservationTime", reservationTime);
         startActivity(intent);
         finish();
-    }
-
-    /**
-     * 카운트 다운 타이머
-     * @param time 시간 ex) 3초 : 3000
-     */
-    public void countDown(long time) {
-
-        showLoading(binding.loading);
-
-        timer = new CountDownTimer(time, 1000) {
-
-            // 특정 시간마다 뷰 변경
-            public void onTick(long millisUntilFinished) {
-            }
-
-            // 제한시간 종료시
-            public void onFinish() {
-                hideLoading(binding.loading);
-            }
-
-        }.start();
     }
 
     @Override

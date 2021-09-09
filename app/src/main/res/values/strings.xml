@@ -113,6 +113,7 @@
     <string name="charge">충전</string>
     <string name="minute30">30분</string>
     <string name="change">변경</string>
+    <string name="rescan">재검색</string>
 
     <!-- 메세지-->
     <string name="m_password_confirm_text">비밀번호를 변경하시겠습니까?</string>

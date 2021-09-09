@@ -12,7 +12,8 @@
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:translationZ="2dp"/>
 
         <include
             android:id="@+id/include_charger_register_menu"

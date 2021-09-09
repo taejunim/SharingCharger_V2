@@ -174,7 +174,8 @@
         <Button
             android:id="@+id/btn_search_device"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_border_blue"
             android:text="@string/search_device"

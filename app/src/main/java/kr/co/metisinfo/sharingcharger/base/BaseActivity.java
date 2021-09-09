@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -75,6 +76,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean isNetworkStatus = true;
 
     ApiUtils apiUtils = new ApiUtils();
+
+    protected boolean isBackPressed = false;
+    CountDownTimer timer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -596,18 +600,52 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 카운트 다운 타이머
+     * @param time 시간 ex) 3초 : 3000
+     */
+    public void countDown(long time, ProgressBar progressBar, Button button) {
+
+        isBackPressed = false;
+
+        showLoading(progressBar);
+
+        timer = new CountDownTimer(time, 1000) {
+
+            // 특정 시간마다 뷰 변경
+            public void onTick(long millisUntilFinished) {
+            }
+
+            // 제한시간 종료시
+            public void onFinish() {
+                isBackPressed = true;
+
+                if (button != null) {
+                    button.setEnabled(true);
+                }
+
+                hideLoading(progressBar);
+            }
+
+        }.start();
+    }
+
+    public void onBackPressed() {
+        if (isBackPressed) {
+            finish();
+        }
+    }
+
     public void showLoading(ProgressBar progressBar) {
-
+        isBackPressed = false;
         progressBar.setVisibility(View.VISIBLE);
-
         //해당페이지 이벤트 막기
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
     }
 
     public void hideLoading(ProgressBar progressBar) {
+        isBackPressed = true;
         progressBar.setVisibility(View.INVISIBLE);
-
         //이벤트 다시 풀기
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }

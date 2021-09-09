@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -158,7 +159,7 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
     public void getBLEScan() {
 
-        countDown(1000 * 5);
+        ((AdminMainActivity)getActivity()).showLoading(binding.loading);
 
         mScanner.startScan(new EVZScanCallbacks() {
 
@@ -166,7 +167,7 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
             public void onScanFinished(@NonNull List<EVZScanResult> results) {
                 mScData = results;
                 if (mScData.size() > 0) {
-                    hideLoading(binding.loading);
+                    ((AdminMainActivity)getActivity()).hideLoading(binding.loading);
 
                     String[] bleArray = new String[mScData.size()];
                     for (int i = 0; i < mScData.size(); i++) {
@@ -192,9 +193,20 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
         LayoutInflater inf = getLayoutInflater();
         View dialogView = inf.inflate(R.layout.charger_search_dialog, null);
+        Button cancelButton = dialogView.findViewById(R.id.cancel_button);
+        Button rescanButton = dialogView.findViewById(R.id.rescan_button);
+
+        cancelButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        rescanButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            getBLEScan();
+        });
 
         dialog.setContentView(dialogView); // Dialog에 선언했던 layout 적용
-        dialog.setCanceledOnTouchOutside(true); // 외부 touch 시 Dialog 종료
+        dialog.setCancelable(false); // 외부 터치나 백키로 dimiss 시키는 것 막음
 
         ArrayList<String> arrayList = new ArrayList<>(); // recyclerView에 들어갈 Array
         arrayList.addAll(Arrays.asList(bleArray)); // Array에 사전에 정의한 Topic 넣기
@@ -228,50 +240,15 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
     }
 
     private void scanFailed() {
-        hideLoading(binding.loading);
+        //hideLoading(binding.loading);
+        ((AdminMainActivity)getActivity()).hideLoading(binding.loading);
 
         CustomDialog customDialog = new CustomDialog(getActivity(), "연결 가능한 충전기를 찾지 못했습니다.\n다시 검색하시겠습니까?");
         customDialog.show();
         customDialog.findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
             customDialog.dismiss();
-            showLoading(binding.loading);
+            ((AdminMainActivity)getActivity()).showLoading(binding.loading);
             getBLEScan();
         });
-    }
-
-    /**
-     * 카운트 다운 타이머
-     * @param time 시간 ex) 3초 : 3000
-     */
-    public void countDown(long time) {
-
-        showLoading(binding.loading);
-
-        timer = new CountDownTimer(time, 1000) {
-
-            // 특정 시간마다 뷰 변경
-            public void onTick(long millisUntilFinished) {
-            }
-
-            // 제한시간 종료시
-            public void onFinish() {
-                hideLoading(binding.loading);
-            }
-
-        }.start();
-    }
-
-    public void showLoading(ProgressBar progressBar) {
-        progressBar.setVisibility(View.VISIBLE);
-
-        //해당페이지 이벤트 막기
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-    }
-
-    public void hideLoading(ProgressBar progressBar) {
-        progressBar.setVisibility(View.INVISIBLE);
-
-        //이벤트 다시 풀기
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

@@ -20,21 +20,13 @@
             android:layout_below="@id/include_header"
             android:layout_height="wrap_content" />
 
-
         <RelativeLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/include_charger_manage_menu"
-            android:layout_above="@+id/include_footer"
             android:layout_marginTop="0dp" />
 
-        <include
-            android:id="@+id/include_footer"
-            layout="@layout/layout_owner_footer"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
 </layout>

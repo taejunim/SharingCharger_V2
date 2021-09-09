@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -17,7 +16,6 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityAdminMainBinding;
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
-import lombok.val;
 
 public class AdminMainActivity extends BaseActivity {
 
@@ -29,7 +27,6 @@ public class AdminMainActivity extends BaseActivity {
     AdminDashboardFragment adminDashboardFragment;
     AdminChargerManageFragment adminChargerManageFragment;
 
-    ArrayList<ImageView> footerButtonList = new ArrayList<>();
     ArrayList<ImageView> subMenuButtonList = new ArrayList<>();
 
     AdminChargerModel adminChargerModel = new AdminChargerModel();
@@ -43,9 +40,6 @@ public class AdminMainActivity extends BaseActivity {
         binding.includeHeader.layoutHeaderMenu.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
 
         //선택된 메뉴 버튼 색 변경을 위해 배열에 담기
-        footerButtonList.add(binding.includeFooter.btnDashboardImage);
-        footerButtonList.add(binding.includeFooter.btnChargerManageImage);
-        //footerButtonList.add(binding.includeFooter.btnAlarmImage);
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerDetailInformation);
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerPriceInformation);
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerTimeSetting);
@@ -59,29 +53,18 @@ public class AdminMainActivity extends BaseActivity {
     public void setOnClickListener() {
 
         binding.includeHeader.btnBack.setOnClickListener(view -> {
-            //finish();
 
             if(fragmentManager.getBackStackEntryCount() == 0) {
                 finish();
             } else {
-                fragmentManager.popBackStack("AdminChargerManageFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                setFragment("footerMenu", binding.includeFooter.btnChargerManageImage, adminChargerModel);
+                fragmentManager.popBackStack("fragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                setFragment("main", null, adminChargerModel);
             }
         });
 
         //충전기 정보 등록
         binding.includeHeader.btnMenu.setOnClickListener(view -> {
-            setFragment("registerMenu", binding.includeFooter.btnDashboardImage, adminChargerModel);
-        });
-
-        //대시보드 버튼
-        binding.includeFooter.btnDashboard.setOnClickListener(view -> {
-            fragmentManager.popBackStack("AdminChargerManageFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            setFragment("footerMenu", binding.includeFooter.btnDashboardImage, adminChargerModel);
-        });
-        //충전기 관리
-        binding.includeFooter.btnChargerManage.setOnClickListener(view -> {
-            setFragment("footerMenu", binding.includeFooter.btnChargerManageImage, adminChargerModel);
+            setFragment("registerMenu", null, adminChargerModel);
         });
 
         //충전기 상세정보
@@ -111,49 +94,27 @@ public class AdminMainActivity extends BaseActivity {
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
         binding.includeChargerManageMenu.chargerManageMenu.setVisibility(View.GONE);
 
-        adminDashboardFragment = new AdminDashboardFragment();
         adminChargerManageFragment = new AdminChargerManageFragment();
 
         //플래그먼트 초기화
         fragmentManager = getSupportFragmentManager();
 
-        setFragment("footerMenu", binding.includeFooter.btnDashboardImage, null);
+        setFragment("main", null, null);
         addActivitys(this);
     }
 
     public void setFragment(String type, ImageView view, Object object){
 
-        if(type == "footerMenu"){
+        if (type == "main") {
+
             //submenu 숨기기
             binding.includeChargerManageMenu.chargerManageMenu.setVisibility(View.GONE);
 
-            int index = 0;
-            for( int i = 0; i<  footerButtonList.size() ; i ++ ) {
-
-                if(footerButtonList.get(i) == view) {
-                    index = i;
-                    footerButtonList.get(i).setColorFilter(ContextCompat.getColor(this, R.color.purple));
-                }
-                else footerButtonList.get(i).setColorFilter(ContextCompat.getColor(this, R.color.gray_button));
-            }
-
             fragmentTransaction = fragmentManager.beginTransaction();
 
-            switch (index){
-                case 0 : //대시보드
-                    binding.includeHeader.txtTitle.setText(R.string.dashboard_title);
-                    binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
-                    fragmentTransaction.replace(R.id.fragment_container, adminDashboardFragment);
-                    break;
-                case 1 : //충전기 관리
-                    binding.includeHeader.txtTitle.setText(R.string.charger_manage_title);
-                    binding.includeHeader.btnMenu.setVisibility(View.VISIBLE);
-                    fragmentTransaction.replace(R.id.fragment_container, adminChargerManageFragment);
-                    break;
-                /*case 2 : //알림 설정
-                    Toast.makeText(this,"알림설정 구현해야됨", Toast.LENGTH_SHORT).show();
-                    break;*/
-            }
+            binding.includeHeader.txtTitle.setText(R.string.charger_manage_title);
+            binding.includeHeader.btnMenu.setVisibility(View.VISIBLE);
+            fragmentTransaction.replace(R.id.fragment_container, adminChargerManageFragment);
 
         } else if(type == "registerMenu"){
 
@@ -165,6 +126,7 @@ public class AdminMainActivity extends BaseActivity {
             fragmentTransaction = fragmentManager.beginTransaction();
             AdminChargerRegisterStep1Fragment adminChargerRegisterStep1Fragment = new AdminChargerRegisterStep1Fragment();
             fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep1Fragment);
+            fragmentTransaction.addToBackStack("fragment");
 
         }else {
 
@@ -202,7 +164,7 @@ public class AdminMainActivity extends BaseActivity {
                     AdminChargerDetailInformationFragment adminChargerDetailInformationFragment = new AdminChargerDetailInformationFragment();
                     adminChargerDetailInformationFragment.setArguments(bundle);
                     fragmentTransaction.replace(R.id.fragment_container, adminChargerDetailInformationFragment);
-                    fragmentTransaction.addToBackStack("AdminChargerManageFragment");
+                    fragmentTransaction.addToBackStack("fragment");
                     break;
                 case 1 : //충전기 단가정보
                     AdminChargerPriceSettingFragment adminChargerPriceSettingFragment = new AdminChargerPriceSettingFragment();
@@ -245,7 +207,13 @@ public class AdminMainActivity extends BaseActivity {
                 fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep3Fragment);
                 break;
             case 3 :
-                setFragment("footerMenu", binding.includeFooter.btnChargerManageImage, adminChargerModel);
+                fragmentManager.popBackStack("fragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                adminChargerManageFragment = new AdminChargerManageFragment();
+
+                //플래그먼트 초기화
+                fragmentManager = getSupportFragmentManager();
+
+                setFragment("main", null, null);
         }
 
         if(step != 3) fragmentTransaction.commit();
@@ -259,6 +227,7 @@ public class AdminMainActivity extends BaseActivity {
                 AdminChargerRegisterStep1Fragment adminChargerRegisterStep1Fragment = new AdminChargerRegisterStep1Fragment();
                 adminChargerRegisterStep1Fragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep1Fragment);
+                fragmentTransaction.addToBackStack("fragment");
                 break;
             case 3 :
                 AdminChargerRegisterStep2Fragment adminChargerRegisterStep2Fragment = new AdminChargerRegisterStep2Fragment();

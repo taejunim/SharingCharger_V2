@@ -64,10 +64,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
     ActivityChargingBinding binding;
 
-    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-    GlideDrawableImageViewTarget gifImage;
-
     ApiUtils apiUtils = new ApiUtils();
 
     EvzBLE mEB;
@@ -77,9 +73,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
     //실제 충전 시간
     String ChargerTime = "1";
 
-    //String ChargerTime = "30";
-    final String testTag = "" + System.currentTimeMillis();
-
     CountDownTimer timer;
 
     CommonUtils cu = new CommonUtils();
@@ -88,7 +81,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
     private int rechargeId;
 
-    private boolean isBackPressed = false;
+    //private boolean isBackPressed = false;
 
     Timer chargingTimer = new Timer();                                                              //충전 진행 경과시간을 위한 Timer 선언
 
@@ -240,7 +233,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         ChargerTime = getIntent().getStringExtra("reservationTime");
         Log.e("metis", "JH ChargerTime: " + ChargerTime);
 
-        BLEDisConnect();
+        //BLEDisConnect();
 
         BLEPlugState();
 
@@ -337,7 +330,8 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
     //BLEConnect
     public void BLEConnect() {
 
-        countDown(1000 * 7);
+        //countDown(1000 * 7);
+        showLoading(binding.loading);
 
         mEB.BLEConnect(mCurData, new EvzScan.BLEConnect() {
             @Override
@@ -411,7 +405,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                     //현재 충전중 X
                     else {
 
-                        new Handler().postDelayed(new Runnable() {// 0.5 초 후에 실행
+                        /*new Handler().postDelayed(new Runnable() {// 0.5 초 후에 실행
                             @Override
                             public void run() {
                                 // 실행할 동작 코딩
@@ -425,7 +419,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
                                 mHandler.sendMessage(msg1);     //메세지를 핸들러로 넘긴다.
                             }
-                        }, 4500);
+                        }, 4500);*/
 
                         /*//다이얼로그로 추가
                         AlertDialog.Builder builder = new AlertDialog.Builder(BLEChargingActivity.this);
@@ -445,11 +439,12 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                                 BLEGetTag();
 
                             }
-                        }, 2500);
+                        }, 500);
                     }
 
                 } catch (Exception e) {
                     Log.e("metis", "BLEConnect Success Exception : " + e);
+                    hideLoading(binding.loading);
                 }
 
             }
@@ -457,7 +452,9 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             @Override
             public void Fail(int code, String msg) {
                 Log.e("metis", "BLE Connect Fail code : " + code+" : "+ msg);
-                Toast.makeText(BLEChargingActivity.this, "BLEConnect 충전기 연결에 실패하였습니다.\n충전기 연결을 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BLEChargingActivity.this, "충전기 연결에 실패하였습니다.\n충전기 연결을 다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+
+                hideLoading(binding.loading);
 
                 //버튼 비활성화
                 disableBtn();
@@ -516,7 +513,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
     //BLEStart
     public void BLEStart() {
 
-        countDown(1000 * 20);
+        showLoading(binding.loading);
 
         mEB.BLEStart(mCurData, new EvzProtocol.BLEStart() {
             @Override
@@ -584,12 +581,14 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                         }
                         Log.e("metis", "chk : " + chk);
                         if (!chk) {
+                            hideLoading(binding.loading);
                             setSharedPreferences(false);
                             BLEStop();
                             Toast.makeText(BLEChargingActivity.this, "충전을 시작할 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
 
                     } catch (Exception e) {
+                        hideLoading(binding.loading);
                         checkStart = false;
                         setSharedPreferences(false);
                         BLEStop();
@@ -657,7 +656,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                 if (preferenceUtil.getInt("rechargeId") > 0) {
                     binding.chargerListStartTime.setText("충전 시작 : " + preferenceUtil.getString("rechargeStartTime"));    
                 }
-
             }
 
             @Override
@@ -673,7 +671,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
     //BLEStop
     public void BLEStop() {
 
-        countDown(1000 * 3);
+        showLoading(binding.loading);
 
         mEB.BLEStop(mCurData, new EvzProtocol.BLEStop() {
             @Override
@@ -688,24 +686,21 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
                         BLEGetTag();
                         createMessage("Stop");
-
                     }
                 }, 2500);
 
                 ChargingTimerStop();                                                                //충전진행 경과시간 End
-
             }
 
             @Override
             public void Fail(int code, String msg) {
-                //hideLoading();
+
                 Log.e("metis", "BLEStop Fail Code = "+code);
 
                 Toast.makeText(BLEChargingActivity.this, "BLEStop 충전 종료를 실패하였습니다.\n다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
                 timerFinish();
                 finish();
             }
-
         });
     }
 
@@ -717,14 +712,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         TextView chargingTimerTx = (TextView) findViewById(R.id.charging_timer);
         chargingTimerTx.setText("00:00:00");
         chargingTimer.cancel();                                                                     //Timer 종료
-    }
-
-    public void onBackPressed() {
-
-        if (isBackPressed) {
-            finish();
-        }
-
     }
 
     //BLEGetTag
@@ -809,6 +796,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             public void Fail(int code, String msg) {
                 Log.e("metis", "BLEGetTag Fail Code = "+code);
                 Toast.makeText(BLEChargingActivity.this, "BLEGetTag 실패하였습니다.", Toast.LENGTH_LONG).show();
+                hideLoading(binding.loading);
                 timerFinish();
             }
         });
@@ -822,50 +810,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             timer.onFinish();
             timer.cancel();
         }
-    }
-
-    /**
-     * 카운트 다운 타이머
-     * @param time 시간 ex) 3초 : 3000
-     */
-    public void countDown(long time) {
-
-        isBackPressed = false;
-
-        showLoading(binding.loading);
-
-        timer = new CountDownTimer(time, 1000) {
-
-            // 특정 시간마다 뷰 변경
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            // 제한시간 종료시
-            public void onFinish() {
-                isBackPressed = true;
-                binding.searchChargerBtn.setEnabled(true);
-                Log.e("metis", "countDownTimer.onFinish() CALL()");
-
-                removeLoading();
-            }
-
-        }.start();
-    }
-
-    /**
-     * 로딩 이미지 종료
-     */
-    private void removeLoading() {
-
-        try {
-
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            Glide.with(this).onDestroy();
-        } catch (Exception e) {
-            Log.e("metis", "removeLoading Exception : " + e);
-        }
-
     }
 
     /*
@@ -901,21 +845,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         });
     }
 
-    //BLEUserDis
-    public void BLEUserDis(){
-        mEB.BLEUserDis(new EvzProtocol.BLEUserDis() {
-            @Override
-            public void Success() {
-                Log.e("metis", "BLEUserDis Success");
-            }
-
-            @Override
-            public void Fail(int i, String s) {
-                Log.e("metis", "BLEUserDis Fail");
-            }
-        });
-    }
-
     //plug 상태값 확인
     public void BLEPlugState(){
         mEB.BLEPlugState(new EvzProtocol.BLEPlugState() {
@@ -936,12 +865,10 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         }
         chargingTimer.cancel();
         super.onDestroy();
-
     }
 
     @Override
     public void btnClick(boolean btnType) {
-
         finish();
     }
 }
