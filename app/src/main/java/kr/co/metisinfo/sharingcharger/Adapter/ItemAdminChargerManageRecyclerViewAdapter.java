@@ -80,6 +80,11 @@ public class ItemAdminChargerManageRecyclerViewAdapter extends RecyclerView.Adap
     }
 
     @Override
+    public int getItemViewType(int position){
+        return position;
+    }
+
+    @Override
     public int getItemCount() {
         return list.size();
     }
