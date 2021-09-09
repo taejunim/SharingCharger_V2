@@ -90,7 +90,7 @@
 
                 <!-- 예약없을때-->
                 <RelativeLayout
-                    android:id="@+id/layout_charging_info"
+                    android:id="@+id/layout_bottom_tab"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_alignParentBottom="true"

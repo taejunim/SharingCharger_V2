@@ -475,7 +475,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             checkBookmark(view, Integer.parseInt(binding.txtChgrDetailNm.getTag().toString()));
         });
 
-        binding.layoutChargingInfo.setOnClickListener(view -> {
+        binding.layoutBottomTab.setOnClickListener(view -> {
 
             showSearchCondition();
         });
@@ -1130,7 +1130,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         binding.layoutChgrInfo.setVisibility(View.VISIBLE);
         binding.layoutChgrInfo.startAnimation(translateTop);
 
-        binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
+        binding.layoutBottomTab.setVisibility(View.INVISIBLE);
 
         return chargerList.get(clickPOIIndex).id;
     }
@@ -1287,7 +1287,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                 binding.layoutChgrInfo.setVisibility(View.INVISIBLE);
 
-                binding.layoutChargingInfo.setVisibility(View.VISIBLE);
+                binding.layoutBottomTab.setVisibility(View.VISIBLE);
 
                 isPageOpen = false;
             } else {
@@ -1352,7 +1352,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
             SearchAddress();
 
-            binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
+            binding.layoutBottomTab.setVisibility(View.INVISIBLE);
 
             //예약클릭시 디테일정보 표시
             setReservationDetailInfo(reservationModel);
@@ -1365,7 +1365,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         //예약없을 시 충전기 검색
         else {
 
-            binding.layoutChargingInfo.setVisibility(View.VISIBLE);
+            binding.layoutBottomTab.setVisibility(View.VISIBLE);
             binding.layoutReservationInfo.setVisibility(View.INVISIBLE);
 
             /*ChargerModel chargerModel;
