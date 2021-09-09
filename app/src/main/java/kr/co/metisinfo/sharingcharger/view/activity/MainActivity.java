@@ -1040,6 +1040,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             mapView.addPOIItem(mDefaultMarker);
         }
         mapPOIItems = mapView.getPOIItems();
+
+        hideLoading(binding.loading);
     }
 
     private void showAll() {
@@ -1247,17 +1249,23 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     @Override
     public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
-
+        hideLayout();
+        showLoading(binding.loading);
     }
 
     @Override
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
+        setAddress(mapPoint);
 
+        refreshChargerList();
     }
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+        setAddress(mapPoint);
+    }
 
+    private void setAddress(MapPoint mapPoint) {
         if (searchKeyword.equals("")) {
             locationLat = mapPoint.getMapPointGeoCoord().latitude;
             locationLng = mapPoint.getMapPointGeoCoord().longitude;
@@ -1431,6 +1439,60 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         } catch (Exception e) {
             Log.e("metis", "getChargersAPI Exception : " + e);
+        }
+    }
+
+    private void refreshChargerList() {
+        String tempRadius = reserveRadius;
+
+        if (tempRadius.equals("전체")) {
+            tempRadius = "";
+        } else {
+            tempRadius = tempRadius.replaceAll("km", "").trim();
+        }
+        Log.e("metis", "tempRadius : " + tempRadius);
+
+        Log.e("metis", "gpsX : " + Constants.currentLocationLat);
+        Log.e("metis", "gpsY : " + Constants.currentLocationLng);
+
+        String tempStartDate = String.format(Locale.KOREA, "%04d", chargingStartYYYY) + "-" + String.format(Locale.KOREA, "%02d", chargingStartMM) + "-" + String.format(Locale.KOREA, "%02d", chargingStartDD) + "T" + String.format(Locale.KOREA, "%02d", chargingStartHH) + ":" + String.format(Locale.KOREA, "%02d", chargingStartII) + ":00";
+
+        Log.e("metis", "tempStartDate  : " + tempStartDate);
+
+        String tempEndDate = String.format(Locale.KOREA, "%04d", chargingEndYYYY) + "-" + String.format(Locale.KOREA, "%02d", chargingEndMM) + "-" + String.format(Locale.KOREA, "%02d", chargingEndDD) + "T" + String.format(Locale.KOREA, "%02d", chargingEndHH) + ":" + String.format(Locale.KOREA, "%02d", chargingEndII) + ":00";
+        Log.e("metis", "endDate : " + tempEndDate);
+
+        try {
+
+            //충전기 리스트 가져오기
+            Map<String, Object> map = apiUtils.getChargers(tempStartDate, tempEndDate, tempRadius, chargerList);
+
+            boolean result = (boolean) map.get("result");
+
+            ArrayList<ChargerModel> tempChargerList = (ArrayList<ChargerModel>) map.get("list");
+            if(result){
+                //if (chargerList.size() != tempChargerList.size()) {
+
+                    chargerList = tempChargerList;
+
+                    pointList.clear();
+
+                    for (int i = 0; i < chargerList.size(); i++) {
+
+                        pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
+                    }
+
+                    createDefaultMarker(binding.mapView);
+                //}
+
+            }else{
+                Toast.makeText(getApplicationContext(), "충전기 목록을 가져오는데 실패하였습니다. 충전기 검색을 다시 해주세요.", Toast.LENGTH_SHORT).show();
+                hideLoading(binding.loading);
+            }
+
+        } catch (Exception e) {
+            Log.e("metis", "getChargersAPI Exception : " + e);
+            hideLoading(binding.loading);
         }
     }
 

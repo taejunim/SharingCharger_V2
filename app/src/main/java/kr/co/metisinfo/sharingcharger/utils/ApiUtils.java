@@ -294,15 +294,8 @@ public class ApiUtils {
             String jsonResult = gson.toJson(response.body());
             List<ChargerModel> list = gson.fromJson(jsonResult, type);
 
-            Log.e("metis", "getChargers list : : " + list);
-
-            for (int i = 0; i < list.size(); i++) {
-
-                chargerList.add(list.get(i));
-            }
-
             map.put("result", true);
-            map.put("list", chargerList);
+            map.put("list", list);
         } else {
             map.put("result", false);
         }
