@@ -153,7 +153,7 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
             nextButton();
 
         } else {
-            Toast.makeText(getContext(), "등록할수 없는 충전기 입니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "등록되지 않은 BLE 입니다. \n고객센터로 문의주세요.",Toast.LENGTH_SHORT).show();
         }
     }
 

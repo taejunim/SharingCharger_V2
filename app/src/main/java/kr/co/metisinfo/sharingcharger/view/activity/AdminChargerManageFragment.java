@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,14 +14,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import kr.co.metisinfo.sharingcharger.Adapter.ItemAdminChargerManageRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerManageBinding;
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
+import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
 public class AdminChargerManageFragment extends Fragment implements ItemAdminChargerManageRecyclerViewAdapter.OnListItemSelected {
@@ -45,6 +49,9 @@ public class AdminChargerManageFragment extends Fragment implements ItemAdminCha
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_manage, container, false);
         View root = binding.getRoot();
+
+        AdminDashboardModel adminDashboardModel = apiUtils.getAdminDashboard();
+        setChargerManageText(adminDashboardModel.getResponseCode(), adminDashboardModel);
 
         mRecyclerView = binding.chargerManageRecycler;
         mRecyclerView.setHasFixedSize(true);
@@ -138,4 +145,18 @@ public class AdminChargerManageFragment extends Fragment implements ItemAdminCha
         super.onDestroyView();
         binding = null;
     }
+
+    private void setChargerManageText(int responseCode, AdminDashboardModel adminDashboardModel) {
+
+        if (responseCode == 200) {
+
+            binding.totalChargerCount.setText(String.valueOf(adminDashboardModel.getOwnChargerCount()));
+            binding.totalProfitPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(adminDashboardModel.getMonthlyCumulativePoint()) + " p");
+        } else {
+            binding.totalChargerCount.setText("-");
+            binding.totalProfitPoint.setText("- p");
+            Toast.makeText(getContext(), adminDashboardModel.getMessage(), Toast.LENGTH_SHORT);
+        }
+    }
+
 }
