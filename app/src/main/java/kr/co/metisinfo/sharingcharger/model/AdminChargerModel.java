@@ -27,5 +27,7 @@ public class AdminChargerModel extends ResponseModel implements Serializable {
     public String providerCompanyName;
     public String rangeOfFee;
     public String sharedType;
+    public String chargerType;
+    public String supplyCapacity;
     public String updated;
 }

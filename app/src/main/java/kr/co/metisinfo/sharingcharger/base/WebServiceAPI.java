@@ -200,7 +200,7 @@ public interface WebServiceAPI {
     @GET("/api/v1/chargers/ble-number")
     Call<Object> getChargerInformationFromBleNumber(@Query("bleNumber") String bleNumber, @Query("sort") String sort, @Query("page") int page, @Query("size") int size);
 
-    // 소유자 충전기 등록
-    @PUT("/api/v1/chargers/app/{id}/assign")
-    Call<Object> assignCharger(@Path("id") int id, @Body AdminChargerModel adminCharger);
+    // 소유자 BLE 충전기 등록
+    @PUT("/api/v1/chargers/{id}/assign")
+    Call<Object> assignBleCharger(@Path("id") int id, @Body AdminChargerModel adminCharger);
 }

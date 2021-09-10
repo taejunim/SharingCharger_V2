@@ -50,10 +50,15 @@ public class ItemAdminChargerManageRecyclerViewAdapter extends RecyclerView.Adap
 
         binding.adminChargerName.setText(adminChargerModel.name);
 
-        String tempBleNumber = adminChargerModel.bleNumber.replaceAll(":", "");
-        tempBleNumber = tempBleNumber.substring(tempBleNumber.length() - 4, tempBleNumber.length());
+        if (adminChargerModel.bleNumber.equals("")) {
+            binding.adminChargerBleText.setText("");
+        } else {
+            String tempBleNumber = "";
+            tempBleNumber = adminChargerModel.bleNumber.replaceAll(":", "");
+            tempBleNumber = tempBleNumber.substring(tempBleNumber.length() - 4, tempBleNumber.length());
+            binding.adminChargerBleText.setText( ThisApplication.context.getResources().getString(R.string.charger_manage_charger_ble_text, tempBleNumber));
+        }
 
-        binding.adminChargerBleText.setText( ThisApplication.context.getResources().getString(R.string.charger_manage_charger_ble_text, tempBleNumber));
         binding.adminChargerAddress.setText(adminChargerModel.address);
         binding.adminChargerNumber.setText(String.valueOf(position + 1));
         binding.adminChargerDescription.setText(adminChargerModel.description.equals("") ? "-" : adminChargerModel.description);

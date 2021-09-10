@@ -721,7 +721,7 @@ public class ApiUtils {
 
         try {
 
-            Response<Object> response = webServiceAPI.assignCharger(adminChargerModel.getId(), adminChargerModel).execute();
+            Response<Object> response = webServiceAPI.assignBleCharger(adminChargerModel.getId(), adminChargerModel).execute();
 
             if (response.code() == 200) {
                 JSONObject json = new JSONObject((Map) response.body());

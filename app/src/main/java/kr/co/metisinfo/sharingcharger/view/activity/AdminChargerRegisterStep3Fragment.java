@@ -103,6 +103,36 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
         String detailAddress = binding.editTextDetailAddress.getText().toString();
         String parkingFeeDescription = binding.editParkingFeeDescription.getText().toString();
 
+        /*AdminChargerModel adminChargerModel = new AdminChargerModel();
+
+        adminChargerModel.setId(getArguments().getInt("id"));
+
+        //좌표만 보내면 되기 떄문에 주소는 빈값으로 보냄
+        adminChargerModel.setAddress("제주특별자치도 제주시 아라일동 3005-3");
+        *//*adminChargerModel.setGpsX(getArguments().getDouble("gpsX"));
+        adminChargerModel.setGpsY(getArguments().getDouble("gpsY"));*//*
+
+        //충전기 상태 기본값
+        adminChargerModel.setCurrentStatusType("READY");
+        adminChargerModel.setOwnerType("Personal");
+
+        //adminChargerModel.setBleNumber(getArguments().getString("bleNumber"));
+        adminChargerModel.setBleNumber("");
+        adminChargerModel.setCableFlag(binding.cableExistY.isChecked());
+
+        adminChargerModel.setDetailAddress(detailAddress);
+
+        adminChargerModel.setOwnerName(email);
+        adminChargerModel.setName(getArguments().getString("chargerName"));
+        adminChargerModel.setDescription(getArguments().getString("chargerDescription"));
+
+
+        adminChargerModel.setParkingFeeDescription(parkingFeeDescription);
+        adminChargerModel.setParkingFeeFlag(binding.parkingFeeY.isChecked());
+        adminChargerModel.setProviderCompanyId(getArguments().getInt("providerCompanyId"));
+
+        adminChargerModel.setChargerType("MODEM");
+        adminChargerModel.setSupplyCapacity("STANDARD");*/
         AdminChargerModel adminChargerModel = new AdminChargerModel();
 
         adminChargerModel.setId(getArguments().getInt("id"));
