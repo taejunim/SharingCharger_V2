@@ -12,6 +12,7 @@
     <color name="include_header">#010101</color>
     <color name="blue_button">#3498DB</color>
     <color name="blue_button_click">#4688B4</color>
+    <color name="blue_text">#3498DB</color>
 
     <color name="red">#C0392B</color>
     <color name="neutral_tint">#BDBDBD</color>

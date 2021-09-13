@@ -1,8 +1,11 @@
 package kr.co.metisinfo.sharingcharger.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.graphics.Point;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -251,6 +254,17 @@ public class CommonUtils {
     //동적으로 layoutParam 설정을 위해 float -> DP 로 변경
     public int convertToDp(Float value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, ThisApplication.context.getResources().getDisplayMetrics());
+    }
+
+    //기기의 너비구해서 60% 값 리턴
+    public int getPercentHeight(Activity activity, int percent) {
+
+        Display display = activity.getWindowManager().getDefaultDisplay();  // in Activity
+
+        Point size = new Point();
+        display.getRealSize(size); // or getSize(size)
+        int height = size.y;
+        return height * percent / 100;
     }
 }
 

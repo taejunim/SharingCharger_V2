@@ -12,9 +12,10 @@ public class ChargerModel {
     public String chargerStateCode;// 충전기 상태 코드
 
 
- // 진우 DTO
+    // 진우 DTO
     public String acceptType;
     public String address;
+    public String detailAddress;
     public String bleNumber;
     public String created;
     public String currentStatusType;

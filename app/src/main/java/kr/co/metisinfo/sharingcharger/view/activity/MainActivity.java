@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -24,9 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
@@ -53,12 +57,15 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import kr.co.metisinfo.sharingcharger.Adapter.ItemAdminChargerManageRecyclerViewAdapter;
+import kr.co.metisinfo.sharingcharger.Adapter.ItemMainChargerRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.Constants;
@@ -84,7 +91,7 @@ import kr.co.metisinfo.sharingcharger.view.viewInterface.FragmentDialogInterface
 import kr.co.metisinfo.sharingcharger.viewModel.BookmarkViewModel;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements MapView.POIItemEventListener, MapView.MapViewEventListener, FragmentDialogInterface {
+public class MainActivity extends BaseActivity implements MapView.POIItemEventListener, MapView.MapViewEventListener, FragmentDialogInterface, ItemMainChargerRecyclerViewAdapter.OnListItemSelected {
 
     ActivityMainBinding binding;
 
@@ -182,6 +189,12 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     ReservationDateModel reservationDateModel = new ReservationDateModel();
 
+    private ItemMainChargerRecyclerViewAdapter itemMainChargerRecyclerViewAdapter;
+    private RecyclerView mainChargerRecyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private int currentVisibleChargerPosition = -1;
+    MapPOIItem currentVisibleCharger;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -209,8 +222,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     binding.editSearch.setText("");
 
-                    /*gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-                    Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);*/
                     showLoading(binding.loading);
 
                     reserveChargingMinute = data.getIntExtra("chargingMinute", -1);
@@ -275,7 +286,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                     binding.editSearch.setText(model.placeName);
                     searchKeyword = model.placeName;
                     binding.layoutTop1.requestFocus();
-
 
                     //키워드검색인지 즐겨찾기 인지 구분
                     String getType = data.getStringExtra("type");
@@ -345,28 +355,67 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             gerUserType = ThisApplication.staticUserModel.userType;
         }
 
+        ViewGroup.LayoutParams layoutParams = binding.layoutBottomTab.getLayoutParams();
+        layoutParams.height = commonUtils.getPercentHeight(this, 30);
+        binding.layoutBottomTab.setLayoutParams(layoutParams);
+
+        //충전기 목록 View
+        itemMainChargerRecyclerViewAdapter = new ItemMainChargerRecyclerViewAdapter(this);
+        mainChargerRecyclerView = binding.mainChargerRecyclerView;
+        mainChargerRecyclerView.setHasFixedSize(true);
+        mainChargerRecyclerView.scrollToPosition(0);
+        layoutManager = new LinearLayoutManager(this);
+        mainChargerRecyclerView.setLayoutManager(layoutManager);
+        mainChargerRecyclerView.setAdapter(itemMainChargerRecyclerViewAdapter);
+
+        //충전기 목록 스크롤시 지도 Move
+        mainChargerRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+
+                if (firstVisiblePosition != -1) {
+                    moveMapToPosition(firstVisiblePosition);
+                }
+            }
+        });
+    }
+
+    //목록의 충전기로 지도 이동
+    private void moveMapToPosition(int firstVisiblePosition) {
+        //이동
+        if (currentVisibleChargerPosition != firstVisiblePosition) {
+            ChargerModel chargerModel = chargerList.get(firstVisiblePosition);
+            binding.mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(chargerModel.gpsY, chargerModel.gpsX),true);
+            currentVisibleChargerPosition = firstVisiblePosition;
+        }
+    }
+
+    //목록의 Row 클릭시 해당 충전기 상세 Show
+    @Override
+    public void sendViewDataToActivity(int position) {
+        currentVisibleCharger = binding.mapView.findPOIItemByTag(position);
+        binding.mapView.selectPOIItem(currentVisibleCharger, true);
+        poiItemSelected(binding.mapView, currentVisibleCharger);
     }
 
     @Override
     public void initViewModel() {
 
-        Log.e("metis", "lat : " + Constants.currentLocationLat + ", lng : " + Constants.currentLocationLng);
         //현재 시간 표시
         setTime();
 
-        //메인 지도 화면, 충전기 정보 가져오기
-        //addChargerInfo(Constants.currentLocationLat, Constants.currentLocationLng);
-
         binding.mapView.setMapViewEventListener(this);
         binding.mapView.setPOIItemEventListener(this);
-
-        //마커 표시
-        //createDefaultMarker(binding.mapView);
-
-        //test 예약 있을때
-        /*binding.layoutChargingInfo.setVisibility(View.INVISIBLE);
-        binding.layoutReservationInfo.setVisibility(View.VISIBLE);*/
-        //test
     }
 
     @Override
@@ -1053,9 +1102,15 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         }
     }
 
+    //마커 클릭시 상세 보여줌
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
 
+        poiItemSelected(mapView, mapPOIItem);
+    }
+
+    //마커 클릭시 상세 보여줌
+    private void poiItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
         setAddress(mapPOIItem.getMapPoint());
 
         int chargerId;
@@ -1125,7 +1180,15 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     //충전기 상세정보
     public int setChargerDetailInfo(){
 
-        binding.txtChgrNm.setText(chargerList.get(clickPOIIndex).name);
+        if (chargerList.get(clickPOIIndex).bleNumber.equals("")) {
+            binding.txtChgrNm.setText(chargerList.get(clickPOIIndex).name);
+        } else {
+            String tempBleNumber = "";
+            tempBleNumber = chargerList.get(clickPOIIndex).bleNumber.replaceAll(":", "");
+            tempBleNumber = tempBleNumber.substring(tempBleNumber.length() - 4, tempBleNumber.length());
+            binding.txtChgrNm.setText(chargerList.get(clickPOIIndex).name + " " + ThisApplication.context.getResources().getString(R.string.charger_manage_charger_ble_text, tempBleNumber));
+        }
+
         //주소 및 충전 요금 즐겨찾기
         setChargerInfo();
 
@@ -1143,6 +1206,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         Log.e("metis", "chargerList : " + chargerList.size());
 
         binding.txtChgrAddrNm.setText(chargerList.get(clickPOIIndex).address);
+
+        if (chargerList.get(clickPOIIndex).detailAddress.equals("")) {
+            binding.chargerDetailAddressText.setText(ThisApplication.context.getResources().getString(R.string.charger_detail_address_text, "-"));
+        } else {
+            binding.chargerDetailAddressText.setText(ThisApplication.context.getResources().getString(R.string.charger_detail_address_text, chargerList.get(clickPOIIndex).detailAddress));
+        }
+
         binding.txtChgrAmtValue.setText(chargerList.get(clickPOIIndex).rangeOfFee);
 
         //즐겨찾기 확인
@@ -1226,6 +1296,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 binding.layoutReservationDetailInfo.setVisibility(View.INVISIBLE);
             }
         }
+        currentVisibleChargerPosition = -1;
+        currentVisibleCharger = null;
     }
 
     @Override
@@ -1256,7 +1328,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-        
+        Log.e("metis", "onMapViewMoveFinished");
+
+        if (currentVisibleChargerPosition != -1) {
+            currentVisibleCharger = mapView.findPOIItemByTag(currentVisibleChargerPosition);
+            mapView.selectPOIItem(currentVisibleCharger, true);
+            setAddress(currentVisibleCharger.getMapPoint());
+        }
     }
 
     private void setAddress(MapPoint mapPoint) {
@@ -1425,6 +1503,7 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
             if(result){
                 chargerList = (ArrayList<ChargerModel>) map.get("list");
+                itemMainChargerRecyclerViewAdapter.setList(chargerList);
             }else{
                 Toast.makeText(getApplicationContext(), "충전기 목록을 가져오는데 실패하였습니다. 충전기 검색을 다시 해주세요.", Toast.LENGTH_SHORT).show();
             }
@@ -1471,6 +1550,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                     pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
                 }
+
+                itemMainChargerRecyclerViewAdapter.setList(chargerList);
 
                 createDefaultMarker(binding.mapView);
 

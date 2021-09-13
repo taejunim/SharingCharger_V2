@@ -45,6 +45,7 @@
     <string name="search_condition_title_total">총&#160;</string>
     <string name="search_condition_title_charging">&#160;충전</string>
     <string name="main_charge_amt_key">충전 요금 : 시간당&#160;</string>
+    <string name="charger_detail_address_text">상세주소 : %1$s</string>
 
     <!-- 예약진행-->
     <string name="reservation_progress_title">예약 진행</string>

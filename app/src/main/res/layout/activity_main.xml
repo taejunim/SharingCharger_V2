@@ -92,7 +92,7 @@
                 <RelativeLayout
                     android:id="@+id/layout_bottom_tab"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="300dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
@@ -100,21 +100,23 @@
                     android:visibility="visible">
 
                     <FrameLayout
+                        android:id="@+id/charger_image_layout"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:background="@drawable/border_blue_50">
 
-                    <ImageView
-                        android:id="@+id/image_clock"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="5dp"
-                        android:background="@mipmap/battery_img"
-                        android:contentDescription="@string/image_description" />
+                        <ImageView
+                            android:id="@+id/image_clock"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:background="@mipmap/battery_img"
+                            android:contentDescription="@string/image_description" />
 
                     </FrameLayout>
                     <RelativeLayout
@@ -122,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="18dp">
+                        android:layout_marginTop="10dp">
 
                         <TextView
                             android:id="@+id/txt_charging_time_start"
@@ -161,20 +163,31 @@
                         android:layout_below="@+id/layout_charging_time"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="5dp"
                         android:textColor="@color/black"
-                        android:textSize="17dp"
+                        android:textSize="16sp"
                         tools:text="7/24 (금) 22:30 ~ 23:00" />
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="10dp"
-                        android:button="@android:color/transparent"
-                        android:contentDescription="@string/image_description"
-                        android:padding="15dp"
-                        android:src="@mipmap/btn_dropdown" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/charger_image_layout"
+                        android:background="@color/bright_white"/>
+
+                    <RelativeLayout
+                        android:id="@+id/main_charger_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/charger_image_layout"
+                        android:layout_margin="10dp"
+                        android:background="@color/white">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/main_charger_recycler_View"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
                 <!-- 예약없을때-->
@@ -492,11 +505,11 @@
             <RelativeLayout
                 android:id="@+id/layout_chgr_info"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="330dp"
                 android:background="@drawable/edit_text_border"
                 android:visibility="invisible"
                 app:behavior_hideable="false"
-                app:behavior_peekHeight="300dp"
+                app:behavior_peekHeight="330dp"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
                 <View
@@ -561,10 +574,19 @@
                         android:textSize="15dp" />
 
                     <TextView
-                        android:id="@+id/txt_chgr_amt_key"
+                        android:id="@+id/charger_detail_address_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txt_chgr_addr_nm"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/gray"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/txt_chgr_amt_key"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/charger_detail_address_text"
                         android:layout_marginTop="10dp"
                         android:text="@string/main_charge_amt_key"
                         android:textColor="@color/black"
@@ -574,7 +596,7 @@
                         android:id="@+id/txt_chgr_amt_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/txt_chgr_addr_nm"
+                        android:layout_below="@+id/charger_detail_address_text"
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@+id/txt_chgr_amt_key"
                         android:textColor="@color/black"
