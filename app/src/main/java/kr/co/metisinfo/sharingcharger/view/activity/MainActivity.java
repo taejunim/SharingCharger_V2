@@ -57,14 +57,12 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import kr.co.metisinfo.sharingcharger.Adapter.ItemAdminChargerManageRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.Adapter.ItemMainChargerRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
@@ -87,6 +85,7 @@ import kr.co.metisinfo.sharingcharger.model.SearchKeywordModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.viewInterface.FragmentDialogInterface;
 import kr.co.metisinfo.sharingcharger.viewModel.BookmarkViewModel;
 import retrofit2.Response;
@@ -194,6 +193,8 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     private RecyclerView.LayoutManager layoutManager;
     private int currentVisibleChargerPosition = -1;
     MapPOIItem currentVisibleCharger;
+
+    PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1323,7 +1324,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
         setAddress(mapPoint);
 
-        refreshChargerList();
+        if (reservationModel != null) {
+            Log.e("metis", "예약이 있어서 충전기 검색 안 함");
+            hideLoading(binding.loading);
+        } else {
+            refreshChargerList();
+        }
+
     }
 
     @Override
@@ -1367,7 +1374,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
                 binding.layoutChgrInfo.setVisibility(View.INVISIBLE);
 
-                binding.layoutBottomTab.setVisibility(View.VISIBLE);
+                if (reservationModel != null) {
+                    binding.layoutBottomTab.setVisibility(View.INVISIBLE);
+                    binding.layoutReservationInfo.setVisibility(View.VISIBLE);
+                } else {
+                    binding.layoutBottomTab.setVisibility(View.VISIBLE);
+                    binding.layoutReservationInfo.setVisibility(View.INVISIBLE);
+                }
 
                 isPageOpen = false;
             } else {
@@ -1416,8 +1429,6 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         pointList.clear();
         chargerList.clear();
 
-        /*gifImage = new GlideDrawableImageViewTarget(binding.imageLoading);
-        Glide.with(this).load(R.mipmap.spinner_loading).into(gifImage);*/
         showLoading(binding.loading);
 
         //예약 상태 확인, 예약없음, 예약 있음, 충전 중
@@ -1425,49 +1436,64 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         if (reservationModel != null) {
 
-            //userType 체크, 예약 있을시 예약화면 표시 or 충전중 표시
-            checkRecharge();
-
-            SearchAddress();
-
-            binding.layoutBottomTab.setVisibility(View.INVISIBLE);
-
-            //예약클릭시 디테일정보 표시
-            setReservationDetailInfo(reservationModel);
-
-            binding.layoutReservationInfo.setVisibility(View.VISIBLE);
-
-            pointList.add(MapPoint.mapPointWithGeoCoord(Constants.currentLocationLat, Constants.currentLocationLng));
+            showLayoutIfExistReservation();
 
         }
         //예약없을 시 충전기 검색
         else {
 
-            binding.layoutBottomTab.setVisibility(View.VISIBLE);
-            binding.layoutReservationInfo.setVisibility(View.INVISIBLE);
-
-            /*ChargerModel chargerModel;
-
-            chargerModel = new ChargerModel();
-
-            chargerModel.id = -1;
-            chargerModel.address = "현재위치";
-            chargerModel.gpsY = lat;
-            chargerModel.gpsX = lng;
-            chargerModel.name = "현재위치";
-
-            chargerList.add(chargerModel);*/
-
-            getChargersAPI();
-
-            for (int i = 0; i < chargerList.size(); i++) {
-
-                pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
-            }
-
-            createDefaultMarker(binding.mapView);
+            showLayoutIfNotExistReservation();
         }
     }
+
+    private void showLayoutIfExistReservation() {
+        //userType 체크, 예약 있을시 예약화면 표시 or 충전중 표시
+        checkRecharge();
+
+        SearchAddress();
+
+        binding.layoutBottomTab.setVisibility(View.INVISIBLE);
+
+        //예약클릭시 디테일정보 표시
+        setReservationDetailInfo(reservationModel);
+
+        binding.layoutReservationInfo.setVisibility(View.VISIBLE);
+
+        pointList.add(MapPoint.mapPointWithGeoCoord(reservationModel.gpsY, reservationModel.gpsX));
+
+
+        binding.mapView.removeAllPOIItems();
+
+        MapPOIItem mDefaultMarker = new MapPOIItem();
+        mDefaultMarker.setItemName(reservationModel.chargerName);
+        mDefaultMarker.setTag(0);
+        mDefaultMarker.setMapPoint(pointList.get(0));
+        mDefaultMarker.setSelectedMarkerType(MapPOIItem.MarkerType.CustomImage);
+        mDefaultMarker.setCustomSelectedImageResourceId(R.mipmap.seleted_marker);
+        mDefaultMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+        mDefaultMarker.setCustomImageResourceId(R.mipmap.blue_marker_40);
+        mDefaultMarker.setShowCalloutBalloonOnTouch(false);                     // POI 클릭시 말풍선 보여주는지 여부
+        binding.mapView.addPOIItem(mDefaultMarker);
+
+        mapPOIItems = binding.mapView.getPOIItems();
+
+        hideLoading(binding.loading);
+    }
+
+    private void showLayoutIfNotExistReservation() {
+        binding.layoutBottomTab.setVisibility(View.VISIBLE);
+        binding.layoutReservationInfo.setVisibility(View.INVISIBLE);
+
+        getChargersAPI();
+
+        for (int i = 0; i < chargerList.size(); i++) {
+
+            pointList.add(MapPoint.mapPointWithGeoCoord(chargerList.get(i).gpsY, chargerList.get(i).gpsX));
+        }
+
+        createDefaultMarker(binding.mapView);
+    }
+
 
     public void getChargersAPI() {
 
@@ -1612,12 +1638,26 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
 
         binding.reservationDetailTotalTime.setText(totalTime);
         binding.reservationDetailDetailTime.setText(timeTerm);
-        binding.txtChgrDetailNm.setText(reservationModel.chargerName);
+
+        if (reservationModel.bleNumber.equals("")) {
+            binding.txtChgrDetailNm.setText(reservationModel.chargerName);
+        } else {
+            String tempBleNumber = "";
+            tempBleNumber = reservationModel.bleNumber.replaceAll(":", "");
+            tempBleNumber = tempBleNumber.substring(tempBleNumber.length() - 4, tempBleNumber.length());
+            binding.txtChgrDetailNm.setText(reservationModel.chargerName + " " + ThisApplication.context.getResources().getString(R.string.charger_manage_charger_ble_text, tempBleNumber));
+        }
 
         binding.txtChgrDetailNm.setTag(reservationModel.chargerId);
 
         //"제주 제주시 관광대학로 111(아라일동)"
         binding.txtChgrAddrDetailNm.setText(reservationModel.chargerAddress);
+
+        if (reservationModel.chargerDetailAddress.equals("")) {
+            binding.txtChgrDetailAddrDetailNm.setText(ThisApplication.context.getResources().getString(R.string.charger_detail_address_text, "-"));
+        } else {
+            binding.txtChgrDetailAddrDetailNm.setText(ThisApplication.context.getResources().getString(R.string.charger_detail_address_text, reservationModel.chargerDetailAddress));
+        }
 
         //"178p"
         binding.txtChgrDetailAmtValue.setText(reservationModel.rangeOfFee);

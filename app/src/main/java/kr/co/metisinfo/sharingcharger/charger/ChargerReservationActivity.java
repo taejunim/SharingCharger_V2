@@ -16,7 +16,7 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityReservationProgressBinding;
-import kr.co.metisinfo.sharingcharger.dialog.InstantChargingDialog;
+
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
