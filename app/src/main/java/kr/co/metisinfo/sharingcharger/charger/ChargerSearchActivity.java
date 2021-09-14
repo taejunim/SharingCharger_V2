@@ -1,7 +1,10 @@
 package kr.co.metisinfo.sharingcharger.charger;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -45,6 +48,16 @@ public class ChargerSearchActivity extends BaseActivity {
     List<EVZScanResult> mScData;
     EVZScanResult mEVZScanResult;
 
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {  // 실행이 끝난후 확인 가능
+            Bundle bd = msg.getData();
+
+            if (bd.getBoolean("bluetooth")) {
+                getBLEScan();
+            }
+        }
+    };
+
     @Override
     public void initLayout() {
 
@@ -76,9 +89,7 @@ public class ChargerSearchActivity extends BaseActivity {
             * */
             mEvzBluetooth.setBluetooth(true);
 
-            getBLEScan();
-
-            /*new Handler().postDelayed(new Runnable() {// 2.5 초 후에 실행
+            new Handler().postDelayed(new Runnable() {// 1 초 후에 실행
                 @Override
                 public void run() {
                     Message msg = mHandler.obtainMessage();  //사용할 핸들러를 이용해서 보낼 메시지 객체 생성
@@ -89,7 +100,7 @@ public class ChargerSearchActivity extends BaseActivity {
                     mHandler.sendMessage(msg);     //메세지를 핸들러로 넘긴다.
 
                 }
-            }, 2500);*/
+            }, 1000);
 
         });
     }

@@ -27,6 +27,9 @@ public class CommonUtils {
 
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    @SuppressLint("SimpleDateFormat")
+    SimpleDateFormat remainChargingTimeFormat = new SimpleDateFormat("HH:mm");
+
     public static String val2(int str) {
 
         String val = Integer.toString(str);
@@ -200,6 +203,21 @@ public class CommonUtils {
     }
 
     /**
+     * sec를 hh:mm:ss로 변환
+     * @param sec       sec
+     * @return          hh:mm:ss
+     */
+    public String remainChargingTime(int sec) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,sec);
+
+        return remainChargingTimeFormat.format(calendar.getTime());
+    }
+
+    /**
      * sec 시간 계산(yyyy-MM-dd HH:mm:ss)
      * @param startTime     yyyy-MM-dd HH:mm:ss
      * @param sec           sec
@@ -256,7 +274,18 @@ public class CommonUtils {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, ThisApplication.context.getResources().getDisplayMetrics());
     }
 
-    //기기의 너비구해서 60% 값 리턴
+    //기기의 너비구해서 % 값 리턴
+    public int getPercentWidth(Activity activity, int percent) {
+
+        Display display = activity.getWindowManager().getDefaultDisplay();  // in Activity
+
+        Point size = new Point();
+        display.getRealSize(size); // or getSize(size)
+        int width = size.x;
+        return width * percent / 100;
+    }
+
+    //기기의 높이구해서 % 값 리턴
     public int getPercentHeight(Activity activity, int percent) {
 
         Display display = activity.getWindowManager().getDefaultDisplay();  // in Activity

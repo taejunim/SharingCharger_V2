@@ -696,6 +696,7 @@
                     android:id="@+id/btn_reservation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="40dp"
                     android:visibility="visible"
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/button_border_blue"

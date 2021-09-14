@@ -419,19 +419,24 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         binding.mapView.setPOIItemEventListener(this);
     }
 
+    private void showReservationLayout() {
+        clickPOIIndex = 1;
+
+        CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ReservationInfo", Integer.parseInt(binding.txtChgrDetailNm.getTag().toString()));
+        task.execute();
+
+        binding.layoutReservationDetailInfo.setVisibility(View.VISIBLE);
+        binding.layoutReservationDetailInfo.startAnimation(translateTop);
+
+        binding.mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(reservationModel.gpsY, reservationModel.gpsX),true);
+    }
+
     @Override
     public void setOnClickListener() {
 
         //예약 있을시
         binding.layoutReservationInfo.setOnClickListener(view -> {
-
-            clickPOIIndex = 1;
-
-            CheckBookmarkBackgroundTask task = new CheckBookmarkBackgroundTask(this, "ReservationInfo", Integer.parseInt(binding.txtChgrDetailNm.getTag().toString()));
-            task.execute();
-
-            binding.layoutReservationDetailInfo.setVisibility(View.VISIBLE);
-            binding.layoutReservationDetailInfo.startAnimation(translateTop);
+            showReservationLayout();
         });
 
         //예약 닫기버튼
@@ -1092,9 +1097,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         float minZoomLevel = 4;
         float maxZoomLevel = 10;
 
-        //pointList.add(MapPoint.mapPointWithGeoCoord(Constants.currentLocationLat, Constants.currentLocationLng));
+        MapPoint mapPoint;
 
-        MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(Constants.currentLocationLat, Constants.currentLocationLng);
+        if (reservationModel != null) {
+            mapPoint = MapPoint.mapPointWithGeoCoord(reservationModel.gpsY, reservationModel.gpsX);
+        } else {
+            mapPoint = MapPoint.mapPointWithGeoCoord(Constants.currentLocationLat, Constants.currentLocationLng);
+        }
 
         if (checkLocationServiceStatus()) {
 
@@ -1106,8 +1115,13 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
     //마커 클릭시 상세 보여줌
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+        if (reservationModel != null) {
+            showReservationLayout();
+        } else {
+            mainChargerRecyclerView.scrollToPosition(mapPOIItem.getTag());
+            poiItemSelected(mapView, mapPOIItem);
+        }
 
-        poiItemSelected(mapView, mapPOIItem);
     }
 
     //마커 클릭시 상세 보여줌

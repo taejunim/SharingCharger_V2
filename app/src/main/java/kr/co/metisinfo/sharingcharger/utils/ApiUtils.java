@@ -319,18 +319,13 @@ public class ApiUtils {
             Gson gSon = new Gson();
             model = gSon.fromJson(json.toString(), RechargeModel.class);
 
-            Date oldDate = format.parse(stChargingTime);
-            Date nowDate = new Date();
-            Log.e("metis", "oldDate : " + format.format(oldDate));
-            Log.e("metis", "nowDate : " + format.format(nowDate));
+            Date oldDate = format.parse(model.startRechargeDate);
+            Date nowDate = format.parse(model.endRechargeDate);
 
             long diff = nowDate.getTime() - oldDate.getTime();
             long second = diff / 1000;
 
             model.chargingTime = cu.chargingTime((int) second);                                  //sec를 hh:mm:ss로 변환 CALL
-            model.startRechargeDate = stChargingTime;
-            model.endRechargeDate = cu.timeSecCalculation(model.startRechargeDate, (int) second);   //sec 시간 계산(yyyy-MM-dd HH:mm:ss) CALL
-
         }
 
         return model;

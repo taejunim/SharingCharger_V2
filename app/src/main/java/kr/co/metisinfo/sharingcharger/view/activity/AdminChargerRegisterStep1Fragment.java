@@ -44,7 +44,8 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerRegisterStep1Binding;;
 
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
-import kr.co.metisinfo.sharingcharger.utils.ApiUtils;;
+import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.utils.CommonUtils;;
 
 
 public class AdminChargerRegisterStep1Fragment extends Fragment {
@@ -57,24 +58,12 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
     private EVZScanManager mScanner;
     List<EVZScanResult> mScData;
 
-    CountDownTimer timer;
-
     public static Dialog dialog;
 
     ApiUtils apiUtils = new ApiUtils();
     AdminChargerModel adminChargerModel = new AdminChargerModel();
 
-    Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {  // 실행이 끝난후 확인 가능
-            Bundle bd = msg.getData();
-
-            // bluetooth 활성화
-            if (bd.getBoolean("bluetooth")) {
-
-                getBLEScan();
-            }
-        }
-    };
+    CommonUtils commonUtils = new CommonUtils();
 
     @Nullable
     @Override
@@ -224,19 +213,8 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
         dialogRecyclerView.setAdapter(adapter);
 
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.alert_dialog_border);
-        dialog.getWindow().setLayout(getDialogWidth(), WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(commonUtils.getPercentWidth(getActivity(), 60), WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.show(); // Dialog 출력
-    }
-
-    //기기의 너비구해서 60% 값 리턴
-    private int getDialogWidth() {
-
-        Display display = getActivity().getWindowManager().getDefaultDisplay();  // in Activity
-
-        Point size = new Point();
-        display.getRealSize(size); // or getSize(size)
-        int width = size.x;
-        return width * 60 / 100;
     }
 
     private void scanFailed() {

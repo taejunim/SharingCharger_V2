@@ -61,8 +61,6 @@ public class ItemMainChargerRecyclerViewAdapter extends RecyclerView.Adapter<Ite
 
         ChargerModel chargerModel = list.get(position);
 
-        cowViewHolder.itemView.setTag(chargerModel.getId());
-
         binding.chargerName.setText(chargerModel.name);
 
         if (chargerModel.bleNumber.equals("")) {
@@ -92,6 +90,16 @@ public class ItemMainChargerRecyclerViewAdapter extends RecyclerView.Adapter<Ite
 
             case "CHARGING" :
                 chargerStatusText = "충전중";
+                binding.chargerStatus.setTextColor(ContextCompat.getColor(ThisApplication.context, R.color.red));
+                break;
+
+            case "TROUBLE" :
+                chargerStatusText = "점검중";
+                binding.chargerStatus.setTextColor(ContextCompat.getColor(ThisApplication.context, R.color.red));
+                break;
+
+            case "CLOSE" :
+                chargerStatusText = "마감";
                 binding.chargerStatus.setTextColor(ContextCompat.getColor(ThisApplication.context, R.color.red));
                 break;
         }

@@ -79,6 +79,16 @@ public class ItemAdminChargerManageRecyclerViewAdapter extends RecyclerView.Adap
                 chargerStatusText = "충전중";
                 binding.adminChargerStatus.setTextColor(ContextCompat.getColor(ThisApplication.context, R.color.red));
                 break;
+
+                case "TROUBLE" :
+                chargerStatusText = "점검중";
+                binding.adminChargerStatus.setTextColor(ContextCompat.getColor(ThisApplication.context, R.color.red));
+                break;
+
+            case "CLOSE" :
+                chargerStatusText = "마감";
+                binding.adminChargerStatus.setTextColor(ContextCompat.getColor(ThisApplication.context, R.color.red));
+                break;
         }
 
         binding.adminChargerStatus.setText(chargerStatusText);

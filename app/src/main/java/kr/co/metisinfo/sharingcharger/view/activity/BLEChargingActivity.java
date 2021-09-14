@@ -1,6 +1,7 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,14 +10,18 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
@@ -28,12 +33,14 @@ import com.charzin.evzsdk.EvzScan;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import kr.co.metisinfo.sharingcharger.ChargerDialogAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
@@ -96,6 +103,8 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
     //start 함수가 2번 돌아가기 때문에 한번으로 막아줘야함
     boolean checkStart = true;
+
+    RechargeModel rechargeEndModel = new RechargeModel();
 
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {  // 실행이 끝난후 확인 가능
@@ -233,7 +242,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         ChargerTime = getIntent().getStringExtra("reservationTime");
         Log.e("metis", "JH ChargerTime: " + ChargerTime);
 
-        //BLEDisConnect();
+        BLEDisConnect();
 
         BLEPlugState();
 
@@ -254,15 +263,12 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                 dialog.dismiss();
                 chargerFrameClick(binding.frameStart);
             }else if(getMsgType.equals("Stop")){
-                finish();
+                showChargerFinishDialog(rechargeEndModel);
             }else{
                 Intent intent = new Intent(this, ChargerSearchActivity.class);
-
                 startActivity(intent);
-
                 finish();
             }
-
         });
 
         if(getMsgType.equals("SearchCharger")){
@@ -271,7 +277,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         }
 
         builder.show();
-
     }
 
     //충전시작, 충전종료 버튼
@@ -483,7 +488,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                         if (sec != 0) {
                             sec--;
 
-                            chargingTimerTx.setText(cu.chargingTime(sec));   //sec를 hh:mm:ss로 변환 CALL 하고 TEXT에 SET
+                            chargingTimerTx.setText(cu.remainChargingTime(sec));   //sec를 hh:mm:ss로 변환 CALL 하고 TEXT에 SET
                         } else {
                             BLEStop();
                         }
@@ -504,7 +509,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
                 Toast.makeText(BLEChargingActivity.this,"충전기 연결이 끊어졌습니다.",Toast.LENGTH_LONG).show();
                 Log.e("metis", "BLEDisConnect Code = "+code);
-                //finish();
+                hideLoading(binding.loading);
 
             }
         });
@@ -685,9 +690,8 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                     public void run() {
 
                         BLEGetTag();
-                        createMessage("Stop");
                     }
-                }, 2500);
+                }, 1000);
 
                 ChargingTimerStop();                                                                //충전진행 경과시간 End
             }
@@ -697,7 +701,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
                 Log.e("metis", "BLEStop Fail Code = "+code);
 
-                Toast.makeText(BLEChargingActivity.this, "BLEStop 충전 종료를 실패하였습니다.\n다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BLEChargingActivity.this, "충전 종료를 실패하였습니다.\n다시 시도하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
                 timerFinish();
                 finish();
             }
@@ -710,7 +714,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
     public void ChargingTimerStop() {
 
         TextView chargingTimerTx = (TextView) findViewById(R.id.charging_timer);
-        chargingTimerTx.setText("00:00:00");
+        chargingTimerTx.setText("00:00");
         chargingTimer.cancel();                                                                     //Timer 종료
     }
 
@@ -761,13 +765,11 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                             //getTagNumber == rechargeId 현재 내가 충전하고 있음 (정상종료)
                             if (_tag.Number != null && _tag.Number.equals(String.format(Locale.KOREA, "%013d", rechargeId))) {
 
-                                RechargeModel rechargeEndModel = apiUtils.endAuthenticateCharger(reservationModel.chargerId, model, stChargingTime);
+                                rechargeEndModel = apiUtils.endAuthenticateCharger(reservationModel.chargerId, model, stChargingTime);
 
                                 if(rechargeEndModel != null){
-                                    //충전 결과 표시
-                                    showChargerFinishDialog(rechargeEndModel);
                                     BLEDelOneTag(_tag);
-
+                                    setAlertDialog("Stop","충전기 종료 성공","충전기가 종료되었습니다.");
                                 }
                             }
                             // 비정상 종료
@@ -817,9 +819,48 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
      * */
     private void showChargerFinishDialog(RechargeModel rModel) {
 
-        ChargerFinishDialog cfd = new ChargerFinishDialog(this, rModel, this);
-        cfd.setCancelable(false);                                                                   //DIALOG BACKGROUND CLICK FALSE
-        cfd.show();
+        Dialog dialog = new Dialog(this);
+
+        LayoutInflater inf = getLayoutInflater();
+        View dialogView = inf.inflate(R.layout.charger_finish_dialog, null);
+        Button confirmButton = dialogView.findViewById(R.id.dialog_ok_btn);
+
+
+        TextView tv_first_deduction_point_txt = dialogView.findViewById(R.id.first_deduction_point_txt);
+        tv_first_deduction_point_txt.setText(String.valueOf(rModel.reservationPoint));                          //선차감 포인트 SET
+
+        TextView tv_prediction_refund_point_txt = dialogView.findViewById(R.id.prediction_refund_point_txt);
+        tv_prediction_refund_point_txt.setText(String.valueOf(rModel.reservationPoint-rModel.rechargePoint));   //환불 포인트 SET
+
+        TextView tv_filling_amount_txt = dialogView.findViewById(R.id.filling_amount_txt);
+        tv_filling_amount_txt.setText(String.valueOf(rModel.reservationPoint - (rModel.reservationPoint-rModel.rechargePoint)));                                       //실제 소진 포인트 SET
+
+        TextView reservationStartTimeText = dialogView.findViewById(R.id.reservation_start_time_txt);
+        reservationStartTimeText.setText(rModel.reservationStartDate);                                              //충전 시작 시간 SET
+
+        TextView reservationEndTimeText = dialogView.findViewById(R.id.reservation_end_time_txt);
+        reservationEndTimeText.setText(rModel.reservationEndDate);                                                  //충전 종료 시간 SET
+
+        TextView tv_charg_start_time_txt = dialogView.findViewById(R.id.charg_start_time_txt);
+        tv_charg_start_time_txt.setText(rModel.startRechargeDate);                                              //충전 시작 시간 SET
+
+        TextView tv_charg_end_time_txt = dialogView.findViewById(R.id.charg_end_time_txt);
+        tv_charg_end_time_txt.setText(rModel.endRechargeDate);                                                  //충전 종료 시간 SET
+
+        TextView tv_charging_time_txt = dialogView.findViewById(R.id.charging_time_txt);
+        tv_charging_time_txt.setText(rModel.chargingTime);                                                      //충전 시간 SET
+
+        confirmButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            finish();
+        });
+
+        dialog.setContentView(dialogView); // Dialog에 선언했던 layout 적용
+        dialog.setCancelable(false); // 외부 터치나 백키로 dimiss 시키는 것 막음
+
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.alert_dialog_border);
+        dialog.getWindow().setLayout(cu.getPercentWidth(this, 90), WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.show(); // Dialog 출력
     }
 
     //BLEDelOneTag
@@ -841,6 +882,21 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
                     timerFinish();
                 });
+            }
+        });
+    }
+
+    //BLEUserDis
+    public void BLEUserDis(){
+        mEB.BLEUserDis(new EvzProtocol.BLEUserDis() {
+            @Override
+            public void Success() {
+                Log.e("metis", "BLEUserDis Success");
+            }
+
+            @Override
+            public void Fail(int i, String s) {
+                Log.e("metis", "BLEUserDis Fail");
             }
         });
     }
