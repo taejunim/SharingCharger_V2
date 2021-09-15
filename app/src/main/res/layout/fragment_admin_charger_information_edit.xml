@@ -126,14 +126,14 @@
                     android:id="@+id/label_parking_fee_yn"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/label_detail_address"
+                    android:layout_alignStart="@id/charger_information_edit_title"
+                    android:layout_marginTop="30dp"
                     android:gravity="center_vertical"
                     android:minHeight="30dp"
+                    android:text="주차 요금 여부"
                     android:textColor="@color/black"
-                    android:layout_below="@id/label_detail_address"
-                    android:layout_marginTop="30dp"
-                    android:layout_alignStart="@id/charger_information_edit_title"
-                    android:textSize="17sp"
-                    android:text="주차 요금 여부"/>
+                    android:textSize="17sp" />
 
                 <RadioGroup
                     android:id="@+id/parking_fee_toggle"

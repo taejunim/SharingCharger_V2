@@ -137,6 +137,11 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
         adminChargerModel = apiUtils.getChargerInformationFromBleNumber(bleNumber);
 
+        if (bleNumber.equals("")) {
+            Toast.makeText(getContext(), "BLE가 선택되지 않았습니다.\nBLE 검색후 선택해주세요.",Toast.LENGTH_SHORT).show();
+           return;
+        }
+
         if(adminChargerModel.getResponseCode() == 200) {
 
             nextButton();

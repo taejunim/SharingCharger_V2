@@ -19,7 +19,7 @@
             android:layout_height="wrap_content" />
 
         <ImageView
-            android:id="@+id/image_datail_address"
+            android:id="@+id/image_address"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_below="@id/include_charger_register_menu"
@@ -30,28 +30,57 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/edit_text_detail_address"
-            android:layout_above="@id/edit_text_detail_address"
+            android:layout_alignStart="@id/edit_text_address"
+            android:layout_above="@id/edit_text_address"
             android:textColor="@color/black"
-            android:text="상세 주소"/>
+            android:text="주소"/>
+
+        <TextView
+            android:id="@+id/edit_text_address"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/image_address"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_toEndOf="@id/image_address"
+            android:autoSizeTextType="uniform"
+            android:background="@color/header_dummy"
+            android:gravity="center"
+            android:importantForAutofill="no"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/detail_address_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_text_address"
+            android:layout_alignStart="@+id/edit_text_address"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:text="상세 주소 : "/>
 
         <EditText
             android:id="@+id/edit_text_detail_address"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_datail_address"
-            android:layout_alignBottom="@id/image_datail_address"
-            android:layout_marginStart="30dp"
+            android:layout_alignBaseline="@+id/detail_address_text"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="30dp"
-            android:singleLine="true"
+            android:layout_toEndOf="@id/detail_address_text"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:background="@color/header_dummy"
-            android:textColor="@color/black"/>
+            android:singleLine="true"
+            android:textColor="@color/black" />
 
         <ImageView
             android:id="@+id/image_shared_type"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@id/image_datail_address"
+            android:layout_below="@id/detail_address_text"
             android:layout_marginTop="40dp"
             android:layout_marginStart="20dp"
             android:src="@mipmap/clock_black"/>
@@ -59,10 +88,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/radio_sharing"
             android:layout_above="@id/radio_sharing"
-            android:textColor="@color/black"
-            android:text="항시 운영 여부"/>
+            android:layout_alignStart="@id/radio_sharing"
+            android:text="항시 운영 여부"
+            android:textColor="@color/black" />
 
         <RadioGroup
             android:id="@+id/radio_sharing"
@@ -132,18 +161,21 @@
 
         <ImageView
             android:id="@+id/image_cable_exist_yn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_below="@id/image_parking_fee_yn"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="20dp"
-            android:src="@mipmap/car"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/charge_end" />
 
         <TextView
+            android:id="@+id/text_cable_exist_yn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@id/radio_cable_exist"
-            android:layout_above="@id/radio_cable_exist"
+            android:layout_below="@id/radio_parking_fee"
+            android:layout_marginTop="20dp"
             android:textColor="@color/black"
             android:text="케이블 존재 여부"/>
 
@@ -151,13 +183,17 @@
             android:id="@+id/radio_cable_exist"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_parking_fee_yn"
-            android:layout_alignBottom="@id/image_cable_exist_yn"
-            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/image_cable_exist_yn"
+            android:layout_alignLeft="@+id/radio_parking_fee"
+            android:layout_below="@id/text_cable_exist_yn"
+            android:layout_alignBaseline="@+id/image_cable_exist_yn"
+
             android:layout_marginEnd="30dp"
+
             android:orientation="horizontal"
             android:background="@color/header_dummy"
             android:checkedButton="@+id/cable_exist_y">
+
             <RadioButton
                 android:id="@+id/cable_exist_n"
                 style="@style/CustomRadioGroup"
@@ -171,15 +207,56 @@
                 android:text="있음"/>
         </RadioGroup>
 
+        <ImageView
+            android:id="@+id/image_charge_type"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/radio_cable_exist"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"
+            android:src="@mipmap/battery_img" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/radio_charge_type"
+            android:layout_above="@id/radio_charge_type"
+            android:textColor="@color/black"
+            android:text="충전 타입"/>
+
+        <RadioGroup
+            android:id="@+id/radio_charge_type"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@id/image_parking_fee_yn"
+            android:layout_alignBottom="@id/image_charge_type"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:orientation="horizontal"
+            android:background="@color/header_dummy"
+            android:checkedButton="@+id/charge_type_standard">
+            <RadioButton
+                android:id="@+id/charge_type_standard"
+                style="@style/CustomRadioGroup"
+                android:layout_marginStart="2dp"
+                android:text="완속"/>
+
+            <RadioButton
+                android:id="@+id/charge_type_slow"
+                style="@style/CustomRadioGroup"
+                android:layout_marginEnd="2dp"
+                android:text="저속"/>
+        </RadioGroup>
+
 
         <ImageView
             android:id="@+id/image_parking_fee_description"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/image_cable_exist_yn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/radio_charge_type"
+            android:layout_marginStart="23dp"
             android:layout_marginTop="40dp"
-            android:layout_marginStart="20dp"
-            android:src="@mipmap/document"/>
+            android:src="@mipmap/document" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -193,13 +270,15 @@
             android:id="@+id/edit_parking_fee_description"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_toEndOf="@id/image_parking_fee_description"
-            android:layout_alignBottom="@id/image_parking_fee_description"
-            android:layout_marginStart="30dp"
+            android:layout_alignTop="@id/image_parking_fee_description"
+            android:layout_marginStart="33dp"
             android:layout_marginEnd="30dp"
-            android:singleLine="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_toEndOf="@id/image_parking_fee_description"
             android:background="@color/header_dummy"
-            android:textColor="@color/black"/>
+            android:singleLine="true"
+            android:textColor="@color/black" />
     </RelativeLayout>
     </ScrollView>
         <include
