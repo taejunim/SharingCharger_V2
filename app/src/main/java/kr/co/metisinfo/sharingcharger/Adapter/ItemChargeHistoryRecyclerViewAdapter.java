@@ -13,12 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.metisinfo.sharingcharger.R;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ChargeHistoryItemListBinding;
 import kr.co.metisinfo.sharingcharger.model.RechargeModel;
 
 public class ItemChargeHistoryRecyclerViewAdapter extends RecyclerView.Adapter<ItemChargeHistoryRecyclerViewAdapter.CowViewHolder> {
 
-    private static final String TAG = ItemChargeHistoryRecyclerViewAdapter.class.getSimpleName();
+    DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
     private List<RechargeModel> list = new ArrayList<>();
 
@@ -31,7 +32,6 @@ public class ItemChargeHistoryRecyclerViewAdapter extends RecyclerView.Adapter<I
     public ItemChargeHistoryRecyclerViewAdapter.CowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         ChargeHistoryItemListBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.charge_history_item_list, parent, false);
-
         return new ItemChargeHistoryRecyclerViewAdapter.CowViewHolder(binding);
     }
 
@@ -43,22 +43,34 @@ public class ItemChargeHistoryRecyclerViewAdapter extends RecyclerView.Adapter<I
         RechargeModel model = list.get(position);
 
         binding.chargeHistoryNameTxt.setText(model.chargerName);
-
         binding.chargeHistoryDateTxt.setText(setDate(model.startRechargeDate, model.endRechargeDate));
 
-        DecimalFormat format = new DecimalFormat("###,###");
-
-        binding.chargeHistoryPointTxt.setText(format.format(model.rechargePoint));
+        if (model.reservationPoint >= 0) {
+            binding.chargeHistoryReservationPointTxt.setText(ThisApplication.context.getResources().getString(R.string.charge_history_reservation_point, decimalFormat.format(model.reservationPoint)));
+        } else {
+            binding.chargeHistoryReservationPointTxt.setText("정산중");
+        }
 
         // 충전시 일때 rechargePoint 0이기 때문에 endRechargeDate이 null 이면 정산중
         if(model.endRechargeDate == null){
-            binding.chargeHistoryPointTxt.setText("정산 중");
-            binding.chargeHistoryPoint1Txt.setVisibility(View.GONE);
+
+            binding.chargeHistoryRechargePointTxt.setText(ThisApplication.context.getResources().getString(R.string.charge_history_recharge_point,  "정산중"));
+            binding.chargeHistoryRefundPointTxt.setText(ThisApplication.context.getResources().getString(R.string.charge_history_refund_point,  "정산중"));
+
         }else{
-            binding.chargeHistoryPointTxt.setText(format.format(model.rechargePoint));
+
+            if (model.rechargePoint >= 0) {
+                binding.chargeHistoryRechargePointTxt.setText(ThisApplication.context.getResources().getString(R.string.charge_history_recharge_point, decimalFormat.format(model.rechargePoint)));
+            } else {
+                binding.chargeHistoryRechargePointTxt.setText(ThisApplication.context.getResources().getString(R.string.charge_history_recharge_point,  "정산 오류"));
+            }
+
+            if (model.refundPoint >= 0) {
+                binding.chargeHistoryRefundPointTxt.setText(ThisApplication.context.getResources().getString(R.string.charge_history_refund_point, decimalFormat.format(model.refundPoint)));
+            } else {
+                binding.chargeHistoryRefundPointTxt.setText(ThisApplication.context.getResources().getString(R.string.charge_history_recharge_point,  "정산 오류"));
+            }
         }
-
-
     }
     private String setDate(String getSDate, String getEDate) {
 

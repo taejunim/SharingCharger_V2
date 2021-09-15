@@ -5,7 +5,7 @@
     <RelativeLayout
         android:id="@+id/charge_history_top_layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp">
 
         <!-- 장치이름-->
@@ -64,29 +64,39 @@
             android:src="@mipmap/coin_gray"/>
 
         <TextView
-            android:id="@+id/charge_history_point_txt"
+            android:id="@+id/charge_history_reservation_point_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/charge_history_point_img"
             android:layout_below="@+id/charge_history_time_img"
+            android:layout_toEndOf="@+id/charge_history_point_img"
+            android:text="@string/charge_history_reservation_point"
             android:textColor="@color/black"
-            android:textSize="14dp"
-            android:text="2,562"/>
+            android:textSize="14dp" />
 
         <TextView
-            android:id="@+id/charge_history_point1_txt"
+            android:id="@+id/charge_history_recharge_point_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/charge_history_time_img"
-            android:layout_toEndOf="@+id/charge_history_point_txt"
-            android:text="포인트 사용"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/black"/>
+            android:layout_below="@+id/charge_history_reservation_point_txt"
+            android:layout_toEndOf="@+id/charge_history_point_img"
+            android:text="@string/charge_history_recharge_point"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/charge_history_refund_point_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/charge_history_recharge_point_txt"
+            android:layout_toEndOf="@+id/charge_history_point_img"
+            android:text="@string/charge_history_refund_point"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/charge_history_point_img"
+            android:layout_below="@+id/charge_history_refund_point_txt"
             android:layout_marginTop="20dp"
             android:background="@color/dark_gray"/>
 

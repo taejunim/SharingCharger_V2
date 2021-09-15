@@ -252,6 +252,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 closeDrawer();
 
+            } else if (groupPosition == 6) {
+
+                //회원 증명서
+                Intent intent = new Intent(startClass, WebViewActivity.class);
+                intent.putExtra("getTagName", "notice");                             //WEBVIEW GBN PARAM -> setting은 회원 증명서
+                startActivity(intent);
+                closeDrawer();
+
             }
 
             return false;

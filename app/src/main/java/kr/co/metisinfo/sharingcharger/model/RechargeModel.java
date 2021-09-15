@@ -22,5 +22,5 @@ public class RechargeModel {
     public double   rechargeKwh;                                                                    //충전량
     public int      rechargeMinute;                                                                 //충전 시간
     public String   chargingTime;                                                                   //경과 시간
-
+    public int      refundPoint;                                                                  //예상 환불 포인트
 }
