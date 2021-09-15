@@ -126,6 +126,24 @@ public class ApiUtils {
     }
 
     /**
+     * sms 문자
+     **/
+    public String getSms(String phoneNumber) throws Exception {
+
+        String certificateNo = null;
+
+        Response<Object> response = webServiceAPI.getSms(phoneNumber).execute();
+
+        if (response.code() == 200 && response.body() != null) {
+
+            certificateNo = response.body().toString();
+
+        }
+
+        return certificateNo;
+    }
+
+    /**
      * 비밀번호 리셋
      **/
     public Response<Object> passwordReset(String username, UserModel userModel) throws Exception {

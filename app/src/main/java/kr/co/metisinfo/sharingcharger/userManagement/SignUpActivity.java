@@ -128,8 +128,30 @@ public class SignUpActivity extends BaseActivity {
                 String phone = binding.registerPhoneInput.getText().toString().trim();
                 Log.e("metis", "phone : " + phone);
 
-                //추후 수정해야 함
-                isCertificationBtn = true;
+                try {
+
+                    tempCertificateNo = apiUtils.getSms(phone);
+
+                    if (tempCertificateNo != null) {
+                        Log.e(TAG, "response : " + tempCertificateNo);
+
+                        if (tempCertificateNo.contains(".")) {
+                            tempCertificateNo = tempCertificateNo.substring(0, tempCertificateNo.indexOf("."));
+                        }
+
+                        Log.e(TAG, "tempCertificateNo : " + tempCertificateNo);
+
+                        isCertificationBtn = true;
+                        binding.layoutTimeRemaining.setVisibility(View.VISIBLE);
+                        countDown("0300");
+                    } else {
+                        Toast.makeText(this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (Exception e) {
+                    Toast.makeText(this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "registerCertificationBtn Exception: " + e);
+                }
             }
 
         });
@@ -424,6 +446,7 @@ public class SignUpActivity extends BaseActivity {
 
                 // 변경 후
                 binding.txtCountDown.setText("재인증 요청");
+                tempCertificateNo = "";
                 isCertificationBtn = false;
                 // TODO : 타이머가 모두 종료될때 어떤 이벤트를 진행할지 처리
 

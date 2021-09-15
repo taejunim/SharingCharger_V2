@@ -54,6 +54,8 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
 
         binding.loginRegisterBtn.setOnClickListener(view -> goUserRegister());
 
+        binding.loginFindId.setOnClickListener(view -> findId());
+
         binding.loginResetPw.setOnClickListener(view -> getFindPassword());
 
         binding.loginBtn.setOnClickListener(view -> { // 로그인 버튼 클릭 리스너
@@ -76,7 +78,11 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
     public void init() {
 
         //Text 밑줄
-        SpannableString content = new SpannableString(getString(R.string.change_password));
+        SpannableString content = new SpannableString(getString(R.string.login_find_id));
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        binding.loginFindId.setText(content);
+
+        content = new SpannableString(getString(R.string.change_password));
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         binding.loginResetPw.setText(content);
     }
@@ -182,6 +188,13 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
         }
 
         return true;
+    }
+
+    private void findId() {
+
+        Intent intent = new Intent(this, FindIdActivity.class);
+
+        startActivity(intent);
     }
 
     private void getFindPassword() {

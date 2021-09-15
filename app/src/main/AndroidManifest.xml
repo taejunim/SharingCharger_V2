@@ -69,6 +69,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 
+        <!-- FindIdActivity -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.userManagement.FindIdActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
+
         <!-- PasswordResetActivity -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.userManagement.PasswordResetActivity"

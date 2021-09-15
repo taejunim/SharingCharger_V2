@@ -43,6 +43,10 @@ public interface WebServiceAPI {
     @POST("/api/v1/login")
     Call<UserModel> login(@Body UserModel user);
 
+    // SMS 인증 정보를 가져오기 위한 API
+    @GET("/api/v1/sms/{phone}")
+    Call<Object> getSms(@Path("phone") String phone);
+
     // 비밀번호 리셋
     @PATCH("/api/v1/reset/password/{username}")
     Call<Object> passwordReset(@Path("username") String username, @Body UserModel userModel);

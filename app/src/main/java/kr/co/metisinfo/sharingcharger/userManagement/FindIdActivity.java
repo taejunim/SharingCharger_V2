@@ -1,28 +1,34 @@
 package kr.co.metisinfo.sharingcharger.userManagement;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
+import kr.co.metisinfo.sharingcharger.databinding.ActivityFindIdBinding;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityUserRegisterBinding;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
+import kr.co.metisinfo.sharingcharger.view.activity.BLEChargingActivity;
 
-public class PasswordResetActivity extends BaseActivity {
+public class FindIdActivity extends BaseActivity {
 
-    private static final String TAG = PasswordResetActivity.class.getSimpleName();
+    private static final String TAG = FindIdActivity.class.getSimpleName();
 
-    ActivityUserRegisterBinding binding;
+    ActivityFindIdBinding binding;
 
     CountDownTimer timer;
 
-    private String tempCertificateNo = "1234";      // 임시 인증 번호
+    private String tempCertificateNo = "";      // 임시 인증 번호
 
     private boolean isCertificationBtn = false;
 
@@ -31,7 +37,7 @@ public class PasswordResetActivity extends BaseActivity {
     @Override
     public void initLayout() {
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_user_register);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_find_id);
 
         changeStatusBarColor(false);
 
@@ -46,14 +52,15 @@ public class PasswordResetActivity extends BaseActivity {
     public void setOnClickListener() {
 
         binding.includeHeader.btnBack.setOnClickListener(view -> finish());
-        binding.registerBtn.setOnClickListener(view -> passwordResetConfirm(this));
+        //binding.registerBtn.setOnClickListener(view -> passwordResetConfirm(this));
+        binding.registerBtn.setOnClickListener(view -> findId());
 
-        binding.registerCertificationBtn.setOnClickListener(view ->
+        binding.certificationButton.setOnClickListener(view ->
         {
 
             if (checkVerificationCode()) {
 
-                String phone = binding.registerPhoneInput.getText().toString().trim();
+                String phone = binding.userPhoneInput.getText().toString().trim();
                 Log.e("metis", "phone : " + phone);
 
                 try {
@@ -70,14 +77,14 @@ public class PasswordResetActivity extends BaseActivity {
                         Log.e(TAG, "tempCertificateNo : " + tempCertificateNo);
 
                         isCertificationBtn = true;
-                        binding.layoutTimeRemaining.setVisibility(View.VISIBLE);
+                        binding.remainingTimeLayout.setVisibility(View.VISIBLE);
                         countDown("0300");
                     } else {
-                        Toast.makeText(PasswordResetActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(FindIdActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                     }
 
                 } catch (Exception e) {
-                    Toast.makeText(PasswordResetActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FindIdActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "registerCertificationBtn Exception: " + e);
                 }
 
@@ -88,59 +95,42 @@ public class PasswordResetActivity extends BaseActivity {
     @Override
     public void init() {
 
-        binding.includeHeader.txtTitle.setText(R.string.change_password);
+        binding.includeHeader.txtTitle.setText(R.string.login_find_id);
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
-
-        binding.registerPersonalInfoLayout.setVisibility(View.INVISIBLE);
-        binding.registerBtn.setText("비밀번호 변경하기");
-        binding.registerPwTitle.setVisibility(View.INVISIBLE);
-        binding.registerPwTitleStar.setVisibility(View.INVISIBLE);
-        binding.registerPwInput.setVisibility(View.INVISIBLE);
-        binding.registerConfirmPwTitle.setVisibility(View.INVISIBLE);
-        binding.registerConfirmPwTitleStar.setVisibility(View.INVISIBLE);
-        binding.registerConfirmPwInput.setVisibility(View.INVISIBLE);
-
     }
 
     private boolean validationCheck() {
 
-        if (binding.registerNameInput.getText().toString().trim().equals("")) {             // 사용자 이름 입력하지 않았을 경우
+        if (binding.userNameInput.getText().toString().trim().equals("")) {             // 사용자 이름 입력하지 않았을 경우
 
-            binding.registerNameInput.setText("");
-            binding.registerNameInput.requestFocus();
+            binding.userNameInput.setText("");
+            binding.userNameInput.requestFocus();
             Toast.makeText(this, "이름을 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
-        } else if (binding.registerPhoneInput.getText().toString().equals("")) {      // 전화번호 입력 x
+        } else if (binding.userPhoneInput.getText().toString().equals("")) {      // 전화번호 입력 x
 
-            binding.registerPhoneInput.requestFocus();
+            binding.userPhoneInput.requestFocus();
             Toast.makeText(this, "전화번호를 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
-        } else if (binding.registerPhoneInput.getText().toString().length() < 10) { // 전화번호 자리수 부족
+        } else if (binding.userPhoneInput.getText().toString().length() < 10) { // 전화번호 자리수 부족
 
-            binding.registerPhoneInput.requestFocus();
+            binding.userPhoneInput.requestFocus();
             Toast.makeText(this, "입력한 전화번호 자리수가 불충분 합니다.", Toast.LENGTH_LONG).show();
-
-            return false;
-        } else if (binding.registerEmailInput.getText().toString().trim().equals("")) {     // 이메일 입력하지 않았을 경우
-
-            binding.registerEmailInput.setText("");
-            binding.registerEmailInput.requestFocus();
-            Toast.makeText(this, "아이디; 또는 이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
         }
         //인증번호 일치하는지 확인
-        else if (binding.registerCertificationInput.getText().toString().equals("")) {
+        else if (binding.certificationInput.getText().toString().equals("")) {
 
-            binding.registerCertificationInput.requestFocus();
+            binding.certificationInput.requestFocus();
             Toast.makeText(this, "인증번호를 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
-        } else if (!tempCertificateNo.equals(binding.registerCertificationInput.getText().toString())) {
+        } else if (!tempCertificateNo.equals(binding.certificationInput.getText().toString())) {
 
-            binding.registerCertificationInput.requestFocus();
+            binding.certificationInput.requestFocus();
             Toast.makeText(this, "인증번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
 
             return false;
@@ -153,36 +143,43 @@ public class PasswordResetActivity extends BaseActivity {
         return true;
     }
 
-
-    private void passwordResetConfirm(Context context) {
-
-
-        // validationCheck 체크 하고 화면 이동
+    private void findId() {
         if (validationCheck()) {
-
-            Intent intent = new Intent(this, ChangePasswordActivity.class);
-            intent.putExtra("activityName", this.getLocalClassName());
-
-            intent.putExtra("userEmail", binding.registerEmailInput.getText().toString());
-
-            startActivity(intent);
-            finish();
+            showAlertDialog("아래의 이메일로 가입되어 있습니다.", "teerjwi21@naver.com");
         }
+    }
 
+    public void showAlertDialog(String title, String message){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+
+        builder.setCancelable(false);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        builder.setPositiveButton("확인", (dialog, which) ->{
+
+            dialog.dismiss();
+        });
+
+        AlertDialog alertDialog = builder.show();
+        TextView messageText = (TextView) alertDialog.findViewById(android.R.id.message);
+        messageText.setGravity(Gravity.CENTER);
+        alertDialog.show();
     }
 
     private boolean checkVerificationCode() {
 
-        if (binding.registerPhoneInput.getText().toString().trim().equals("")) {     // 전화번호 입력하지 않았을 경우
+        if (binding.userPhoneInput.getText().toString().trim().equals("")) {     // 전화번호 입력하지 않았을 경우
 
-            binding.registerPhoneInput.setText("");
-            binding.registerPhoneInput.requestFocus();
+            binding.userPhoneInput.setText("");
+            binding.userPhoneInput.requestFocus();
             Toast.makeText(this, "전화번호를 입력하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
 
             return false;
-        } else if (binding.registerPhoneInput.getText().length() < 10) {
+        } else if (binding.userPhoneInput.getText().length() < 10) {
 
-            binding.registerPhoneInput.requestFocus();
+            binding.userPhoneInput.requestFocus();
             Toast.makeText(this, "입력한 전화번호 자리수가 불충분 합니다.", Toast.LENGTH_LONG).show();
 
             return false;
@@ -250,14 +247,14 @@ public class PasswordResetActivity extends BaseActivity {
                     second = "0" + second;
                 }
 
-                binding.txtCountDown.setText(min + ":" + second);
+                binding.remainingTime.setText(min + ":" + second);
             }
 
             // 제한시간 종료시
             public void onFinish() {
 
                 // 변경 후
-                binding.txtCountDown.setText("재인증 요청");
+                binding.remainingTime.setText("재인증 요청");
                 tempCertificateNo = "";
                 isCertificationBtn = false;
 
