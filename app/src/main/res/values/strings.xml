@@ -77,6 +77,7 @@
     <string name="point_history_title">포인트 이력</string>
 
     <!-- 충전기 사용 이력-->
+    <string name="charge_history_recharge_number">충전 번호 : %1$s</string>
     <string name="charge_history_reservation_point">차감 포인트 : %1$s</string>
     <string name="charge_history_recharge_point">실제 소진 포인트 : %1$s</string>
     <string name="charge_history_refund_point">예상 환불 포인트 : %1$s</string>

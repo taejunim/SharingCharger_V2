@@ -40,6 +40,8 @@ public class HistorySearchConditionActivity extends BaseActivity {
 
     private boolean firstClick = false;
 
+    private TextView originTextView;
+
     @Override
     public void initLayout() {
 
@@ -135,6 +137,8 @@ public class HistorySearchConditionActivity extends BaseActivity {
         } else {
             firstClick = true;
             setHistoryTextClick(binding.historySearchFourthTerm);
+            setHistoryTextClick(binding.historySearchStartDate);
+            setHistoryTextClick(binding.historySearchEndDate);
             binding.historySearchStartDate.setText(startDate);
             binding.historySearchEndDate.setText(endDate);
         }
@@ -149,6 +153,7 @@ public class HistorySearchConditionActivity extends BaseActivity {
             setHistoryTextClick(binding.historySearchSecondArray);
         }
 
+        originTextView = binding.historySearchFirstTerm;
     }
 
     public void setHistoryTextClick(View view) {
@@ -169,7 +174,7 @@ public class HistorySearchConditionActivity extends BaseActivity {
 
                 TextView textView = (TextView) getView;
 
-                if (ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_term_layout")) {
+                if (ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_term_layout") || ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_date_layout")) {
                     //직접 선택 이라면 dialog
                     if (!selectedTextView.getText().toString().contains("개월") && textViewFlag == false) {
 
@@ -198,9 +203,19 @@ public class HistorySearchConditionActivity extends BaseActivity {
             }
         }
 
-        selectedTextView.setBackgroundResource(R.color.blue_button);
-        selectedTextView.setTextAppearance(R.style.history_selected_selected);
+        if (!ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_date_layout")) {
+            selectedTextView.setBackgroundResource(R.color.blue_button);
+            selectedTextView.setTextAppearance(R.style.history_selected_selected);
+        } else {
 
+            originTextView.setBackgroundResource(R.color.transparent);
+            originTextView.setTextAppearance(R.style.history_selected_none);
+
+            binding.historySearchFourthTerm.setBackgroundResource(R.color.blue_button);
+            binding.historySearchFourthTerm.setTextAppearance(R.style.history_selected_selected);
+        }
+
+        originTextView = selectedTextView;
     }
 
     public String setDate(int getMonth) {
@@ -288,7 +303,7 @@ public class HistorySearchConditionActivity extends BaseActivity {
 
             // -1일경우 false
             Log.e("TAG", "cal1 compareTo cal2 : " + cal1.compareTo(cal2));
-            if(cal1.compareTo(cal2) == -1){
+            if(cal1.compareTo(cal2) == -1 || cal1.compareTo(cal2) == 0){
                 tf = false;
             }
 

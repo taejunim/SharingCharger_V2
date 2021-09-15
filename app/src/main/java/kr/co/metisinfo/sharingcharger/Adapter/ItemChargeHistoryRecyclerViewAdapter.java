@@ -43,6 +43,11 @@ public class ItemChargeHistoryRecyclerViewAdapter extends RecyclerView.Adapter<I
         RechargeModel model = list.get(position);
 
         binding.chargeHistoryNameTxt.setText(model.chargerName);
+
+        if (model.id >= 0) {
+            binding.chargeHistoryRechargeNumber.setText(ThisApplication.context.getResources().getString(R.string.charge_history_recharge_number, String.valueOf(model.id)));
+        }
+
         binding.chargeHistoryDateTxt.setText(setDate(model.startRechargeDate, model.endRechargeDate));
 
         if (model.reservationPoint >= 0) {

@@ -130,7 +130,8 @@
                     android:paddingStart="15dp"
                     android:paddingEnd="0dp"
                     android:text="2020-06-22"
-                    android:textColor="@color/gray" />
+                    android:textColor="@color/gray"
+                    android:onClick="setHistoryTextClick"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -149,7 +150,8 @@
                     android:paddingStart="0dp"
                     android:paddingEnd="15dp"
                     android:text="2020-07-22"
-                    android:textColor="@color/gray" />
+                    android:textColor="@color/gray"
+                    android:onClick="setHistoryTextClick"/>
 
             </LinearLayout>
 
@@ -280,7 +282,8 @@
         <Button
             android:id="@+id/history_search_btn"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_border_blue"
             android:text="적용"
