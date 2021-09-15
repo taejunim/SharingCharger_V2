@@ -24,7 +24,6 @@ public class AdminMainActivity extends BaseActivity {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
-    AdminDashboardFragment adminDashboardFragment;
     AdminChargerManageFragment adminChargerManageFragment;
 
     ArrayList<ImageView> subMenuButtonList = new ArrayList<>();
