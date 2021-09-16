@@ -2,7 +2,6 @@ package kr.co.metisinfo.sharingcharger.view.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,11 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.charzin.evzsdk.EvzBLE;
 import com.charzin.evzsdk.EvzBLEData;
 import com.charzin.evzsdk.EvzBLETagData;
@@ -33,20 +28,17 @@ import com.charzin.evzsdk.EvzScan;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import kr.co.metisinfo.sharingcharger.ChargerDialogAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityChargingBinding;
-import kr.co.metisinfo.sharingcharger.dialog.ChargerFinishDialog;
 import kr.co.metisinfo.sharingcharger.model.AuthenticateModel;
 import kr.co.metisinfo.sharingcharger.model.RechargeEndModel;
 import kr.co.metisinfo.sharingcharger.model.RechargeModel;

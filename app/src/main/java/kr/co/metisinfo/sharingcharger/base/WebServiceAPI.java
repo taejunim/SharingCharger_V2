@@ -31,6 +31,10 @@ public interface WebServiceAPI {
     @GET("/api/v1/check/{username}")
     Call<UserModel> checkDuplicate(@Path("username") String username);
 
+    // 사용자 아이디 찾기
+    @GET("/api/v1/find/email")
+    Call<Object> findId(@Query("name") String userName, @Query("phone") String phone);
+
     // 개인정보처리방침 약관 정보를 가져오기 위한 API
     @GET("/api/v1/policy/privacy")
     Call<ResponseBody> getPolicyPrivacy();

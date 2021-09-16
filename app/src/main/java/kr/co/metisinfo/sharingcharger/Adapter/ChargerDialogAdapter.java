@@ -1,7 +1,6 @@
-package kr.co.metisinfo.sharingcharger;
+package kr.co.metisinfo.sharingcharger.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.view.activity.AdminChargerRegisterStep1Fragment;
 
 public class ChargerDialogAdapter extends RecyclerView.Adapter<ChargerDialogAdapter.ViewHolder> {

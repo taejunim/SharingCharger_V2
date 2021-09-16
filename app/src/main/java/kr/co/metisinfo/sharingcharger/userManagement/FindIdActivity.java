@@ -1,24 +1,30 @@
 package kr.co.metisinfo.sharingcharger.userManagement;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
+import android.app.Dialog;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import kr.co.metisinfo.sharingcharger.Adapter.IdDialogAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
-import kr.co.metisinfo.sharingcharger.charger.ChargerSearchActivity;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityFindIdBinding;
-import kr.co.metisinfo.sharingcharger.databinding.ActivityUserRegisterBinding;
+import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
-import kr.co.metisinfo.sharingcharger.view.activity.BLEChargingActivity;
+import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 
 public class FindIdActivity extends BaseActivity {
 
@@ -34,13 +40,15 @@ public class FindIdActivity extends BaseActivity {
 
     ApiUtils apiUtils = new ApiUtils();
 
+    public static Dialog idDialog;
+
+    CommonUtils commonUtils = new CommonUtils();
+
     @Override
     public void initLayout() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_find_id);
-
         changeStatusBarColor(false);
-
     }
 
     @Override
@@ -52,33 +60,29 @@ public class FindIdActivity extends BaseActivity {
     public void setOnClickListener() {
 
         binding.includeHeader.btnBack.setOnClickListener(view -> finish());
-        //binding.registerBtn.setOnClickListener(view -> passwordResetConfirm(this));
         binding.registerBtn.setOnClickListener(view -> findId());
 
-        binding.certificationButton.setOnClickListener(view ->
-        {
+        binding.certificationButton.setOnClickListener(view -> {
 
             if (checkVerificationCode()) {
 
                 String phone = binding.userPhoneInput.getText().toString().trim();
-                Log.e("metis", "phone : " + phone);
 
                 try {
 
                     tempCertificateNo = apiUtils.getSms(phone);
 
                     if (tempCertificateNo != null) {
-                        Log.e(TAG, "response : " + tempCertificateNo);
 
                         if (tempCertificateNo.contains(".")) {
                             tempCertificateNo = tempCertificateNo.substring(0, tempCertificateNo.indexOf("."));
                         }
 
-                        Log.e(TAG, "tempCertificateNo : " + tempCertificateNo);
-
                         isCertificationBtn = true;
                         binding.remainingTimeLayout.setVisibility(View.VISIBLE);
                         countDown("0300");
+
+                        binding.certificationInput.requestFocus();
                     } else {
                         Toast.makeText(FindIdActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                     }
@@ -145,27 +149,60 @@ public class FindIdActivity extends BaseActivity {
 
     private void findId() {
         if (validationCheck()) {
-            showAlertDialog("아래의 이메일로 가입되어 있습니다.", "teerjwi21@naver.com");
+
+            try {
+                Map<String, Object> map = apiUtils.findId(binding.userNameInput.getText().toString().trim(), binding.userPhoneInput.getText().toString());
+
+                boolean result = (boolean) map.get("result");
+
+                if(result){
+                    List<UserModel> idList = (ArrayList<UserModel>) map.get("list");
+
+                    showIdDialog(idList);
+                }else{
+                    Toast.makeText(getApplicationContext(), "아이디 목록을 가져오는데 실패하였습니다.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (Exception e) {
+                Log.e("metis", "findId Exception : " + e);
+            }
         }
     }
 
-    public void showAlertDialog(String title, String message){
+    private void showIdDialog(List<UserModel> idList) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+        idDialog = new Dialog(this);
 
-        builder.setCancelable(false);
-        builder.setTitle(title);
-        builder.setMessage(message);
+        LayoutInflater inf = getLayoutInflater();
+        View dialogView = inf.inflate(R.layout.id_dialog, null);
+        TextView titleText = dialogView.findViewById(R.id.dialog_title);
+        Button confirmButton = dialogView.findViewById(R.id.confirm_button);
 
-        builder.setPositiveButton("확인", (dialog, which) ->{
+        titleText.setText(idList.size() > 0 ? "현재 가입된 이메일입니다." : "입력하신 정보와 일치하는 아이디가 없습니다.");
 
-            dialog.dismiss();
+        confirmButton.setOnClickListener(v -> {
+            idDialog.dismiss();
         });
 
-        AlertDialog alertDialog = builder.show();
-        TextView messageText = (TextView) alertDialog.findViewById(android.R.id.message);
-        messageText.setGravity(Gravity.CENTER);
-        alertDialog.show();
+        idDialog.setContentView(dialogView); // Dialog에 선언했던 layout 적용
+        idDialog.setCancelable(false); // 외부 터치나 백키로 dimiss 시키는 것 막음
+
+        /*
+        다음 4줄의 코드는 RecyclerView를 정의하기 위한 View, Adapter선언 코드이다.
+        1. RecyclerView id 등록
+        2. 수직방향으로 보여줄 예정이므로 LinearLayoutManager 등록
+           2차원이면 GridLayoutManager 등 다른 Layout을 선택
+        3. adapter에 topic Array 넘겨서 출력되게끔 전달
+        4. adapter 적용
+        */
+        RecyclerView dialogRecyclerView = (RecyclerView) dialogView.findViewById(R.id.dialogRecyclerView);
+        dialogRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        IdDialogAdapter adapter = new IdDialogAdapter(idList);
+        dialogRecyclerView.setAdapter(adapter);
+
+        idDialog.getWindow().setBackgroundDrawableResource(R.drawable.alert_dialog_border);
+        idDialog.getWindow().setLayout(commonUtils.getPercentWidth(this, 80), WindowManager.LayoutParams.WRAP_CONTENT);
+        idDialog.show(); // Dialog 출력
     }
 
     private boolean checkVerificationCode() {

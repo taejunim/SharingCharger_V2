@@ -82,6 +82,34 @@ public class ApiUtils {
     }
 
     /**
+     * 사용자 아이디 찾기
+     **/
+    public Map<String, Object> findId(String userName, String phone) throws Exception {
+
+        Map<String, Object> map = new HashMap<>();
+        Log.e("metis", " findId");
+
+        Response<Object> response = webServiceAPI.findId(userName, phone).execute();
+
+        if (response.code() == 200) {
+
+            Type type = new TypeToken<List<UserModel>>() {}.getType();
+            Gson gson = new Gson();
+
+            String jsonResult = gson.toJson(response.body());
+            List<UserModel> list = gson.fromJson(jsonResult, type);
+
+            map.put("result", true);
+            map.put("list", list);
+
+        } else {
+            map.put("result", false);
+        }
+
+        return map;
+    }
+
+    /**
      * 정보 동의
      **/
     public String getPolicy(String getTagName) throws Exception {

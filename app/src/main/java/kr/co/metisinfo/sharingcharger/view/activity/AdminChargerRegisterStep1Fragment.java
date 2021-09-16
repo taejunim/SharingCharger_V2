@@ -2,22 +2,13 @@ package kr.co.metisinfo.sharingcharger.view.activity;
 
 import android.app.Dialog;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import kr.co.metisinfo.sharingcharger.ChargerDialogAdapter;
+import kr.co.metisinfo.sharingcharger.Adapter.ChargerDialogAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerRegisterStep1Binding;;
