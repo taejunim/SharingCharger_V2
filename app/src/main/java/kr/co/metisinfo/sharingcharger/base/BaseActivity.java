@@ -247,19 +247,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             } else if (groupPosition == 5) {
 
-                //충전기 관리
-                Intent intent = new Intent(startClass, AdminMainActivity.class);
-                startActivity(intent);
-                closeDrawer();
-
-            } else if (groupPosition == 6) {
-
-                //회원 증명서
+                //공지사항
                 Intent intent = new Intent(startClass, WebViewActivity.class);
                 intent.putExtra("getTagName", "notice");                             //WEBVIEW GBN PARAM -> setting은 회원 증명서
                 startActivity(intent);
                 closeDrawer();
 
+            } else if (groupPosition == 6) {
+
+                //충전기 관리
+                Intent intent = new Intent(startClass, AdminMainActivity.class);
+                startActivity(intent);
+                closeDrawer();
             }
 
             return false;
