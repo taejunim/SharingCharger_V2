@@ -1,6 +1,9 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,10 +24,12 @@ import androidx.fragment.app.Fragment;
 import java.text.SimpleDateFormat;
 
 import kr.co.metisinfo.sharingcharger.R;
+import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerInformationEditBinding;
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 import kr.co.metisinfo.sharingcharger.model.AllowTimeOfDayModel;
+import kr.co.metisinfo.sharingcharger.model.SearchKeywordModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 
 import static kr.co.metisinfo.sharingcharger.base.Constants.CHANGE_INFORMATION;
@@ -61,6 +66,23 @@ public class AdminChargerInformationEditFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            //키워드 검색, 즐겨찾기
+            case Constants.PAGE_SEARCH_KEYWORD:
+                // 내 위치중심, 지도중심 구분해야함
+                if (resultCode == RESULT_OK) {
+                    SearchKeywordModel model = (SearchKeywordModel) data.getSerializableExtra("keyword");
+                    binding.editAddress.setText(model.roadAddressName);
+                }
+
+                break;
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,6 +107,11 @@ public class AdminChargerInformationEditFragment extends Fragment {
         } else {
             binding.cableExistFalse.setChecked(true);
         }
+
+        binding.editAddress.setOnClickListener(v ->  {
+            Intent intent = new Intent(getActivity(), SearchKeywordActivity.class);
+            startActivityForResult(intent, Constants.PAGE_SEARCH_KEYWORD);
+        });
 
         binding.editParkingFeeDescription.setText(adminChargerModel.parkingFeeDescription);
 

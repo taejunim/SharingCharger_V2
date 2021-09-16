@@ -19,11 +19,11 @@
             android:id="@+id/btn_charger_price_information"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_toLeftOf="@+id/btn_charger_time_setting"
-            android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
-            android:src="@mipmap/credit_card2" />
+            android:layout_toLeftOf="@+id/btn_charger_time_setting"
+            android:src="@mipmap/coins" />
 
         <ImageView
             android:id="@+id/btn_charger_time_setting"
@@ -40,10 +40,21 @@
             android:id="@+id/btn_charger_information_edit"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="20dp"
+
+            android:layout_marginTop="7dp"
+            android:layout_toLeftOf="@+id/btn_charge_history"
+            android:src="@mipmap/edit" />
+
+        <ImageView
+            android:id="@+id/btn_charge_history"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="10dp"
             android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@id/btn_charger_price_information"
             android:layout_marginTop="7dp"
-            android:src="@mipmap/edit" />
+            android:src="@mipmap/credit_card2" />
     </RelativeLayout>
 
 </layout>

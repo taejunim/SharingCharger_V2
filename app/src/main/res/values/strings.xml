@@ -82,6 +82,10 @@
     <string name="charge_history_reservation_point">차감 포인트 : %1$s</string>
     <string name="charge_history_recharge_point">실제 소진 포인트 : %1$s</string>
     <string name="charge_history_refund_point">예상 환불 포인트 : %1$s</string>
+    <string name="admin_charge_history_charger_name">충전기명 : %1$s</string>
+    <string name="admin_charge_history_profit_point">수익 포인트 : %1$s</string>
+    <string name="admin_charge_history_reservation_date">예약 일자 : %1$s</string>
+    <string name="admin_charge_history_charge_date">충전 일자 : %1$s</string>
 
     <!-- 즐겨찾기-->
     <string name="bookmark_title">즐겨찾기</string>

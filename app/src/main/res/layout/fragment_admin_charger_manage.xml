@@ -6,75 +6,77 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/white">
-    <RelativeLayout
-        android:id="@+id/admin_charger_manage_header"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/white">
 
-        <TextView
-            android:id="@+id/total_charger_count_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:text="총 충전기 대수"/>
+        <RelativeLayout
+            android:id="@+id/admin_charger_manage_header"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/white">
 
-        <TextView
-            android:id="@+id/total_charger_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/total_charger_count_text"
-            android:layout_alignBottom="@id/total_charger_count_text"
-            android:layout_marginEnd="20dp"
-            android:textColor="@color/purple"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="3"/>
+            <TextView
+                android:id="@+id/total_charger_count_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="총 충전기 대수"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/total_charger_count_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/total_charger_count_label"
-            android:layout_below="@id/total_charger_count_label"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:text="대"/>
+            <TextView
+                android:id="@+id/total_charger_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/total_charger_count_text"
+                android:layout_alignBottom="@id/total_charger_count_text"
+                android:layout_marginEnd="20dp"
+                android:text="3"
+                android:textColor="@color/purple"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/total_profit_point_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_alignParentEnd="true"
-            android:text="이달의 수익 포인트"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/total_charger_count_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/total_charger_count_label"
+                android:layout_alignEnd="@id/total_charger_count_label"
+                android:layout_marginTop="10dp"
+                android:text="대"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/total_profit_point"
-            android:layout_width="100dp"
-            android:layout_height="35dp"
-            android:layout_below="@+id/total_profit_point_label"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/button_border_purple"
-            android:gravity="center"
-            android:text="50,000p"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="10dp"
-            android:textColor="@color/white"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/total_profit_point_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="이달의 수익 포인트"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/total_profit_point"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/total_profit_point_label"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_border_purple"
+                android:gravity="center"
+                android:text="50,000p"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/charger_manage_recycler"
             android:layout_width="match_parent"

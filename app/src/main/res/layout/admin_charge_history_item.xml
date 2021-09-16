@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/admin_charge_history_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <!-- 장치이름-->
+        <ImageView
+            android:id="@+id/admin_charge_history_location_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/blue_marker_40"/>
+
+        <TextView
+            android:id="@+id/admin_charge_history_charger_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/admin_charge_history_location_img"
+            android:text="@string/admin_charge_history_charger_name"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <FrameLayout
+            android:id="@+id/admin_charge_history_battery_image_layout"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/admin_charge_history_location_img"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/border_blue_50">
+
+            <ImageView
+                android:id="@+id/admin_charge_history_battery_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/battery_img"
+                android:contentDescription="@string/image_description" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/admin_charge_history_recharge_number"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_below="@+id/admin_charge_history_location_img"
+            android:layout_alignBaseline="@+id/admin_charge_history_battery_image_layout"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@+id/admin_charge_history_battery_image_layout"
+            android:text="@string/charge_history_recharge_number"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <!-- 사용날짜-->
+        <ImageView
+            android:id="@+id/admin_charge_history_time_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/admin_charge_history_battery_image_layout"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:src="@mipmap/clock_gray" />
+
+        <TextView
+            android:id="@+id/admin_charge_history_reservation_date"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_below="@+id/admin_charge_history_battery_image_layout"
+            android:layout_alignBaseline="@+id/admin_charge_history_time_img"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@+id/admin_charge_history_time_img"
+            android:autoSizeTextType="uniform"
+            android:text="예약 일자 : 2020-07-23 18:00 ~ 2020-07-23 21:30"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/admin_charge_history_charge_date"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_below="@+id/admin_charge_history_reservation_date"
+            android:layout_alignBaseline="@+id/admin_charge_history_time_img"
+            android:layout_toEndOf="@+id/admin_charge_history_time_img"
+            android:autoSizeTextType="uniform"
+            android:text="충전 일자 : 2020-07-23 18:00 ~ 2020-07-23 21:30"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <!-- 사용 포인트-->
+        <ImageView
+            android:id="@+id/admin_charge_history_point_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="27dp"
+            android:layout_below="@+id/admin_charge_history_time_img"
+            android:src="@mipmap/coin_gray"/>
+
+        <TextView
+            android:id="@+id/admin_charge_history_profit_point"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_below="@+id/admin_charge_history_time_img"
+            android:layout_alignBaseline="@+id/admin_charge_history_point_img"
+            android:layout_marginTop="27dp"
+            android:layout_toEndOf="@+id/admin_charge_history_point_img"
+            android:text="@string/admin_charge_history_profit_point"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/admin_charge_history_profit_point"
+            android:layout_marginTop="20dp"
+            android:background="@color/dark_gray"/>
+
+    </RelativeLayout>
+
+</layout>

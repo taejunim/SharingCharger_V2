@@ -43,6 +43,7 @@ public class AdminMainActivity extends BaseActivity {
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerPriceInformation);
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerTimeSetting);
         subMenuButtonList.add(binding.includeChargerManageMenu.btnChargerInformationEdit);
+        subMenuButtonList.add(binding.includeChargerManageMenu.btnChargeHistory);
     }
 
     @Override
@@ -84,6 +85,11 @@ public class AdminMainActivity extends BaseActivity {
         //충전기 정보수정
         binding.includeChargerManageMenu.btnChargerInformationEdit.setOnClickListener(view -> {
             setFragment("subMenu", binding.includeChargerManageMenu.btnChargerInformationEdit, adminChargerModel);
+        });
+
+        //충전기 충전 이력
+        binding.includeChargerManageMenu.btnChargeHistory.setOnClickListener(view -> {
+            setFragment("subMenu", binding.includeChargerManageMenu.btnChargeHistory, adminChargerModel);
         });
     }
 
@@ -179,6 +185,12 @@ public class AdminMainActivity extends BaseActivity {
                     AdminChargerInformationEditFragment adminChargerInformationEditFragment = new AdminChargerInformationEditFragment();
                     adminChargerInformationEditFragment.setArguments(bundle);
                     fragmentTransaction.replace(R.id.fragment_container, adminChargerInformationEditFragment);
+                    break;
+
+                case 4 : //충전기 충전 이력
+                    AdminChargeHistoryFragment adminChargeHistoryFragment = new AdminChargeHistoryFragment();
+                    adminChargeHistoryFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.fragment_container, adminChargeHistoryFragment);
                     break;
             }
         }

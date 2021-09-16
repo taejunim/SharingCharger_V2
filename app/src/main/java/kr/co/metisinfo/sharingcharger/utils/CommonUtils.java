@@ -295,5 +295,18 @@ public class CommonUtils {
         int height = size.y;
         return height * percent / 100;
     }
+
+    public String setDate(int getMonth) {
+
+        String getStringDate = DateUtils.setOperationDate("minus", getMonth * 30, "yyyyMMdd");
+
+        int startYYYY = Integer.parseInt(getStringDate.substring(0, 4));
+        int startMM = Integer.parseInt(getStringDate.substring(4, 6));
+        int startDD = Integer.parseInt(getStringDate.substring(6, 8));
+
+        String getDate = startYYYY + "-" + String.format("%02d", startMM) + "-" + String.format("%02d", startDD);
+
+        return getDate;
+    }
 }
 

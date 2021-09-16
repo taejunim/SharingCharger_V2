@@ -21,6 +21,7 @@ import java.util.Map;
 import kr.co.metisinfo.sharingcharger.base.Constants;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.base.WebServiceAPI;
+import kr.co.metisinfo.sharingcharger.model.AdminChargeHistoryModel;
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
 import kr.co.metisinfo.sharingcharger.model.AllowTimeOfDayModel;
@@ -494,6 +495,40 @@ public class ApiUtils {
                 RechargeModel vo = gson.fromJson(contacts.getJSONObject(i).toString(), RechargeModel.class);
 
                 list.add(vo);
+            }
+
+            map.put("list", list);
+        }
+
+        return map;
+    }
+
+    /**
+     * 충전 이력 조회
+     **/
+    public Map<String, Object> getAdminChargeHistory(int chargerId, String startDate, String endDate, String getType, int index, List<AdminChargeHistoryModel> list) throws Exception {
+
+        Map<String, Object> map = new HashMap<>();
+
+        Response<Object> response = webServiceAPI.getAdminChargeHistory(ThisApplication.staticUserModel.id, chargerId, startDate, endDate, getType, index, 10).execute();
+
+        if (response.code() == 200 && response.body() != null) {
+            JSONObject json = new JSONObject((Map) response.body());
+
+            JSONArray contacts = json.getJSONArray("content");
+
+            if (contacts.length() == 0) {
+                map.put("chkList", false);
+            } else {
+                map.put("chkList", true);
+            }
+
+            for (int i = 0; i < contacts.length(); i++) {
+                Gson gson = new Gson();
+
+                AdminChargeHistoryModel adminChargeHistoryModel = gson.fromJson(contacts.getJSONObject(i).toString(), AdminChargeHistoryModel.class);
+
+                list.add(adminChargeHistoryModel);
             }
 
             map.put("list", list);
