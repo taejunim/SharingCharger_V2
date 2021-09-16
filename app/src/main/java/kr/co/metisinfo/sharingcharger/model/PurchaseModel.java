@@ -8,14 +8,11 @@ import lombok.ToString;
 public class PurchaseModel {
 
     public int id;
-    public int userId;
     public String username;
-    public int paidAmount;
-    public int cancelAmount;
-    public int approvalNumber;
-    public String approvalDate;
-    public int userPoint;
-    public String paymentType;
-    public String paymentSuccessType;
+    public int point;
+    public String type;
+    public String created;
+    public int pointTargetId;
+    public String targetName;
 
 }

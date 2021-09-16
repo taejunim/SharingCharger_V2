@@ -436,25 +436,17 @@ public class ApiUtils {
     /**
      * 포인트 이력 조회
      **/
-    public Map<String, Object> getPoints(String username, String startDate, String endDate, String sort, String paymentType, int pageIndex, List<PurchaseModel> list) throws Exception {
+    public Map<String, Object> getPoints(String startDate, String endDate, String sort, String paymentType, int pageIndex, List<PurchaseModel> list) throws Exception {
 
         Map<String, Object> map = new HashMap<>();
 
-        //신용 걸제 완료 구분 -> ALL 하드코딩
-        String paymentSuccessType = "ALL";
-
-        Response<Object> response = webServiceAPI.getPoints(username, startDate, endDate, sort, paymentSuccessType, paymentType, pageIndex, 10).execute();
+        Response<Object> response = webServiceAPI.getPoints(String.valueOf(ThisApplication.staticUserModel.id), startDate, endDate, sort, paymentType, pageIndex, 10).execute();
 
         if (response.code() == 200 && response.body() != null) {
             JSONObject json = new JSONObject((Map) response.body());
 
             JSONArray contacts = json.getJSONArray("content");
 
-            if (contacts.length() == 0) {
-                map.put("chkList", false);
-            } else {
-                map.put("chkList", true);
-            }
             for (int i = 0; i < contacts.length(); i++) {
                 Gson gson = new Gson();
 

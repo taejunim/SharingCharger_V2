@@ -41,6 +41,7 @@ public class HistorySearchConditionActivity extends BaseActivity {
     private boolean firstClick = false;
 
     private TextView originTextView;
+    private TextView originTypeTextView;
 
     @Override
     public void initLayout() {
@@ -102,15 +103,22 @@ public class HistorySearchConditionActivity extends BaseActivity {
         //point에만 유형이 필요함
         else{
             getType = intent.getStringExtra("getType");
+
             if (getType.equals("PURCHASE")) {
-                getType = "포인트 충전";
+                getType = "구매";
                 setHistoryTextClick(binding.historySearchSecondType);
-            } else if (getType.equals("USED")) {
-                getType = "사용";
+            } else if (getType.equals("PURCHASE_CANCEL")) {
+                getType = "구매 취소";
                 setHistoryTextClick(binding.historySearchThirdType);
-            } else if (getType.equals("REFUND")) {
-                getType = "부분 환불";
+            } else if (getType.equals("EXCHANGE")) {
+                getType = "포인트 환전";
                 setHistoryTextClick(binding.historySearchFourthType);
+            } else if (getType.equals("GIVE")) {
+                getType = "포인트 지급";
+                setHistoryTextClick(binding.historySearchFifthType);
+            } else if (getType.equals("WITHDRAW")) {
+                getType = "포인트 회수";
+                setHistoryTextClick(binding.historySearchSixthType);
             } else {
                 getType = "전체";
                 setHistoryTextClick(binding.historySearchFirstType);
@@ -191,7 +199,7 @@ public class HistorySearchConditionActivity extends BaseActivity {
                         getMonth = selectedTextView.getText().toString();
                     }
                     textViewFlag = true;
-                } else if (ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_type_layout")) {
+                } else if (ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_type_layout_sub1") || ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_type_layout_sub2")) {
                     getType = selectedTextView.getText().toString();
                 } else {
                     getArray = selectedTextView.getText().toString();
@@ -202,10 +210,19 @@ public class HistorySearchConditionActivity extends BaseActivity {
 
             }
         }
+        if(ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_type_layout_sub1") || ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_type_layout_sub2")) {
 
-        if (!ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_date_layout")) {
+            if(originTypeTextView != null){
+                originTypeTextView.setBackgroundResource(R.color.transparent);
+                originTypeTextView.setTextAppearance(R.style.history_selected_none);
+            }
+            originTypeTextView = selectedTextView;
             selectedTextView.setBackgroundResource(R.color.blue_button);
             selectedTextView.setTextAppearance(R.style.history_selected_selected);
+        } else if (!ll.getResources().getResourceEntryName(ll.getId()).equals("history_search_date_layout")) {
+            selectedTextView.setBackgroundResource(R.color.blue_button);
+            selectedTextView.setTextAppearance(R.style.history_selected_selected);
+
         } else {
 
             originTextView.setBackgroundResource(R.color.transparent);

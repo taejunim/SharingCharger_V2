@@ -51,25 +51,29 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
 
         DecimalFormat format = new DecimalFormat("###,###");
 
-        if(model.getPaymentType().equals("PAID")){
-            getPointUsedType = "구매";
-            point = "+ " + format.format(model.paidAmount);
+        if(model.getPoint() != 0) point = format.format(model.point);
+
+        String type = model.getType();
+
+        if(type.equals("PURCHASE") || type.equals("GIVE") ){
+            point = "+" + point;
             binding.pointHistoryPoint.setTextColor(ContextCompat.getColor(context, R.color.blue_button));
+            if(type.equals("PURCHASE")) getPointUsedType = "구매";
+            else getPointUsedType = "포인트 지급";
 
-        }else if(model.getPaymentType().equals("CANCEL")){
-            getPointUsedType = "취소";
-            point = "- " + format.format(model.cancelAmount);
+        } else if(model.getType().equals("PURCHASE_CANCEL") || model.getType().equals("EXCHANGE") || model.getType().equals("WITHDRAW")){
             binding.pointHistoryPoint.setTextColor(ContextCompat.getColor(context, R.color.red));
-        } else {
-            getPointUsedType = "-";
-        }
-        binding.pointHistoryPoint.setText(point);
-        binding.pointHistoryApprovalNumberTxt.setText(String.valueOf(model.approvalNumber));
+            if(type.equals("PURCHASE_CANCEL")) getPointUsedType = "구매 취소";
+            else if(type.equals("EXCHANGE")) getPointUsedType = "포인트 환전";
+            else getPointUsedType = "포인트 회수";
+        } else getPointUsedType = "-";
 
-        String getDate = model.approvalDate;
+        binding.pointHistoryPoint.setText(point);
+        binding.pointHistoryApprovalNumberTxt.setText(String.valueOf(model.targetName));
+
+        String getDate = model.created;
 
         getDate = getDate.replaceAll("T"," ");
-
         getDate = getDate.substring(0, getDate.length()-3);
 
         binding.pointHistoryDateTxt.setText(getDate);

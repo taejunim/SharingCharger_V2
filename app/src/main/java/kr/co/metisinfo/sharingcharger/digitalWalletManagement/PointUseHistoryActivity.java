@@ -51,8 +51,6 @@ public class PointUseHistoryActivity extends BaseActivity {
 
     private String getMonthType = "1개월";
 
-    private boolean chkList = false;
-
     ApiUtils apiUtils = new ApiUtils();
     CommonUtils commonUtils = new CommonUtils();
 
@@ -76,12 +74,16 @@ public class PointUseHistoryActivity extends BaseActivity {
 
             getType = "ALL";
 
-            if (data.getStringExtra("getType").equals("포인트 충전")) {
+            if (data.getStringExtra("getType").equals("구매")) {
                 getType = "PURCHASE";
-            } else if (data.getStringExtra("getType").equals("사용")) {
-                getType = "USED";
-            } else if (data.getStringExtra("getType").equals("부분 환불")) {
-                getType = "REFUND";
+            } else if (data.getStringExtra("getType").equals("구매 취소")) {
+                getType = "PURCHASE_CANCEL";
+            } else if (data.getStringExtra("getType").equals("포인트 환전")) {
+                getType = "EXCHANGE";
+            } else if (data.getStringExtra("getType").equals("포인트 지급")) {
+                getType = "GIVE";
+            } else if (data.getStringExtra("getType").equals("포인트 회수")) {
+                getType = "WITHDRAW";
             }
 
             Log.e(TAG, "getArray : " + getArray + " getType : " + getType + " Index : " + index);
@@ -165,24 +167,21 @@ public class PointUseHistoryActivity extends BaseActivity {
                 try {
                     if (lastVisibleItemPosition == itemTotalCount) {
 
-                        if (chkList) {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            // 해당 작업을 처리함.
-                                            index++;
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 해당 작업을 처리함.
+                                        index++;
 
-                                            getPointHistoryList(getStartDate, getEndDate, getArray, getType, index);
-                                        }
-                                    });
-                                }
-                            }).start();
-                        }
+                                        getPointHistoryList(getStartDate, getEndDate, getArray, getType, index);
+                                    }
+                                });
+                            }
+                        }).start();
                     }
-
                 } catch (Exception e) {
                     Log.e("metis", "onScrolled Exception : " + e);
                 }
@@ -228,16 +227,10 @@ public class PointUseHistoryActivity extends BaseActivity {
 
         try {
 
-            PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
-            String username = preferenceUtil.getString("email");
-
-            Map<String, Object> map = apiUtils.getPoints(username, startDate, endDate, sort, getType, pageIndex, list);
-
-            chkList = (boolean) map.get("chkList");
+            Map<String, Object> map = apiUtils.getPoints(startDate, endDate, sort, getType, pageIndex, list);
 
             list = (List) map.get("list");
 
-            Log.e(TAG, "chkList : " + chkList);
             Log.e(TAG, "List : " + list);
 
             historyAdapter.setList(list);

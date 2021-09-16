@@ -126,7 +126,7 @@ public interface WebServiceAPI {
 
     // 포인트 이력조회
     @GET("/api/v1/point/users/electronicWallet/{userId}/history")
-    Call<Object> getPoints(@Path("userId") String userId, @Query("startDate") String startDate, @Query("endDate") String endDate, @Query("sort") String sort, @Query("paymentSuccessType") String paymentSuccessType, @Query("paymentType") String paymentType, @Query("page") int page, @Query("size") int size);
+    Call<Object> getPoints(@Path("userId") String userId, @Query("startDate") String startDate, @Query("endDate") String endDate, @Query("sort") String sort, @Query("pointUsedType") String pointUsedType, @Query("page") int page, @Query("size") int size);
 
     // 충전 이력조회
     @GET("/api/v1/recharges/users/{userId}/history")
