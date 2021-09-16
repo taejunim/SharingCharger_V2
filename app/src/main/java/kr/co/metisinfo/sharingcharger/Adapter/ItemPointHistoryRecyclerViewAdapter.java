@@ -15,13 +15,13 @@ import java.util.List;
 
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.PointHistoryItemListBinding;
-import kr.co.metisinfo.sharingcharger.model.PointModel;
+import kr.co.metisinfo.sharingcharger.model.PurchaseModel;
 
 public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<ItemPointHistoryRecyclerViewAdapter.CowViewHolder> {
 
     private static final String TAG = ItemPointHistoryRecyclerViewAdapter.class.getSimpleName();
 
-    private List<PointModel> list = new ArrayList<>();
+    private List<PurchaseModel> list = new ArrayList<>();
 
     private Context context;
 
@@ -44,40 +44,39 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
 
         PointHistoryItemListBinding binding = holder.binding;
 
-        PointModel model = list.get(position);
+        PurchaseModel model = list.get(position);
 
-        String getPointUsedType = "포인트 충전";
+        String getPointUsedType = "";
+        String point = "";
 
-        if(model.type.equals("REFUND")){
-            getPointUsedType = "부분 환불";
-        }else if(model.type.equals("USED")){
-            getPointUsedType = "사용";
+        DecimalFormat format = new DecimalFormat("###,###");
+
+        if(model.getPaymentType().equals("PAID")){
+            getPointUsedType = "구매";
+            point = "+ " + format.format(model.paidAmount);
+            binding.pointHistoryPoint.setTextColor(ContextCompat.getColor(context, R.color.blue_button));
+
+        }else if(model.getPaymentType().equals("CANCEL")){
+            getPointUsedType = "취소";
+            point = "- " + format.format(model.cancelAmount);
+            binding.pointHistoryPoint.setTextColor(ContextCompat.getColor(context, R.color.red));
+        } else {
+            getPointUsedType = "-";
         }
+        binding.pointHistoryPoint.setText(point);
+        binding.pointHistoryApprovalNumberTxt.setText(String.valueOf(model.approvalNumber));
 
-        String getDate = model.created;
+        String getDate = model.approvalDate;
 
         getDate = getDate.replaceAll("T"," ");
 
         getDate = getDate.substring(0, getDate.length()-3);
 
         binding.pointHistoryDateTxt.setText(getDate);
-
         binding.pointHistoryStateTxt.setText(getPointUsedType);
 
-        String getPoint = String.valueOf(model.point);
 
-        DecimalFormat format = new DecimalFormat("###,###");
 
-        if(getPoint.substring(0,1).equals("-")){
-            getPoint = format.format(model.point);
-            getPoint = getPoint.replace("-","- ");
-            binding.pointHistoryPoint.setTextColor(ContextCompat.getColor(context, R.color.red));
-        }else{
-            getPoint = "+ "+ format.format(model.point);
-            binding.pointHistoryPoint.setTextColor(ContextCompat.getColor(context, R.color.blue_button));
-        }
-
-        binding.pointHistoryPoint.setText(getPoint);
 
     }
 
@@ -86,7 +85,7 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
         return list.size();
     }
 
-    public void setList(List<PointModel> list) {
+    public void setList(List<PurchaseModel> list) {
 
         this.list.clear();
         this.list.addAll(list);

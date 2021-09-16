@@ -102,6 +102,7 @@
     <string name="dashboard_monthly_reservation_count">%1$s 건</string>
     <string name="dashboard_monthly_charge_amount_text">이달의\n충전량</string>
     <string name="dashboard_monthly_charge_amount">%1$s KWh</string>
+    <string name="dashboard_monthly_profit_point_title">월별 수익 포인트</string>
 
     <!-- 소유주 충전기 관리 -->
     <string name="charger_manage_title">충전기 관리</string>

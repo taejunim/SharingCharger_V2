@@ -189,6 +189,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarTransparent" />
 
+        <!-- 관리자 이달의 수익 포인트 -->
+        <activity
+            android:name="kr.co.metisinfo.sharingcharger.view.activity.AdminMonthlyProfitPointActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarTransparent" />
+
         <!-- WebView -->
         <activity
             android:name="kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity"

@@ -26,8 +26,10 @@ import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
 import kr.co.metisinfo.sharingcharger.model.AllowTimeOfDayModel;
 import kr.co.metisinfo.sharingcharger.model.AuthenticateModel;
 import kr.co.metisinfo.sharingcharger.model.ChargerModel;
+import kr.co.metisinfo.sharingcharger.model.AdminMonthlyProfitPointModel;
 import kr.co.metisinfo.sharingcharger.model.PointModel;
 import kr.co.metisinfo.sharingcharger.model.PriceModel;
+import kr.co.metisinfo.sharingcharger.model.PurchaseModel;
 import kr.co.metisinfo.sharingcharger.model.RechargeEndModel;
 import kr.co.metisinfo.sharingcharger.model.RechargeModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
@@ -433,11 +435,14 @@ public class ApiUtils {
     /**
      * 포인트 이력 조회
      **/
-    public Map<String, Object> getPoints(String startDate, String endDate, String sort, String getType, int pageIndex, List<PointModel> list) throws Exception {
+    public Map<String, Object> getPoints(String username, String startDate, String endDate, String sort, String paymentType, int pageIndex, List<PurchaseModel> list) throws Exception {
 
         Map<String, Object> map = new HashMap<>();
 
-        Response<Object> response = webServiceAPI.getPoints(ThisApplication.staticUserModel.id, startDate, endDate, sort, getType, pageIndex, 10).execute();
+        //신용 걸제 완료 구분 -> ALL 하드코딩
+        String paymentSuccessType = "ALL";
+
+        Response<Object> response = webServiceAPI.getPoints(username, startDate, endDate, sort, paymentSuccessType, paymentType, pageIndex, 10).execute();
 
         if (response.code() == 200 && response.body() != null) {
             JSONObject json = new JSONObject((Map) response.body());
@@ -449,11 +454,10 @@ public class ApiUtils {
             } else {
                 map.put("chkList", true);
             }
-
             for (int i = 0; i < contacts.length(); i++) {
                 Gson gson = new Gson();
 
-                PointModel vo = gson.fromJson(contacts.getJSONObject(i).toString(), PointModel.class);
+                PurchaseModel vo = gson.fromJson(contacts.getJSONObject(i).toString(), PurchaseModel.class);
 
                 list.add(vo);
             }
@@ -833,6 +837,39 @@ public class ApiUtils {
         }
 
         return adminChargerModel;
+    }
+
+    /**
+     * 소유주 월별 수익 포인트
+     **/
+    public Map<String, Object> getAdminMonthlyProfitPoint(String searchYear) throws Exception{
+
+        Map<String, Object> map = new HashMap<>();
+        Log.e("metis", " getAdminCharger" + ThisApplication.staticUserModel.id);
+
+        String searchType = "MONTH";
+        String searchMonth = "12";
+
+        Response<Object> response = webServiceAPI.getAdminMonthlyProfitPoint(String.valueOf(ThisApplication.staticUserModel.id), searchType, searchYear, searchMonth).execute();
+
+        if (response.code() == 200) {
+            Log.d("metis", response.body().toString());
+            //JSONObject json = new JSONObject((Map) response.body());
+
+            JSONArray json = new JSONArray(response.body().toString());
+            Gson gson = new Gson();
+            List<AdminMonthlyProfitPointModel> adminMonthlyProfitPointModelList = new ArrayList<>();
+
+            for (int i = 0; i < json.length(); i++) {
+                AdminMonthlyProfitPointModel adminMonthlyProfitPointModel = gson.fromJson(json.getJSONObject(i).toString(), AdminMonthlyProfitPointModel.class);
+                Log.d("metis",adminMonthlyProfitPointModel.toString());
+                adminMonthlyProfitPointModelList.add(adminMonthlyProfitPointModel);
+            }
+
+            map.put("list", adminMonthlyProfitPointModelList);
+        }
+
+        return map;
     }
 
     /**

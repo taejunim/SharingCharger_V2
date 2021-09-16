@@ -1,5 +1,6 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import java.util.Map;
 import kr.co.metisinfo.sharingcharger.Adapter.ItemAdminChargerManageRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerManageBinding;
+import kr.co.metisinfo.sharingcharger.digitalWalletManagement.PointUseHistoryActivity;
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 import kr.co.metisinfo.sharingcharger.model.AdminDashboardModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
@@ -62,6 +64,11 @@ public class AdminChargerManageFragment extends Fragment implements ItemAdminCha
         mRecyclerView.setAdapter(itemAdminChargerManageRecyclerViewAdapter);
 
         getChargerList(page);
+
+        //월별 수익 포인트 리스트 OPEN
+        binding.totalProfitPoint.setOnClickListener(v -> {
+            openMonthlyProfitPoint();
+        });
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -157,6 +164,12 @@ public class AdminChargerManageFragment extends Fragment implements ItemAdminCha
             binding.totalProfitPoint.setText("- p");
             Toast.makeText(getContext(), adminDashboardModel.getMessage(), Toast.LENGTH_SHORT);
         }
+    }
+
+    private void openMonthlyProfitPoint(){
+        //포인트 사용이력 화면
+        Intent intent = new Intent(this.getContext(), AdminMonthlyProfitPointActivity.class);
+        startActivity(intent);
     }
 
 }

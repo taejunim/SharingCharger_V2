@@ -125,8 +125,8 @@ public interface WebServiceAPI {
     Call<ReservationModel> insertReservation(@Body ReservationModel reservation);
 
     // 포인트 이력조회
-    @GET("/api/v1/point/users/{userId}/history")
-    Call<Object> getPoints(@Path("userId") int userId, @Query("startDate") String startDate, @Query("endDate") String endDate, @Query("sort") String sort, @Query("pointUsedType") String pointUsedType, @Query("page") int page, @Query("size") int size);
+    @GET("/api/v1/point/users/electronicWallet/{userId}/history")
+    Call<Object> getPoints(@Path("userId") String userId, @Query("startDate") String startDate, @Query("endDate") String endDate, @Query("sort") String sort, @Query("paymentSuccessType") String paymentSuccessType, @Query("paymentType") String paymentType, @Query("page") int page, @Query("size") int size);
 
     // 충전 이력조회
     @GET("/api/v1/recharges/users/{userId}/history")
@@ -211,4 +211,8 @@ public interface WebServiceAPI {
     // 소유자 BLE 충전기 등록
     @PUT("/api/v1/chargers/{id}/assign")
     Call<Object> assignBleCharger(@Path("id") int id, @Body AdminChargerModel adminCharger);
+
+    // 소유자 월별 수익 포인트
+    @GET("/api/v1/dashboard/personal/{userId}/stat/point")
+    Call<Object> getAdminMonthlyProfitPoint(@Path("userId") String userId, @Query("searchType") String searchType, @Query("searchYear") String searchYear, @Query("searchMonth") String searchMonth);
 }

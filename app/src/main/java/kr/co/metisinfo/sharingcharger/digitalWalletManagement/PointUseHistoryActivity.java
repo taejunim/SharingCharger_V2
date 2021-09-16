@@ -20,11 +20,13 @@ import java.util.Map;
 import kr.co.metisinfo.sharingcharger.Adapter.ItemPointHistoryRecyclerViewAdapter;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
+import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityHistoryBinding;
-import kr.co.metisinfo.sharingcharger.model.PointModel;
+import kr.co.metisinfo.sharingcharger.model.PurchaseModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
+import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.activity.HistorySearchConditionActivity;
 
 import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_POINT_HISTORY;
@@ -37,7 +39,7 @@ public class PointUseHistoryActivity extends BaseActivity {
 
     private ItemPointHistoryRecyclerViewAdapter historyAdapter;
 
-    List<PointModel> list = new ArrayList<>();
+    List<PurchaseModel> list = new ArrayList<>();
 
     private int index = 1;
 
@@ -226,7 +228,10 @@ public class PointUseHistoryActivity extends BaseActivity {
 
         try {
 
-            Map<String, Object> map = apiUtils.getPoints(startDate, endDate, sort, getType, pageIndex, list);
+            PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+            String username = preferenceUtil.getString("email");
+
+            Map<String, Object> map = apiUtils.getPoints(username, startDate, endDate, sort, getType, pageIndex, list);
 
             chkList = (boolean) map.get("chkList");
 
