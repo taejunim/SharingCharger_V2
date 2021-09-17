@@ -5,7 +5,7 @@
     <RelativeLayout
         android:id="@+id/charge_history_top_layout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp">
 
         <TextView
@@ -53,10 +53,22 @@
             android:textStyle="bold"
             android:textSize="16dp"/>
 
+        <TextView
+            android:id="@+id/point_history_reason_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignStart="@id/point_history_date_txt"
+            android:layout_alignEnd="@id/point_history_approval_number_txt"
+            android:layout_below="@id/point_history_state_txt"
+            android:textSize="12dp"
+            android:text="줄바꿈테스트입니다/ 줄바꿈테스트입니다/ 줄바꿈테스트입니다/ 줄바꿈테스트입니다/줄바꿈테스트입니다/줄바꿈테스트입니다/줄바꿈테스트입니다/"
+            android:textColor="@color/gray"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/point_history_point"
+            android:layout_below="@+id/point_history_reason_txt"
             android:layout_marginTop="15dp"
             android:background="@color/dark_gray"/>
 

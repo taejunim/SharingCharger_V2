@@ -2,6 +2,7 @@ package kr.co.metisinfo.sharingcharger.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -55,12 +56,14 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
 
         String type = model.getType();
 
+        //구매 / 지급 포인트 앞에 + 추가
         if(type.equals("PURCHASE") || type.equals("GIVE") ){
             point = "+" + point;
             binding.pointHistoryPoint.setTextColor(ContextCompat.getColor(context, R.color.blue_button));
             if(type.equals("PURCHASE")) getPointUsedType = "구매";
             else getPointUsedType = "포인트 지급";
 
+        //구매 취소 / 환전 / 회수
         } else if(model.getType().equals("PURCHASE_CANCEL") || model.getType().equals("EXCHANGE") || model.getType().equals("WITHDRAW")){
             binding.pointHistoryPoint.setTextColor(ContextCompat.getColor(context, R.color.red));
             if(type.equals("PURCHASE_CANCEL")) getPointUsedType = "구매 취소";
@@ -70,8 +73,23 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
 
         binding.pointHistoryPoint.setText(point);
 
-        if(model.getType().equals("EXCHANGE")) binding.pointHistoryApprovalNumberTxt.setText("");
-        else binding.pointHistoryApprovalNumberTxt.setText(String.valueOf(model.targetName));
+        //타입에 따라 승인번호를 보여줄지 / 사유를 보여줄지
+        if(type.equals("PURCHASE") || type.equals("PURCHASE_CANCEL")){
+
+            binding.pointHistoryApprovalNumberTxt.setText(model.targetName);
+            binding.pointHistoryReasonTxt.setVisibility(View.GONE);
+
+        } else if(type.equals("GIVE") || type.equals("WITHDRAW")){
+
+            binding.pointHistoryApprovalNumberTxt.setText("");
+            binding.pointHistoryReasonTxt.setText(model.targetName);
+
+        } else {
+
+            binding.pointHistoryApprovalNumberTxt.setText("");
+            binding.pointHistoryReasonTxt.setVisibility(View.GONE);
+
+        }
 
         String getDate = model.created;
 
@@ -86,6 +104,11 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    @Override
+    public int getItemViewType(int position){
+        return position;
     }
 
     public void setList(List<PurchaseModel> list) {
