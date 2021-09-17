@@ -69,7 +69,9 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
         } else getPointUsedType = "-";
 
         binding.pointHistoryPoint.setText(point);
-        binding.pointHistoryApprovalNumberTxt.setText(String.valueOf(model.targetName));
+
+        if(model.getType().equals("EXCHANGE")) binding.pointHistoryApprovalNumberTxt.setText("");
+        else binding.pointHistoryApprovalNumberTxt.setText(String.valueOf(model.targetName));
 
         String getDate = model.created;
 
