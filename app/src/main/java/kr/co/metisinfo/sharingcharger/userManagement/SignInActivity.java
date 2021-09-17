@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
@@ -59,19 +61,9 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
         binding.loginResetPw.setOnClickListener(view -> getFindPassword());
 
         binding.loginBtn.setOnClickListener(view -> { // 로그인 버튼 클릭 리스너
-
-            if (isNetworkStatus) {
-                if (!isRegisterBtnClick) {   // 중복 클릭 막기 위함.
-
-                    isRegisterBtnClick = true;
-
-                    getLogin();
-
-                }
-            } else {
-                Toast.makeText(this, "네트워크 상태를 확인하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
-            }
+            tryLogin();
         });
+
     }
 
     @Override
@@ -85,8 +77,33 @@ public class SignInActivity extends BaseActivity implements NetworkStatusInterfa
         content = new SpannableString(getString(R.string.change_password));
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         binding.loginResetPw.setText(content);
+
+        binding.loginPw.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                tryLogin();
+                return false;
+            }
+        });
+
     }
 
+    private void tryLogin(){
+
+            if (isNetworkStatus) {
+                if (!isRegisterBtnClick) {   // 중복 클릭 막기 위함.
+
+                    isRegisterBtnClick = true;
+
+                    getLogin();
+
+                }
+            } else {
+                Toast.makeText(this, "네트워크 상태를 확인하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+            }
+
+    }
     private void getLogin() {
 
         if (validationCheck()) {
