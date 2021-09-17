@@ -81,9 +81,6 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
         binding.pointHistoryDateTxt.setText(getDate);
         binding.pointHistoryStateTxt.setText(getPointUsedType);
 
-
-
-
     }
 
     @Override

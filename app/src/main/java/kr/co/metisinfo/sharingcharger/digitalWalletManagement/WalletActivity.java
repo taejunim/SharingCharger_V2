@@ -1,7 +1,6 @@
 package kr.co.metisinfo.sharingcharger.digitalWalletManagement;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -105,6 +104,7 @@ public class WalletActivity extends BaseActivity {
     public void init() {
 
         binding.includeHeader.txtTitle.setText("전자지갑");                                           //HEADER TXT SET
+        binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
     }
 
     @Override
