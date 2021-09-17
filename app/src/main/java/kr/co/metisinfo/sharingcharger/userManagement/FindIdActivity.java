@@ -64,6 +64,8 @@ public class FindIdActivity extends BaseActivity {
 
         binding.certificationButton.setOnClickListener(view -> {
 
+            binding.certificationInput.requestFocus();
+
             if (checkVerificationCode()) {
 
                 String phone = binding.userPhoneInput.getText().toString().trim();
@@ -81,15 +83,15 @@ public class FindIdActivity extends BaseActivity {
                         isCertificationBtn = true;
                         binding.remainingTimeLayout.setVisibility(View.VISIBLE);
                         countDown("0300");
-
-                        binding.certificationInput.requestFocus();
                     } else {
                         Toast.makeText(FindIdActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                        binding.userPhoneInput.requestFocus();
                     }
 
                 } catch (Exception e) {
                     Toast.makeText(FindIdActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "registerCertificationBtn Exception: " + e);
+                    binding.userPhoneInput.requestFocus();
                 }
 
             }

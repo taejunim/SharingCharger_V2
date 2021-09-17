@@ -79,7 +79,9 @@
                     android:gravity="top"
                     android:hint="내용을 입력해주세요"
                     android:paddingLeft="10dp"
-                    android:singleLine="true"
+                    android:paddingRight="10dp"
+                    android:inputType="textMultiLine"
+                    android:scrollHorizontally="false"
                     android:textColor="@color/black" />
             </RelativeLayout>
         </ScrollView>

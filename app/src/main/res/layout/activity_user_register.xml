@@ -128,13 +128,13 @@
 
                 <EditText
                     android:id="@+id/register_certification_input"
-                    android:layout_below="@id/register_certification_title"
-                    android:hint="@string/register_certification_hint"
                     style="@style/register_edit_txt"
-                    android:maxLength="10"
+                    android:layout_below="@id/register_certification_title"
+                    android:layout_marginBottom="0dp"
+                    android:hint="@string/register_certification_hint"
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:layout_marginBottom="0dp"/>
+                    android:maxLength="10" />
 
                 <!-- 인증요청 남은시간-->
                 <RelativeLayout

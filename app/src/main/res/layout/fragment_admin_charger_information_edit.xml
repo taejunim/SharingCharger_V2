@@ -111,17 +111,17 @@
                     android:id="@+id/edit_detail_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="30dp"
-                    android:layout_toEndOf="@id/label_detail_address"
+                    android:layout_alignEnd="@id/edit_charger_name"
                     android:layout_alignBottom="@id/label_detail_address"
                     android:layout_marginStart="30dp"
-                    android:layout_alignEnd="@id/edit_charger_name"
-                    android:textSize="15sp"
-                    android:textColor="@color/black"
+                    android:layout_toEndOf="@id/label_detail_address"
+                    android:background="@color/header_dummy"
+                    android:maxLines="1"
+                    android:minHeight="30dp"
                     android:paddingLeft="10dp"
                     android:singleLine="true"
-                    android:maxLines="1"
-                    android:background="@color/header_dummy"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/label_parking_fee_yn"
@@ -220,19 +220,19 @@
                     android:id="@+id/edit_parking_fee_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="60dp"
-                    android:layout_toEndOf="@id/label_parking_fee_description"
                     android:layout_alignTop="@id/label_parking_fee_description"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textColorHint="@color/black"
-                    android:paddingTop="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:layout_toEndOf="@id/label_parking_fee_description"
+                    android:background="@color/header_dummy"
                     android:gravity="top"
-                    android:background="@color/header_dummy"/>
+                    android:minHeight="60dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="15sp" />
 
             </RelativeLayout>
 

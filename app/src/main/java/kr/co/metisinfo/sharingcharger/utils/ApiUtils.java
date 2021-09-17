@@ -1,6 +1,7 @@
 package kr.co.metisinfo.sharingcharger.utils;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -68,20 +69,31 @@ public class ApiUtils {
     /**
      * 이메일 중복체크
      */
-    public Boolean checkDuplicate(String userEmail) {
+    public Map<String, Object> checkDuplicate(String userEmail) {
 
-        Response<UserModel> response = null;
+        Map<String, Object> resultMap = new HashMap<>();
+
         try {
-            response = webServiceAPI.checkDuplicate(userEmail).execute();
+            Response<UserModel> response = webServiceAPI.checkDuplicate(userEmail).execute();
+
+            if (response.code() == 204) {
+                resultMap.put("result", true);
+            } else {
+                resultMap.put("result", false);
+                resultMap.put("message", "이미 사용중인 이메일입니다.");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
+            resultMap.put("result", false);
+            resultMap.put("message", "예상치 못한 오류가 발생하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+        } catch (NullPointerException e) {
+            resultMap.put("result", false);
+            resultMap.put("message", "서버와 통신이 원활하지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+            return resultMap;
         }
 
-        if (response.code() == 204) {
-            return true;
-        }
-
-        return false;
+        return resultMap;
     }
 
     /**

@@ -125,6 +125,8 @@ public class AdminChargerInformationEditFragment extends Fragment {
                 adminChargerModel.setName(binding.editChargerName.getText().toString());
                 adminChargerModel.setAddress(binding.editAddress.getText().toString());
                 adminChargerModel.setDetailAddress(binding.editDetailAddress.getText().toString());
+                adminChargerModel.setGpsX(0);
+                adminChargerModel.setGpsY(0);
 
                 int parkingFeeId = binding.parkingFeeToggle.getCheckedRadioButtonId();
                 RadioButton parkingFee = view.findViewById(parkingFeeId);

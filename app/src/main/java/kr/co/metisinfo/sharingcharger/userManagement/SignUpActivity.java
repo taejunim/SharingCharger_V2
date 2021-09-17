@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import kr.co.metisinfo.sharingcharger.R;
@@ -89,15 +90,19 @@ public class SignUpActivity extends BaseActivity {
 
         binding.registerDuplicationCheckButton.setOnClickListener(view -> {
 
-            if (checkDuplicate()) {
+            if (checkValidation()) {
                 String userEmail = binding.registerEmailInput.getText().toString().trim();
 
-                isPossibleSignUp = apiUtils.checkDuplicate(userEmail);
+                Map<String, Object> resultMap = apiUtils.checkDuplicate(userEmail);
 
-                if (isPossibleSignUp) {
+                boolean result = (boolean) resultMap.get("result");
+
+                if (result) {
+                    isPossibleSignUp = result;
                     Toast.makeText(this, "사용 가능한 이메일입니다.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "이미 사용중인 이메일입니다.", Toast.LENGTH_LONG).show();
+                    String message = (String) resultMap.get("message");
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -121,8 +126,9 @@ public class SignUpActivity extends BaseActivity {
 
         binding.registerCertificationBtn.setOnClickListener(view -> {
 
-            //인증번호 가져오기
+            binding.registerCertificationInput.requestFocus();
 
+            //인증번호 가져오기
             if (checkVerificationCode()) {
 
                 String phone = binding.registerPhoneInput.getText().toString().trim();
@@ -144,13 +150,17 @@ public class SignUpActivity extends BaseActivity {
                         isCertificationBtn = true;
                         binding.layoutTimeRemaining.setVisibility(View.VISIBLE);
                         countDown("0300");
+
+
                     } else {
                         Toast.makeText(this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                        binding.registerPhoneInput.requestFocus();
                     }
 
                 } catch (Exception e) {
                     Toast.makeText(this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "registerCertificationBtn Exception: " + e);
+                    binding.registerPhoneInput.requestFocus();
                 }
             }
 
@@ -275,7 +285,7 @@ public class SignUpActivity extends BaseActivity {
     /**
      * 회원가입 이메일 중복 체크
      */
-    private boolean checkDuplicate() {
+    private boolean checkValidation() {
         if (binding.registerEmailInput.getText().toString().trim().equals("")) {     // 이메일 입력하지 않았을 경우
 
             binding.registerEmailInput.setText("");

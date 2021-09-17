@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -106,6 +108,28 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
 
         binding.imageCableExistYn.setColorFilter(ContextCompat.getColor(getContext(), R.color.black));
         binding.imageChargeType.setColorFilter(ContextCompat.getColor(getContext(), R.color.black));
+
+        binding.editTextDetailAddress.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_UP) && keyCode != KeyEvent.KEYCODE_DEL && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    binding.scrollView.smoothScrollTo(0, binding.editParkingFeeDescription.getTop());
+                    binding.editParkingFeeDescription.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        binding.editParkingFeeDescription.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                binding.scrollView.smoothScrollTo(0, binding.editParkingFeeDescription.getBottom());
+
+                return false;
+            }
+        });
     }
 
     private void previousButton(){

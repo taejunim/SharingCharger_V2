@@ -104,6 +104,12 @@ public class ItemAdminChargerManageRecyclerViewAdapter extends RecyclerView.Adap
         return list.size();
     }
 
+    //알 수 없는 원인으로 스크롤시 중복 데이터가 발생 setHasStableIds 적용 했는데 해결될 지 의문
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(hasStableIds);
+    }
+
     public void setList(List<AdminChargerModel> list) {
 
         this.list.clear();

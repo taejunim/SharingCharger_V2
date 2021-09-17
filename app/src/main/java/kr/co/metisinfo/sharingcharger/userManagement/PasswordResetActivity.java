@@ -48,8 +48,9 @@ public class PasswordResetActivity extends BaseActivity {
         binding.includeHeader.btnBack.setOnClickListener(view -> finish());
         binding.registerBtn.setOnClickListener(view -> passwordResetConfirm(this));
 
-        binding.registerCertificationBtn.setOnClickListener(view ->
-        {
+        binding.registerCertificationBtn.setOnClickListener(view -> {
+
+            binding.registerCertificationInput.requestFocus();
 
             if (checkVerificationCode()) {
 
@@ -74,11 +75,13 @@ public class PasswordResetActivity extends BaseActivity {
                         countDown("0300");
                     } else {
                         Toast.makeText(PasswordResetActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                        binding.registerPhoneInput.requestFocus();
                     }
 
                 } catch (Exception e) {
                     Toast.makeText(PasswordResetActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "registerCertificationBtn Exception: " + e);
+                    binding.registerPhoneInput.requestFocus();
                 }
 
             }
