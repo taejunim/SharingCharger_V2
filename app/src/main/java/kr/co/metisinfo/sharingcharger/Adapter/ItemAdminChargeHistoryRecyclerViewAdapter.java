@@ -51,7 +51,7 @@ public class ItemAdminChargeHistoryRecyclerViewAdapter extends RecyclerView.Adap
         binding.adminChargeHistoryChargeDate.setText(ThisApplication.context.getResources().getString(R.string.admin_charge_history_charge_date, setDate(model.startRechargeDate, model.endRechargeDate)));
 
         if (model.ownerPoint > 0 && !ThisApplication.staticUserModel.username.equals(model.username)) {
-            binding.adminChargeHistoryProfitPoint.setText(ThisApplication.context.getResources().getString(R.string.admin_charge_history_profit_point, decimalFormat.format(model.ownerPoint)));
+            binding.adminChargeHistoryProfitPoint.setText(ThisApplication.context.getResources().getString(R.string.admin_charge_history_profit_point, decimalFormat.format(model.ownerPoint)) + " p");
         } else if (model.ownerPoint <= 0 && ThisApplication.staticUserModel.username.equals(model.username)){
             binding.adminChargeHistoryProfitPoint.setText(ThisApplication.context.getResources().getString(R.string.admin_charge_history_profit_point, "소유주 본인 충전"));
         } else {
