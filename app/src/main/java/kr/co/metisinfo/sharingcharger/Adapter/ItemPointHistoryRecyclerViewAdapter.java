@@ -76,7 +76,7 @@ public class ItemPointHistoryRecyclerViewAdapter extends RecyclerView.Adapter<It
         //타입에 따라 승인번호를 보여줄지 / 사유를 보여줄지
         if(type.equals("PURCHASE") || type.equals("PURCHASE_CANCEL")){
 
-            binding.pointHistoryApprovalNumberTxt.setText(model.targetName);
+            binding.pointHistoryApprovalNumberTxt.setText("승인번호 : " + model.targetName);
             binding.pointHistoryReasonTxt.setVisibility(View.GONE);
 
         } else if(type.equals("GIVE") || type.equals("WITHDRAW")){

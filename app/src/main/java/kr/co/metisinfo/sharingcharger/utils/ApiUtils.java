@@ -892,8 +892,6 @@ public class ApiUtils {
         Response<Object> response = webServiceAPI.getAdminMonthlyProfitPoint(String.valueOf(ThisApplication.staticUserModel.id), searchType, searchYear, searchMonth).execute();
 
         if (response.code() == 200) {
-            Log.d("metis", response.body().toString());
-            //JSONObject json = new JSONObject((Map) response.body());
 
             JSONArray json = new JSONArray(response.body().toString());
             Gson gson = new Gson();
@@ -901,7 +899,6 @@ public class ApiUtils {
 
             for (int i = 0; i < json.length(); i++) {
                 AdminMonthlyProfitPointModel adminMonthlyProfitPointModel = gson.fromJson(json.getJSONObject(i).toString(), AdminMonthlyProfitPointModel.class);
-                Log.d("metis",adminMonthlyProfitPointModel.toString());
                 adminMonthlyProfitPointModelList.add(adminMonthlyProfitPointModel);
             }
 

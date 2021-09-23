@@ -76,7 +76,7 @@ public class AdminMonthlyProfitPointActivity extends BaseActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     searchYear = years[position].replaceAll(" 년","");
                     ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-
+                    getAdminMonthlyProfitPoint();
                 }
 
                 @Override
@@ -85,10 +85,6 @@ public class AdminMonthlyProfitPointActivity extends BaseActivity {
                 }
             });
 
-            //월별 수익 포인트 리스트 OPEN
-            binding.searchButton.setOnClickListener(v -> {
-                getAdminMonthlyProfitPoint();
-            });
 
         } catch (Exception e) {
             Log.e(TAG, "point Exception : " + e);
@@ -129,7 +125,6 @@ public class AdminMonthlyProfitPointActivity extends BaseActivity {
 
         binding.monthlyProfitPointRecycler.setAdapter(adminMonthlyProfitPointRecyclerViewAdapter);
 
-        getAdminMonthlyProfitPoint();
     }
 
     private void getAdminMonthlyProfitPoint() {
@@ -137,10 +132,6 @@ public class AdminMonthlyProfitPointActivity extends BaseActivity {
         try {
             Map<String, Object> map = apiUtils.getAdminMonthlyProfitPoint(searchYear);
             list = (List) map.get("list");
-
-            Log.d("metis", "searchYear" + searchYear);
-            Log.d("metis", "currentYear" + currentYear);
-            Log.d("metis", "searchMonth" + searchMonth);
 
             if(searchYear.equals(currentYear)){
                 for(int i = 0; i < 12 - searchMonth; i ++)
