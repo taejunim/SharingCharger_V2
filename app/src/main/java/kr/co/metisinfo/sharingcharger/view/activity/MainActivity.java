@@ -1701,7 +1701,11 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
                 binding.layoutReservationInfoRechargeTxt.setText("충전중");
                 binding.mainRechargingTxt.setVisibility(View.VISIBLE);
                 binding.chgrDetailCancel.setVisibility(View.GONE);
-                binding.chgrDetailStart.setText("충전기 연결");
+
+                if (preferenceUtil.getBoolean("isCharging")) {
+                    binding.chgrDetailStart.setText("충전 종료");
+                }
+
 
                 /*SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);
 

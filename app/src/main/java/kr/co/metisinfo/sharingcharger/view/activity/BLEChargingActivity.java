@@ -574,6 +574,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                                 BLESetTag();
                                 sec = Integer.parseInt(ChargerTime) * 60;
                                 ChargingTimerStart();                                               //충전진행 경과시간 START
+                                preferenceUtil.putBoolean("isCharging", true);
                             }
                         }
                         Log.e("metis", "chk : " + chk);
@@ -582,6 +583,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                             setSharedPreferences(false);
                             BLEStop();
                             Toast.makeText(BLEChargingActivity.this, "충전을 시작할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                            preferenceUtil.putBoolean("isCharging", false);
                         }
 
                     } catch (Exception e) {
@@ -590,6 +592,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                         setSharedPreferences(false);
                         BLEStop();
                         Toast.makeText(BLEChargingActivity.this, "인증에 실패하였습니다1.", Toast.LENGTH_SHORT).show();
+                        preferenceUtil.putBoolean("isCharging", false);
                     }
 
                     checkStart = false;
@@ -603,6 +606,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                 Toast.makeText(BLEChargingActivity.this, "BLEStart 충전 시작에 실패하였습니다.\n다시 시도하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                 hideLoading(binding.loading);
                 timerFinish();
+                preferenceUtil.putBoolean("isCharging", false);
             }
 
             /*@Override
@@ -686,6 +690,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                 }, 1000);
 
                 ChargingTimerStop();                                                                //충전진행 경과시간 End
+                preferenceUtil.putBoolean("isCharging", false);
             }
 
             @Override
