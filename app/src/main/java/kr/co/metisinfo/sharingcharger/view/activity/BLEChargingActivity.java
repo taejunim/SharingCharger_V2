@@ -54,7 +54,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-    SimpleDateFormat rechargeTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
 
@@ -630,14 +629,12 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
             Log.e("metis", "setSharedPreferences rechargeId: " + rechargeId);
             editor.putInt("rechargeId", rechargeId);
             editor.putString("time", format.format(now));
-            editor.putString("rechargeStartTime", rechargeTimeFormat.format(now));
             editor.putString("activity", "BLEChargingActivity");
 
             stChargingTime = format.format(now);
         } else {
             editor.putInt("rechargeId", 0);
             editor.putString("time", null);
-            editor.putString("rechargeStartTime", null);
             editor.putString("activity", null);
         }
         editor.commit();
@@ -654,9 +651,6 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
                 timerFinish();
                 chargerFrameClick(binding.frameEnd);
 
-                if (preferenceUtil.getInt("rechargeId") > 0) {
-                    binding.chargerListStartTime.setText("충전 시작 : " + preferenceUtil.getString("rechargeStartTime"));    
-                }
             }
 
             @Override
@@ -833,19 +827,19 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         tv_filling_amount_txt.setText(String.valueOf(rModel.reservationPoint - (rModel.reservationPoint-rModel.rechargePoint)));                                       //실제 소진 포인트 SET
 
         TextView reservationStartTimeText = dialogView.findViewById(R.id.reservation_start_time_txt);
-        reservationStartTimeText.setText(rModel.reservationStartDate);                                              //충전 시작 시간 SET
+        reservationStartTimeText.setText(cu.setDateFormat(rModel.reservationStartDate));                                              //예약 시작 시간 SET
 
         TextView reservationEndTimeText = dialogView.findViewById(R.id.reservation_end_time_txt);
-        reservationEndTimeText.setText(rModel.reservationEndDate);                                                  //충전 종료 시간 SET
+        reservationEndTimeText.setText(cu.setDateFormat(rModel.reservationEndDate));                                                  //예약 종료 시간 SET
 
         TextView tv_charg_start_time_txt = dialogView.findViewById(R.id.charg_start_time_txt);
-        tv_charg_start_time_txt.setText(rModel.startRechargeDate);                                              //충전 시작 시간 SET
+        tv_charg_start_time_txt.setText(cu.setDateFormat(rModel.startRechargeDate));                                                   //충전 시작 시간 SET
 
         TextView tv_charg_end_time_txt = dialogView.findViewById(R.id.charg_end_time_txt);
-        tv_charg_end_time_txt.setText(rModel.endRechargeDate);                                                  //충전 종료 시간 SET
+        tv_charg_end_time_txt.setText(cu.setDateFormat(rModel.endRechargeDate));                                                      //충전 종료 시간 SET
 
         TextView tv_charging_time_txt = dialogView.findViewById(R.id.charging_time_txt);
-        tv_charging_time_txt.setText(rModel.chargingTime);                                                      //충전 시간 SET
+        tv_charging_time_txt.setText(cu.setDateFormat(rModel.chargingTime));                                                      //충전 시간 SET
 
         confirmButton.setOnClickListener(v -> {
             dialog.dismiss();
