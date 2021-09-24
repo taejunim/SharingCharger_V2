@@ -82,26 +82,7 @@ public class ChargerSearchActivity extends BaseActivity {
     public void setOnClickListener() {
 
         binding.btnSearchDevice.setOnClickListener(view -> {
-
-            /*
-            * 블루투스 연결해제 후 충전기 검색 버튼 클릭 시 에러남
-            * 강제로 활성화 시킨 후 2.5초 후 scan 시작함(바로 시작 시 에러남)
-            * */
-            mEvzBluetooth.setBluetooth(true);
-
-            new Handler().postDelayed(new Runnable() {// 1 초 후에 실행
-                @Override
-                public void run() {
-                    Message msg = mHandler.obtainMessage();  //사용할 핸들러를 이용해서 보낼 메시지 객체 생성
-                    Bundle b1 = new Bundle();    //메시지를 담을 번들 생성
-                    b1.putBoolean("bluetooth", true);    //번들에 메시지 추가
-                    msg.setData(b1);    //메세지에 번들을 넣는다.
-
-                    mHandler.sendMessage(msg);     //메세지를 핸들러로 넘긴다.
-
-                }
-            }, 1000);
-
+            searchCharger();
         });
     }
 
@@ -112,9 +93,30 @@ public class ChargerSearchActivity extends BaseActivity {
         mEvzBluetooth = new EvzBluetooth(ChargerSearchActivity.this);
 
         mEvzBluetooth.setBluetooth(true);
-
+        searchCharger();
     }
 
+    public void searchCharger(){
+        /*
+         * 블루투스 연결해제 후 충전기 검색 버튼 클릭 시 에러남
+         * 강제로 활성화 시킨 후 2.5초 후 scan 시작함(바로 시작 시 에러남)
+         * */
+        mEvzBluetooth.setBluetooth(true);
+
+        new Handler().postDelayed(new Runnable() {// 1 초 후에 실행
+            @Override
+            public void run() {
+                Message msg = mHandler.obtainMessage();  //사용할 핸들러를 이용해서 보낼 메시지 객체 생성
+                Bundle b1 = new Bundle();    //메시지를 담을 번들 생성
+                b1.putBoolean("bluetooth", true);    //번들에 메시지 추가
+                msg.setData(b1);    //메세지에 번들을 넣는다.
+
+                mHandler.sendMessage(msg);     //메세지를 핸들러로 넘긴다.
+
+            }
+        }, 1000);
+
+    }
     public void getBLEScan() {
 
         showLoading(binding.loading);
