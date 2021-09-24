@@ -17,8 +17,8 @@
             android:id="@+id/include_charger_manage_menu"
             layout="@layout/layout_charger_manage_detail_header"
             android:layout_width="match_parent"
-            android:layout_below="@id/include_header"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include_header" />
 
         <RelativeLayout
             android:id="@+id/fragment_container"

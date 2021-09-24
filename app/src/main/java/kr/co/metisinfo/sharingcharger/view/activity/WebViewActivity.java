@@ -73,7 +73,7 @@ public class WebViewActivity extends BaseActivity {
 
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (!getTagName.equals("setting")) {
+                if (!getTagName.equals("setting") && !getTagName.equals("notice")) {
                 //스크롤 안의 높이
                     v.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
 
@@ -151,7 +151,8 @@ public class WebViewActivity extends BaseActivity {
         else if (getTagName.equals("notice")) {
             binding.personalBtn.setVisibility(View.GONE);
 
-            url = "https://monttak.co.kr/information/app/notice";
+            //url = "https://monttak.co.kr/information/app/notice";
+            url = "http://211.253.37.97:52340/information/app/notice";
 
             binding.personalWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             binding.personalWebView.setMinimumHeight(800);
