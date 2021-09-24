@@ -110,5 +110,4 @@ dependencies {
     implementation files('libs/libDaumMapAndroid.jar')
 
     implementation group: 'com.kakao.sdk', name: 'kakaonavi', version: project.KAKAO_SDK_VERSION
-
 }

@@ -11,17 +11,13 @@ public class Constants {
 
     /* 테스트 서버 */
     public static final String DEV_HOST = "http://211.253.37.97:52340";
-    public static final String REAL_HOST = "http://211.253.37.97:52340";
-    public static final String DAILY_DEV_HOST = "http://211.253.37.97:52340";
-    public static final String DAILY_REAL_HOST = "http://211.253.37.97:52340";
+    //public static final String DEV_HOST = "https://monttak.co.kr";
+    public static final String REAL_HOST = "https://monttak.co.kr";
 
     public static final String KAKAO_SEARCH_KEYWORD_HOST = "https://dapi.kakao.com";
 
     //서버 IP
     public static final String HOST = isReal ? REAL_HOST : DEV_HOST;
-
-    //포트 번호
-    public static final String DAILY_HOST = isReal ? DAILY_REAL_HOST : DAILY_DEV_HOST;
 
     public static final String HEADER_AUTH_KAKAO_SEARCH_KEYWORD = "Authorization";
 

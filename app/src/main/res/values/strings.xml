@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">sharingcharger</string>
+    <string name="app_name">몬딱충전</string>
 
     <!-- 로그인 -->
     <string name="login_id_hint">아이디 또는 이메일</string>
