@@ -418,6 +418,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 if(cost.equals("")) Toast.makeText(getApplicationContext(), "구매하실 금액을 입력하여 주십시오.", Toast.LENGTH_SHORT).show();
                 else if(cost.equals("0")) Toast.makeText(getApplicationContext(), "포인트 구매는 0원부터 가능합니다.", Toast.LENGTH_SHORT).show();
                 else {
+                    purchaseDialog.dismiss();
                     openWebView(cost);
                 }
             }

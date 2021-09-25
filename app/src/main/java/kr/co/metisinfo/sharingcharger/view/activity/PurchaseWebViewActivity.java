@@ -198,7 +198,6 @@ public class PurchaseWebViewActivity extends BaseActivity {
                         }
                     } catch (URISyntaxException e) {
                         //URI 문법 오류 시 처리 구간
-
                     } catch (ActivityNotFoundException e) {
                         String packageName = intent.getPackage();
                         if (!packageName.equals("")) {
@@ -219,18 +218,22 @@ public class PurchaseWebViewActivity extends BaseActivity {
                 Intent intent = null;
                 if (url.contains("ispmobile")) { // ISP 결제시 ISP 인증 APP 호출
 
+                    try{
+                        String[] arrTid = url.split("=");
+                        TID = arrTid[arrTid.length-1];
 
-                    String[] arrTid = url.split("=");
-                    TID = arrTid[arrTid.length-1];
-
-                    if (installCheck("ISP")) {
-                        Intent isp = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivityForResult(isp, ISP_CALL);
-
-                    } else { // ISP APP 이 설치 되지 않았을 경우 Market으로 연결
-                        Uri uri = Uri.parse("market://details?id=kvp.jjy.MispAndroid320");
-                        intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
+                        if (installCheck("ISP")) {
+                            Intent isp = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivityForResult(isp, ISP_CALL);
+                        } else { // ISP APP 이 설치 되지 않았을 경우 Market으로 연결
+                            Uri uri = Uri.parse("market://details?id=kvp.jjy.MispAndroid320");
+                            intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(uri);
+                            startActivity(intent);
+                            }
+                        } catch (Exception e){
+                            Toast.makeText(getBaseContext(), "지원하지 않는 결제 방식입니다.\n다른 카드사를 선택하여 주십시오.",Toast.LENGTH_SHORT).show();
+                            finish();
                     }
                     return true;
 
@@ -344,14 +347,7 @@ public class PurchaseWebViewActivity extends BaseActivity {
                 }
             }
 
-
-
-
             return false;
-
-
-
-
 
             //return  값을 반드시 false로 해야 합니다.
         }
@@ -381,16 +377,25 @@ public class PurchaseWebViewActivity extends BaseActivity {
             final JsResult finalRes = result;
             if (!TextUtils.isEmpty(message))
             {
-                // 정상 alert() 함수 처리
-                AlertDialog.Builder builder = new AlertDialog.Builder(
-                        view.getContext());
-                builder.setTitle(message).setIcon(R.mipmap.ic_launcher).setMessage(message)
-                        .setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                result.confirm();
-                            }
-                        }).create().show();
+
+                switch (message.substring(0,4)){
+                    case "W002" :
+                        //결제 웹뷰 취소 버튼
+                        finish();
+                        break;
+                    default:
+                        // 정상 alert() 함수 처리
+                        AlertDialog.Builder builder = new AlertDialog.Builder(
+                                view.getContext());
+                        builder.setTitle(message).setIcon(R.mipmap.ic_launcher).setMessage(message)
+                                .setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        result.confirm();
+                                    }
+                                }).create().show();
+                        break;
+                }
                 return true;
             }
             else

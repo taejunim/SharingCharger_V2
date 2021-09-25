@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -86,10 +84,7 @@ public class PurchaseDialog extends Dialog {
         //확인버튼
         findViewById(R.id.dialog_ok_btn).setOnClickListener(view -> {
             String cost =  textView.getText().toString();
-
             purchaseDialogListener.onPurchaseButtonClicked(cost.replace(",", ""));
-            this.dismiss();
-
         });
         //취소버튼
         findViewById(R.id.dialog_no_btn).setOnClickListener(view -> this.dismiss());
@@ -124,7 +119,6 @@ public class PurchaseDialog extends Dialog {
         if(priceButton != priceButtonList.get(3)){
             isOwnPrice = false;
             priceEditText.setEnabled(false);
-            Log.d("metis",priceButton.getText().toString().replace("원",""));
             priceEditText.setText(priceButton.getText().toString().replace("원",""));
 
         } else {
