@@ -3,6 +3,8 @@ package kr.co.metisinfo.sharingcharger.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -39,11 +41,14 @@ import java.util.List;
 import java.util.Locale;
 
 import kr.co.metisinfo.sharingcharger.R;
+import kr.co.metisinfo.sharingcharger.dialog.ChargerFinishDialog;
+import kr.co.metisinfo.sharingcharger.dialog.EmailDialog;
 import kr.co.metisinfo.sharingcharger.model.MenuHeaderVO;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.userManagement.ChargerFavoriteActivity;
 import kr.co.metisinfo.sharingcharger.charger.ChargerUseHistoryActivity;
+import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.activity.AdminMainActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.PurchaseDialog;
@@ -242,8 +247,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             } else if (groupPosition == 4) {
 
                 //고객센터
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:0647256800"));
-                startActivity(intent);
+                EmailDialog emailDialog = new EmailDialog(this);
+                emailDialog.setCancelable(false);                                                                   //DIALOG BACKGROUND CLICK FALSE
+                emailDialog.show();
 
             } else if (groupPosition == 5) {
 

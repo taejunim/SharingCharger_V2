@@ -2,7 +2,12 @@ package kr.co.metisinfo.sharingcharger.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -17,6 +22,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kr.co.metisinfo.sharingcharger.BuildConfig;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.model.CurrentReservationModel;
 import kr.co.metisinfo.sharingcharger.model.ReservationModel;
@@ -307,6 +313,18 @@ public class CommonUtils {
         String getDate = startYYYY + "-" + String.format("%02d", startMM) + "-" + String.format("%02d", startDD);
 
         return getDate;
+    }
+
+    //고객센터 - 이메일 보내기
+    public void sendEmailToAdmin(Context context, String title, String[] receivers){
+        Intent email = new Intent(Intent.ACTION_SEND);
+        email.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        email.setType("text/plain");
+        email.setPackage("com.google.android.gm");
+        email.putExtra(Intent.EXTRA_EMAIL, receivers);
+        email.putExtra(Intent.EXTRA_SUBJECT, title);
+        email.putExtra(Intent.EXTRA_TEXT, String.format("App Version : %s\nDevice : %s\nAndroid(SDK) : %d(%s)\n\n내용 : ", BuildConfig.VERSION_NAME, String.format("%s %s", Build.BRAND, Build.MODEL), Build.VERSION.SDK_INT, Build.VERSION.RELEASE));
+        context.startActivity(email);
     }
 }
 
