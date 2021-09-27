@@ -204,6 +204,8 @@ public class PurchaseWebViewActivity extends BaseActivity {
                             // 앱이 설치되어 있지 않을 경우 구글마켓 이동
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
                         }
+                    } catch (Exception e){
+                        e.printStackTrace();
                     }
                     //return  값을 반드시 true로 해야 합니다.
                     return true;
@@ -231,9 +233,9 @@ public class PurchaseWebViewActivity extends BaseActivity {
                             intent.setData(uri);
                             startActivity(intent);
                             }
-                        } catch (Exception e){
-                            Toast.makeText(getBaseContext(), "지원하지 않는 결제 방식입니다.\n다른 카드사를 선택하여 주십시오.",Toast.LENGTH_SHORT).show();
-                            finish();
+                        } catch (Exception e){                                                      //비씨 페이북은 결제가 안되므로 앱이 설치되어 있어도 연결되지 않게 처리
+                            Toast.makeText(getBaseContext(), "지원하지 않는 결제 방식입니다.\n다른 카드사를 선택하여 주십시오.",Toast.LENGTH_LONG).show();
+                            mWebView.goBack();
                     }
                     return true;
 
@@ -340,6 +342,11 @@ public class PurchaseWebViewActivity extends BaseActivity {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
                     }
                     //return  값을 반드시 true로 해야 합니다.
+                    return true;
+                }
+                else if (url.indexOf("jjy.MispAndroid320") > -1) {                                  //비씨 페이북은 결제가 안되므로 다운로드 링크로 연결되지 않게 처리
+                    Toast.makeText(getBaseContext(), "지원하지 않는 결제 방식입니다.\n다른 카드사를 선택하여 주십시오.",Toast.LENGTH_LONG).show();
+                    mWebView.goBack();
                     return true;
                 }
                 else {
