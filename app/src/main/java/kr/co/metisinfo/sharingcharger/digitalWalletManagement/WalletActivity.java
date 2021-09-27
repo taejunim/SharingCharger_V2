@@ -55,6 +55,10 @@ public class WalletActivity extends BaseActivity {
         }
 
         binding.txtWalletPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(getPoint));
+
+        binding.transferPoint.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override

@@ -10,8 +10,6 @@ public class ThisApplication extends Application {
     public static Context context;
     public static UserModel staticUserModel;
 
-
-
     @Override
     public void onCreate() {
         super.onCreate();

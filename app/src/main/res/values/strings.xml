@@ -74,8 +74,8 @@
     <string name="search_condition_map_place">지도중심</string>
 
     <!-- 이력조회-->
-    <string name="charge_history_title">충전 이력</string>
-    <string name="point_history_title">포인트 이력</string>
+    <string name="charge_history_title">충전기 사용 이력</string>
+    <string name="point_history_title">포인트 구매 내역</string>
 
     <!-- 충전기 사용 이력-->
     <string name="charge_history_recharge_number">충전 번호 : %1$s</string>

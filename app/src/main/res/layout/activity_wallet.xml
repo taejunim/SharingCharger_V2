@@ -87,6 +87,9 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:background="@color/blue_button"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="16sp"
                     android:text="포인트 구메"
                     android:textColor="@color/white"/>
 
@@ -110,6 +113,9 @@
                     android:layout_marginTop="5dp"
                     android:background="#e0e0e0"
                     android:text="포인트 이체"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="16sp"
                     android:textColor="@color/black"/>
 
                 <TextView
@@ -130,7 +136,10 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="5dp"
                     android:background="#e0e0e0"
-                    android:text="포인트 이력"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="16sp"
+                    android:text="포인트 구매 내역"
                     android:onClick="go_point_history"
                     android:textColor="@color/black"/>
 
