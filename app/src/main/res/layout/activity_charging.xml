@@ -42,14 +42,26 @@
             android:id="@+id/charger_list_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="충전기이름"
             android:layout_below="@+id/search_charger_btn"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="충전기이름"
             android:textColor="@color/black"
             android:textSize="20dp"
-            android:textStyle="bold"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/authenticate_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_charger_btn"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_border_mint"
+            style="@style/margin_start_end_20"
             android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"/>
+            android:text="인증요청"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/charger_list_address"

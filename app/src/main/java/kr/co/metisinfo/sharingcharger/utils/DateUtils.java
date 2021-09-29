@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class DateUtils {
-    public static final String DATE_SIMPLE_KOR = "yyyy년 MM월 dd일";
     public static final String DATE_SIMPLE = "yyyy-MM-dd";
     public static final String DATE_SIMPLE_JS = "yyyyMMdd";
 
@@ -18,8 +17,17 @@ public class DateUtils {
 
     public static final String FULL_DATE_SIMPLE_JS = "yyyyMMddHHmm";
 
+    public static final String FULL_DATE_WITH_MILLISECOND_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+
     public static final SimpleDateFormat hmFormat = new SimpleDateFormat(TIME_SIMPLE);
     public static final SimpleDateFormat hmsFormat = new SimpleDateFormat(TIME_HMS);
+
+    public static final SimpleDateFormat fullDateWithMillisecondFormat = new SimpleDateFormat(FULL_DATE_WITH_MILLISECOND_FORMAT);
+
+    public static String getFullDateWithMillisecond(Date date) {
+
+        return fullDateWithMillisecondFormat.format(date);
+    }
 
     public static final String convertToHHMM(String originDateString) {
 
@@ -35,40 +43,9 @@ public class DateUtils {
 
     }
 
-    public static String nowDayView(boolean type) {
-
-        if (type) {
-
-            return getDateYyyy() + "년 " + CommonUtils.val2(getDateMm()) + "월 " + CommonUtils.val2(getDateDd()) + "일";
-
-        } else {
-
-            return getDateYyyy() + "-" + CommonUtils.val2(getDateMm()) + "-" + CommonUtils.val2(getDateDd());
-        }
-    }
-
     public static String nowDateTime() {
 
         return getDateYyyy() + CommonUtils.val2(getDateMm()) + CommonUtils.val2(getDateDd()) + getDateHour() + getDateMinute();
-    }
-
-    public static String nowTimeView(boolean type) {
-
-        if (type) {
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-
-            return /*(cal.get(Calendar.AM_PM) == Calendar.AM) ? " 오전 ": " 오후 " +*/ " " + getDateHour() + "시 " + getDateMinute() + "분";
-        } else {
-
-            return " " + getDateHour() + ":" + getDateMinute();
-        }
-    }
-
-    public static String dayView(int yyyy, int mm, int dd) {
-
-        return yyyy + "년 " + mm + "월 " + dd + "일";
     }
 
     /**
@@ -117,29 +94,6 @@ public class DateUtils {
     public static String getDateMinute() {
 
         return String.format("%02d", Calendar.getInstance(Locale.KOREA).get(Calendar.MINUTE));
-    }
-
-    public static String toDayKo() {
-        String nm = "";
-
-        Calendar cal = Calendar.getInstance();
-        int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
-        if (day_of_week == 1)
-            nm = "(일)";
-        else if (day_of_week == 2)
-            nm = "(월)";
-        else if (day_of_week == 3)
-            nm = "(화)";
-        else if (day_of_week == 4)
-            nm = "(수)";
-        else if (day_of_week == 5)
-            nm = "(목)";
-        else if (day_of_week == 6)
-            nm = "(금)";
-        else if (day_of_week == 7)
-            nm = "(토)";
-
-        return nm;
     }
 
     /**
@@ -195,49 +149,6 @@ public class DateUtils {
         }
     }
 
-    public static String getNowKoreaDate() {
-        SimpleDateFormat d = new SimpleDateFormat(DATE_SIMPLE_KOR, Locale.KOREA);
-        d.applyPattern(DATE_SIMPLE_KOR);
-
-        return d.format(new java.util.Date());
-    }
-
-    public static String getNowKoreaDate(int plusDay) {
-        SimpleDateFormat d = new SimpleDateFormat(DATE_SIMPLE_KOR, Locale.KOREA);
-        d.applyPattern(DATE_SIMPLE_KOR);
-        java.util.Date nowdate = new java.util.Date();
-        String str_date = d.format(nowdate);
-
-        d = null;
-        nowdate = null;
-
-        return str_date;
-    }
-
-    public static int getWeekYear(int num) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, num);
-
-        return calendar.get(Calendar.YEAR);
-    }
-
-    public static int getWeekMm(int num) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, num);
-
-        return calendar.get(Calendar.MONTH) + 1;
-    }
-
-    public static int getWeekDd(int num) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, num);
-
-        return calendar.get(Calendar.DATE);
-    }
-
     public static String setOperationDate(String mode, int value, String format) {
 
         SimpleDateFormat fmt;
@@ -266,41 +177,6 @@ public class DateUtils {
         }
 
         return fmt.format(cal.getTime());
-    }
-
-    public static String setOperationMonth(String mode, int value, String format) {
-        SimpleDateFormat fmt = null;
-        switch (format) {
-            case "yyyy-MM-dd":
-                fmt = new SimpleDateFormat(DATE_SIMPLE, Locale.KOREA);
-                break;
-            case "yyyyMMdd":
-            default:
-                fmt = new SimpleDateFormat(DATE_SIMPLE_JS, Locale.KOREA);
-                break;
-        }
-
-        GregorianCalendar cal = new GregorianCalendar();
-
-        switch (mode) {
-            case "plus":
-                cal.add(GregorianCalendar.MONTH, value); //현재날짜에 value 값을 더한다.
-                break;
-            case "minus":
-                cal.add(GregorianCalendar.MONTH, -value); //현재날짜에 value 값을 뺀다.
-                break;
-            default:
-                break;
-        }
-
-        Date date = cal.getTime(); //연산된 날자를 생성.
-        String setDate = fmt.format(date);
-
-        fmt = null;
-        cal = null;
-        date = null;
-
-        return setDate;
     }
 
     /**
@@ -382,59 +258,5 @@ public class DateUtils {
 
             return standardDate;
         }
-    }
-
-    /**
-     * 20191128 => 2019년 11월 28일 로 변환
-     *
-     * @param date String 날짜
-     * @return yyyy년 MM월 dd일
-     */
-    public static String changeKorDate(String date) {
-
-        if (date == null) return "";
-
-        if (date.length() == 8) {
-            return date.substring(0, 4) + "년 " + date.substring(4, 6) + "월 " + date.substring(6, 8) + "일";
-        } else
-            return date;
-    }
-
-    /**
-     * 20191128 => 2019년 11월 28일 로 변환
-     *
-     * @param date String 날짜
-     * @return yyyy년 MM월 dd일
-     */
-    public static String changeKorDate2(String date) {
-
-        if (date == null) return "";
-
-        if (date.length() == 8) {
-            return date.substring(0, 4) + "/" + date.substring(4, 6) + "/" + date.substring(6, 8);
-        } else
-            return date;
-    }
-
-    /**
-     * 161217 => 오후 4시 12분으로 변환
-     *
-     * @param time String 시간
-     * @return 오후 hh시 mm분
-     */
-    public static String changeKorTime(String time) {
-
-        if (time == null) return "";
-
-        if (time.length() == 6) {
-
-            if (Integer.parseInt(time.substring(0, 2)) >= 12) {
-                return "오후 " + (Integer.parseInt(time.substring(0, 2)) - 12) + "시 " + time.substring(2, 4) + "분";
-            } else {
-                return "오전 " + time.substring(0, 2) + "시 " + time.substring(2, 4) + "분";
-            }
-
-        } else
-            return time;
     }
 }

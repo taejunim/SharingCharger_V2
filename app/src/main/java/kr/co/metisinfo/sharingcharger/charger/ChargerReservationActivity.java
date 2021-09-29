@@ -1,5 +1,7 @@
 package kr.co.metisinfo.sharingcharger.charger;
 
+import static kr.co.metisinfo.sharingcharger.utils.DateUtils.getFullDateWithMillisecond;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -10,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import kr.co.metisinfo.sharingcharger.R;
@@ -206,10 +209,20 @@ public class ChargerReservationActivity extends BaseActivity {
 
         try {
 
+            Date startDate = new Date();
+
             ReservationModel model = apiUtils.goReservation(reservationModel);
+
+            Date endDate = new Date();
 
             //예약 성공
             if(model != null){
+
+                Log.d("metis_TTA", "--------------------------------");
+                Log.d("metis_TTA", "예약시작 : " + getFullDateWithMillisecond(startDate));
+                Log.d("metis_TTA", "예약완료 : " + getFullDateWithMillisecond(endDate));
+                Log.d("metis_TTA", "차이 : " + (endDate.getTime() - startDate.getTime()) / 1000.0 + " 초");
+                Log.d("metis_TTA", "--------------------------------");
 
                 if (ThisApplication.staticUserModel.getUserType().equals("Personal")) {
                     SharedPreferences pref = getSharedPreferences("SharingCharger_V2.0", MODE_PRIVATE);

@@ -147,7 +147,7 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
     @Override
     public void initViewModel() {
 
-        showLoading(binding.loading);
+        //showLoading(binding.loading);
 
     }
 
@@ -157,6 +157,38 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         binding.includeHeader.btnMenu.setVisibility(View.INVISIBLE);
 
         binding.includeHeader.btnBack.setOnClickListener(view -> finish());
+
+        binding.authenticateButton.setOnClickListener(v -> {
+            SimpleDateFormat formatT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+
+            AuthenticateModel model = new AuthenticateModel();
+            model.rechargeStartDate = formatT.format(cal.getTime());
+            model.reservationId = reservationModel.id;
+            model.userId = reservationModel.userId;
+
+            try {
+                Log.d("metis_TTA", "--------------------------------");
+
+                //충전 시작 전 인증
+                boolean result = apiUtils.getAuthenticateCharger(reservationModel.chargerId, model);
+
+                if(result){
+                    Log.d("metis_TTA", "인증결과 : " + result);
+                    chargerFrameClick(binding.frameStart);
+                } else {
+                    Log.d("metis_TTA", "인증결과 : " + result);
+                }
+
+                Log.d("metis_TTA", "--------------------------------");
+
+            } catch (Exception e) {
+                hideLoading(binding.loading);
+                Toast.makeText(BLEChargingActivity.this, "인증에 실패하였습니다1.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // 충전 시작 버튼
         binding.frameStart.setOnClickListener(view -> {
@@ -218,9 +250,9 @@ public class BLEChargingActivity extends BaseActivity implements FragmentDialogI
         //스캔데이터를 받어온다.
         mCurData.mEVZScanResult = getIntent().getParcelableExtra("mEVZScanResult");
 
-        if(mCurData != null){
+        /*if(mCurData != null){
             BLEConnect();
-        }
+        }*/
 
         reservationModel = (ReservationModel) getIntent().getSerializableExtra("reservationModel");
 
