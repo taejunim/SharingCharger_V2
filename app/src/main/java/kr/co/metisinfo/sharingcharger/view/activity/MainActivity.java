@@ -1692,6 +1692,10 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
             binding.layoutReservationInfoRechargeTxt.setText("예약");
             binding.mainRechargingTxt.setVisibility(View.INVISIBLE);
             binding.chgrDetailCancel.setVisibility(View.VISIBLE);
+            if (preferenceUtil.getBoolean("isInstantCharging")) {
+                binding.chgrDetailCancel.setText("충전 취소");
+            }
+
             binding.chgrDetailStart.setText("충전 시작");
 
             Log.e("metis", " gerUserType is " + gerUserType);
