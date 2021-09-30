@@ -125,7 +125,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
                 .setPermissionListener(permissionlistener)
                 /*.setRationaleMessage("현재 위치를 보여주기 위해 권한을 설정해주세요.")
                 .setDeniedMessage("거부하셨습니다.\n[설정] > [권한] 에서 권한을 허용할 수 있어요.")*/
-                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.RECEIVE_SMS)
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE)
                 .check();
     }
 
