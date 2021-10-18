@@ -32,6 +32,7 @@ public class ReservationModel implements Serializable {
     public String chargerAddress;
     public String chargerDetailAddress;
     public String rangeOfFee;
+    public boolean instantChargeFlag;
 
 
 }

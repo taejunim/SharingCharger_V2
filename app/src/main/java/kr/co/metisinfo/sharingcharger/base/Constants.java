@@ -11,6 +11,7 @@ public class Constants {
 
     /* 테스트 서버 */
     //public static final String DEV_HOST = "http://211.253.37.97:52340";
+    //public static final String REAL_HOST = "http://211.253.37.97:52340";
     public static final String DEV_HOST = "https://monttak.co.kr";
     public static final String REAL_HOST = "https://monttak.co.kr";
 

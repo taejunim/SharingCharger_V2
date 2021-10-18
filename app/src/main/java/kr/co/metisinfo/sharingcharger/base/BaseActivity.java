@@ -86,6 +86,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected boolean isBackPressed = false;
     CountDownTimer timer;
 
+    PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -311,7 +313,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         int listSize = Arrays.asList(array).size();
 
         //UserType 가져와서 개인사업자 (Personal) 일때만 충전기 관리 표출
-        PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
         if(!preferenceUtil.getString("userType").equals("Personal"))
             listSize --;
 
@@ -570,6 +571,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                     txtReserveTime.setText(getStartTime);
                     txtReserveSpot.setText(model.chargerName);
+
+                    preferenceUtil.putBoolean("isInstantCharging", model.instantChargeFlag);
                 } else {
                     txtReserveTime.setText("");
                     txtReserveSpot.setText("");
@@ -591,11 +594,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void openWebView(String cost){
 
-        //로그인 값 가져오기
-        PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
-
         String url = "https://devevzone.evzcharge.com/api/user/jeju_pay?product_amt=" + cost;
 
+        //로그인 값 가져오기
         //진우 API에서 didkey 전달되면 sp_user_define1 값에 넣어줘야함.
         url += "&sp_user_define1=" + preferenceUtil.getInt("userId");
 

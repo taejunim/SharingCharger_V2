@@ -2299,6 +2299,10 @@ public class MainActivity extends BaseActivity implements MapView.POIItemEventLi
         //예약 상태 확인, 예약없음, 예약 있음, 충전 중
         reservationModel = apiUtils.getReservationStatus();
 
+        if (reservationModel != null) {
+            preferenceUtil.putBoolean("isInstantCharging", reservationModel.instantChargeFlag);
+        }
+
         addChargerInfo(Constants.currentLocationLat, Constants.currentLocationLng);
         //createDefaultMarker(binding.mapView);
 

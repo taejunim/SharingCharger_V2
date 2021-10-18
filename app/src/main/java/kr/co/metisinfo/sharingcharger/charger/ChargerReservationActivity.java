@@ -203,6 +203,7 @@ public class ChargerReservationActivity extends BaseActivity {
         reservationModel.chargerId = chargerId;
         reservationModel.userId = ThisApplication.staticUserModel.getId();
         reservationModel.expectPoint = ePoint;
+        reservationModel.instantChargeFlag = false;
 
         try {
 

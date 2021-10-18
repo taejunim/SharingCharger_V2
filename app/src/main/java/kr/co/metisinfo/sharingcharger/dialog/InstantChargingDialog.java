@@ -82,6 +82,7 @@ public class InstantChargingDialog extends Dialog  {
         // reservation api
         try {
 
+            reservationModel.instantChargeFlag = true;
             ReservationModel model = apiUtils.goReservation(reservationModel);
 
             //예약 성공
