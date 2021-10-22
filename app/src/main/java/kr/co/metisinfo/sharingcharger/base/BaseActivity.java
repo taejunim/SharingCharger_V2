@@ -55,6 +55,7 @@ import kr.co.metisinfo.sharingcharger.view.activity.PurchaseDialog;
 import kr.co.metisinfo.sharingcharger.view.activity.PurchaseWebViewActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.SettingActivity;
 import kr.co.metisinfo.sharingcharger.digitalWalletManagement.WalletActivity;
+import kr.co.metisinfo.sharingcharger.view.activity.UserIdentificationActivity;
 import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
 
 import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_FAVORITE;
@@ -241,8 +242,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             } else if (groupPosition == 3) {
 
                 //회원 증명서
-                Intent intent = new Intent(startClass, WebViewActivity.class);
-                intent.putExtra("getTagName", "setting");                             //WEBVIEW GBN PARAM -> setting은 회원 증명서
+                Intent intent = new Intent(startClass, UserIdentificationActivity.class);
                 startActivity(intent);
                 closeDrawer();
 

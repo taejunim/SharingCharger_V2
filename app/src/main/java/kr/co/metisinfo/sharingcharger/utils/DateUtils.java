@@ -13,6 +13,9 @@ public class DateUtils {
     public static final String DATE_SIMPLE = "yyyy-MM-dd";
     public static final String DATE_SIMPLE_JS = "yyyyMMdd";
 
+    public static final String DATE_FULL = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_CREATED = "yyyy.MM.dd";
+
     public static final String TIME_SIMPLE = "HH:mm";
     public static final String TIME_HMS = "HH:mm:ss";
 
@@ -32,7 +35,18 @@ public class DateUtils {
         }
 
         return hmFormat.format(originDate);
+    }
 
+    public static String convertToCreatedDate(String originDateString) {
+        Date originDate = null;
+
+        try {
+            originDate = new SimpleDateFormat(DATE_FULL).parse(originDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new SimpleDateFormat(DATE_CREATED).format(originDate);
     }
 
     public static String nowDayView(boolean type) {

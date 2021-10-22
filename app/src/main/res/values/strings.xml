@@ -131,5 +131,9 @@
     <!-- 메세지-->
     <string name="m_password_confirm_text">비밀번호를 변경하시겠습니까?</string>
 
+    <!-- 회원 증명서 -->
+    <string name="user_identification_title">회원 증명서</string>
+    <string name="user_identification_did">발급 DID</string>
+    <string name="user_identification_created_date">발급 일자</string>
 
 </resources>

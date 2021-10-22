@@ -7,7 +7,7 @@ import lombok.Data;
  */
 
 @Data
-public class UserModel {
+public class UserModel extends ResponseModel {
 
     public String name;     // 이름
     public String email;    // 이메일
@@ -23,4 +23,5 @@ public class UserModel {
     public boolean privacyPolicyFlag = false; //개인정보 처리방침 동의여부
     public int id;          // id
     public String currentPassword; // 현재 비밀번호
+    public String did;
 }

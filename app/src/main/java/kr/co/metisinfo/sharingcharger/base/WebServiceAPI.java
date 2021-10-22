@@ -219,4 +219,8 @@ public interface WebServiceAPI {
     // 소유자 월별 수익 포인트
     @GET("/api/v1/dashboard/personal/{userId}/stat/point")
     Call<Object> getAdminMonthlyProfitPoint(@Path("userId") String userId, @Query("searchType") String searchType, @Query("searchYear") String searchYear, @Query("searchMonth") String searchMonth);
+
+    // 회원 증명서
+    @GET("/api/v1/managers/{id}")
+    Call<Object> getUserIdentification(@Path("id") int id);
 }

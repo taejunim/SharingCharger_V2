@@ -909,6 +909,36 @@ public class ApiUtils {
     }
 
     /**
+     * 회원 증명서
+     **/
+    public UserModel getUserIdentification() throws Exception{
+
+        UserModel userModel = new UserModel();
+
+        Response<Object> response = webServiceAPI.getUserIdentification(ThisApplication.staticUserModel.id).execute();
+
+        if (response.code() == 200) {
+
+            JSONObject json = new JSONObject((Map) response.body());
+
+            Gson gson = new Gson();
+
+            userModel = gson.fromJson(json.toString(), UserModel.class);
+            userModel.setResponseCode(response.code());
+        } else if (response.code() == 204) {
+            userModel.setMessage("사용자가 존재하지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+        } else if (response.code() == 400) {
+            userModel.setMessage("요청 파라미터가 올바르지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+        } else if (response.code() == 404) {
+            userModel.setMessage("요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+        } else if (response.code() == 500) {
+            userModel.setMessage("서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+        }
+
+        return userModel;
+    }
+
+    /**
      * 선택된 충전기 상태
      */
     public Response<Object> getChargerStatus(UserModel model) throws Exception {

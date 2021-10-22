@@ -209,5 +209,11 @@
         <activity android:name=".ble.ScanActivity"
             android:screenOrientation="portrait"/>
 
+        <!-- 회원 증명서 -->
+        <activity
+            android:name=".view.activity.UserIdentificationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
+
     </application>
 </manifest>
