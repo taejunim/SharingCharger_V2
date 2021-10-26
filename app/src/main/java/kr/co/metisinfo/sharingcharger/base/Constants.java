@@ -57,4 +57,7 @@ public class Constants {
     public final static int CHANGE_PRICE = 0x02;
     public final static int CHANGE_TIME = 0x03;
     public final static int CHANGE_INFORMATION = 0x04;
+
+    public final static int SIGN_UP_STARTED = 0x05;
+    public final static int SIGN_UP_FINISHED = 0x06;
 }

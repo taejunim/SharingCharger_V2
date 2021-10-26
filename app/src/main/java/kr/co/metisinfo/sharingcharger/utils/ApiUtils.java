@@ -54,14 +54,24 @@ public class ApiUtils {
      */
     public UserModel signUp(UserModel userModel) throws Exception {
 
-        UserModel model = null;
+        UserModel model = new UserModel();
 
         Response<UserModel> response = webServiceAPI.signUp(userModel).execute();
 
-        if (response.code() == 201 && response.body() != null) {
+        if (response.code() == 201) {
 
             model = response.body();
+            model.setMessage("회원가입이 완료되어 로그인 페이지으로 이동합니다.");
+
+        } else if (response.code() == 400) {
+            model.setMessage("요청 파라미터가 올바르지 않습니다.\n문제 지속시 고객센터로 문의주세요.");
+        } else if (response.code() == 404) {
+            model.setMessage("요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+        } else if (response.code() == 500) {
+            model.setMessage("서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
         }
+
+        model.setResponseCode(response.code());
 
         return model;
     }
@@ -184,6 +194,39 @@ public class ApiUtils {
         }
 
         return certificateNo;
+    }
+
+    /**
+     * sms 문자
+     **/
+    public Map<String, Object> getSmsForJoin(String phoneNumber) throws Exception {
+
+        Map<String, Object> map = new HashMap<>();
+
+        Response<Object> response = webServiceAPI.getSmsForJoin(phoneNumber).execute();
+
+        if (response.code() == 200 && response.body() != null) {
+            map.put("result", "success");
+            map.put("code", response.code());
+            map.put("certificateNo", response.body().toString());
+        } else if (response.code() == 400) {
+            map.put("result", "fail");
+            map.put("code", response.code());
+            map.put("certificateNo", "");
+            map.put("message", "이미 등록된 전화번호입니다.");
+        } else if (response.code() == 404) {
+            map.put("result", "fail");
+            map.put("code", response.code());
+            map.put("certificateNo", "");
+            map.put("message", "요청하신 API를 찾을 수 없습니다.\n문제 지속시 고객센터로 문의주세요.");
+        } else if (response.code() == 500) {
+            map.put("result", "fail");
+            map.put("code", response.code());
+            map.put("certificateNo", "");
+            map.put("message", "서버에 문제가 발생 하였습니다.\n문제 지속시 고객센터로 문의주세요.");
+        }
+
+        return map;
     }
 
     /**

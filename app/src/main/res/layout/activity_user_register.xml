@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/register_text_dummy"
-            android:layout_above="@+id/register_btn">
+            android:layout_above="@+id/button_layout">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -321,18 +321,32 @@
 
         </ScrollView>
 
-        <!-- 완료버튼-->
-        <Button
-            android:id="@+id/register_btn"
+        <RelativeLayout
+            android:id="@+id/button_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="40dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/button_border_blue"
-            android:text="@string/register_confirmation"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:textStyle="bold" />
+            android:layout_alignParentBottom="true">
+
+            <!-- 완료버튼-->
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:background="@drawable/button_border_blue"
+                android:text="@string/register_confirmation"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:visibility="invisible"
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
 
     </RelativeLayout>
 

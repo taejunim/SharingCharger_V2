@@ -1,7 +1,11 @@
 package kr.co.metisinfo.sharingcharger.userManagement;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,10 +24,13 @@ import kr.co.metisinfo.sharingcharger.databinding.ActivityUserRegisterBinding;
 import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
+import kr.co.metisinfo.sharingcharger.utils.ProgressDialog;
+
 import kr.co.metisinfo.sharingcharger.view.activity.WebViewActivity;
-import retrofit2.Response;
 
 import static kr.co.metisinfo.sharingcharger.base.Constants.PAGE_PERSONAL_INFORMATION;
+import static kr.co.metisinfo.sharingcharger.base.Constants.SIGN_UP_FINISHED;
+import static kr.co.metisinfo.sharingcharger.base.Constants.SIGN_UP_STARTED;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -49,6 +56,35 @@ public class SignUpActivity extends BaseActivity {
 
     ApiUtils apiUtils = new ApiUtils();
 
+    ProgressDialog customProgressDialog;
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case SIGN_UP_STARTED:
+                    userJoin();
+                    break;
+
+                case SIGN_UP_FINISHED :
+                    customProgressDialog.dismiss();
+
+                    final int resultCode = msg.arg1;
+                    final String resultMessage = (String) msg.obj;
+
+                    if (resultCode == 201) {
+                        Toast.makeText(SignUpActivity.this, resultMessage, Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        Toast.makeText(SignUpActivity.this, resultMessage, Toast.LENGTH_LONG).show();
+                        isRegisterBtnClick = false;
+                    }
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -66,9 +102,7 @@ public class SignUpActivity extends BaseActivity {
                 checkPersonalInfo2 = true;
                 binding.registerPersona2Info1Txt.setText("동의");
             }
-
         }
-
     }
 
     @Override
@@ -76,6 +110,10 @@ public class SignUpActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_user_register);
 
         changeStatusBarColor(false);
+
+        customProgressDialog = new ProgressDialog(this);
+        customProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        customProgressDialog.setCancelable(false);
     }
 
     @Override
@@ -132,28 +170,29 @@ public class SignUpActivity extends BaseActivity {
             if (checkVerificationCode()) {
 
                 String phone = binding.registerPhoneInput.getText().toString().trim();
-                Log.e("metis", "phone : " + phone);
 
                 try {
 
-                    tempCertificateNo = apiUtils.getSms(phone);
+                    Map<String, Object> resultMap = apiUtils.getSmsForJoin(phone);
 
-                    if (tempCertificateNo != null) {
-                        Log.e(TAG, "response : " + tempCertificateNo);
+                    String result = resultMap.get("result").toString();
+
+                    if (result.equals("success")) {
+                        tempCertificateNo = resultMap.get("certificateNo").toString();
 
                         if (tempCertificateNo.contains(".")) {
                             tempCertificateNo = tempCertificateNo.substring(0, tempCertificateNo.indexOf("."));
                         }
 
-                        Log.e(TAG, "tempCertificateNo : " + tempCertificateNo);
-
                         isCertificationBtn = true;
                         binding.layoutTimeRemaining.setVisibility(View.VISIBLE);
                         countDown("0300");
 
+                    } else if (result.equals("fail")) {
+                        tempCertificateNo = "";
 
-                    } else {
-                        Toast.makeText(this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+                        String message = resultMap.get("message").toString();
+                        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
                         binding.registerPhoneInput.requestFocus();
                     }
 
@@ -167,7 +206,6 @@ public class SignUpActivity extends BaseActivity {
         });
 
         binding.registerPersonalInfo1Btn.setOnClickListener(view -> {
-            Log.e("metis", "btn1");
             //개인정보
             Intent intent = new Intent(this, WebViewActivity.class);
 
@@ -177,14 +215,12 @@ public class SignUpActivity extends BaseActivity {
         });
 
         binding.registerPersonalInfo2Btn.setOnClickListener(view -> {
-
             //개인정보 처리방침
             Intent intent = new Intent(this, WebViewActivity.class);
 
             intent.putExtra("getTagName", "PersonalInfo2");
             intent.putExtra("titleName", "개인정보 처리방침 동의여부");
             startActivityForResult(intent, PAGE_PERSONAL_INFORMATION);
-
         });
 
         binding.registerBtn.setOnClickListener(view -> { // 회원가입 버튼 클릭 리스너
@@ -192,10 +228,28 @@ public class SignUpActivity extends BaseActivity {
             if (!isRegisterBtnClick) {   // 중복 클릭 막기 위함.
 
                 isRegisterBtnClick = true;
-                userJoin();
+
+                if (validationCheck()) {
+
+                    if (!isPossibleSignUp) {
+                        Toast.makeText(this, "이메일 중복 체크해주세요.", Toast.LENGTH_LONG).show();
+                        isRegisterBtnClick = false;
+                        return;
+                    }
+
+                    if (checkPersonalInfo2) {
+                        customProgressDialog.show();
+                    }
+
+                    Message msg = new Message();
+                    msg.what = SIGN_UP_STARTED;
+                    handler.sendMessage(msg);
+
+                } else {
+                    isRegisterBtnClick = false;
+                }
             }
         });
-
     }
 
     @Override
@@ -229,57 +283,33 @@ public class SignUpActivity extends BaseActivity {
 
     private void userJoin() {
 
-        if (validationCheck()) {
+        UserModel userModel = new UserModel();
 
-            if (!isPossibleSignUp) {
-                Toast.makeText(this, "이메일 중복 체크해주세요.", Toast.LENGTH_LONG).show();
-                isRegisterBtnClick = false;
-                return;
-            }
+        userModel.name = binding.registerNameInput.getText().toString();
+        userModel.email = binding.registerEmailInput.getText().toString();
+        userModel.password = binding.registerPwInput.getText().toString();
+        userModel.phone = binding.registerPhoneInput.getText().toString();
+        userModel.servicePolicyFlag = true; // 서비스 이용약관
+        userModel.privacyPolicyFlag = true; // 개인정보
+        userModel.userType = "General"; // 사용자 타입 정의. 임시 정의
+        userModel.username = ""; // 일반 사용자는 공란.
 
-            UserModel userModel = new UserModel();
+        try{
+            UserModel model = apiUtils.signUp(userModel);
 
-            userModel.name = binding.registerNameInput.getText().toString();
-            userModel.email = binding.registerEmailInput.getText().toString();
-            userModel.password = binding.registerPwInput.getText().toString();
-            userModel.phone = binding.registerPhoneInput.getText().toString();
-            userModel.servicePolicyFlag = true; // 서비스 이용약관
-            userModel.privacyPolicyFlag = true; // 개인정보
-            userModel.userType = "General"; // 사용자 타입 정의. 임시 정의
-            userModel.username = ""; // 일반 사용자는 공란.
+            Message msg = new Message();
+            msg.what = SIGN_UP_FINISHED;
+            msg.arg1 = model.getResponseCode();
+            msg.obj = model.getMessage();
+            handler.sendMessage(msg);
 
-            try{
-                UserModel model = apiUtils.signUp(userModel);
+        } catch (Exception e){
 
-                //회원가입 성공
-                if(model != null){
-                    Log.e("metis", "회원가입 성공 : " + model);
-
-                    Toast.makeText(SignUpActivity.this, "회원가입이 완료되어 로그인 페이지으로 이동합니다.", Toast.LENGTH_LONG).show();
-
-                    finish();
-                }
-                //회원가입 실패
-                // id 중복 체크따로 해야함
-                else{
-                    Toast.makeText(SignUpActivity.this, "회원가입에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
-                    Log.e("metis", "회원가입 실패");
-                    isRegisterBtnClick = false;
-                }
-
-            }catch (Exception e){
-
-                Toast.makeText(SignUpActivity.this, "회원가입에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
-                Log.e("metis","userJoin Exception : "+ e);
-                isRegisterBtnClick = false;
-            }
-
-
-        } else {
-
+            Toast.makeText(SignUpActivity.this, "회원가입에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
+            Log.e("metis","userJoin Exception : "+ e);
             isRegisterBtnClick = false;
+            customProgressDialog.dismiss();
         }
-
     }
 
     /**
