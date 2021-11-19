@@ -37,6 +37,7 @@ public class WebViewActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_web_view);
 
         try {
+            //화면 세로모드 고정
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } catch (IllegalStateException ignore) {
 

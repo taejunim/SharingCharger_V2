@@ -54,9 +54,13 @@ public class AdminMainActivity extends BaseActivity {
 
         binding.includeHeader.btnBack.setOnClickListener(view -> {
 
+            //백버튼 클릭시 쌓인 프래그먼트가 없으면 소유주 충전기 관리 화면 종료
             if(fragmentManager.getBackStackEntryCount() == 0) {
                 finish();
-            } else {
+            }
+
+            //최근 프래그먼트 화면 종료
+            else {
                 fragmentManager.popBackStack("fragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 setFragment("main", null, adminChargerModel);
             }
@@ -101,7 +105,7 @@ public class AdminMainActivity extends BaseActivity {
 
         adminChargerManageFragment = new AdminChargerManageFragment();
 
-        //플래그먼트 초기화
+        //프래그먼트 초기화
         fragmentManager = getSupportFragmentManager();
 
         setFragment("main", null, null);
@@ -110,6 +114,7 @@ public class AdminMainActivity extends BaseActivity {
 
     public void setFragment(String type, ImageView view, Object object){
 
+        //소유주 충전기 관리 메인
         if (type == "main") {
 
             //submenu 숨기기
@@ -119,9 +124,12 @@ public class AdminMainActivity extends BaseActivity {
 
             binding.includeHeader.txtTitle.setText(R.string.charger_manage_title);
             binding.includeHeader.btnMenu.setVisibility(View.VISIBLE);
-            fragmentTransaction.replace(R.id.fragment_container, adminChargerManageFragment);
+            fragmentTransaction.replace(R.id.fragment_container, adminChargerManageFragment); //fragmentTransaction 로 프래그먼트 교체
 
-        } else if(type == "registerMenu"){
+        }
+
+        //소유주 충전기 등록 화면
+        else if(type == "registerMenu"){
 
             binding.includeHeader.txtTitle.setText("충전기 등록");
             //충전기 정보 등록 숨기기
@@ -131,7 +139,7 @@ public class AdminMainActivity extends BaseActivity {
             fragmentTransaction = fragmentManager.beginTransaction();
             AdminChargerRegisterStep1Fragment adminChargerRegisterStep1Fragment = new AdminChargerRegisterStep1Fragment();
             fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep1Fragment);
-            fragmentTransaction.addToBackStack("fragment");
+            fragmentTransaction.addToBackStack("fragment"); //뒤로가기 기능을 위해 fragment를 stack 에 쌓음
 
         }else {
 
@@ -143,12 +151,14 @@ public class AdminMainActivity extends BaseActivity {
 
             AdminChargerModel tempAdminChargerModel = (AdminChargerModel) object;
 
+            //충전기 공유 타입이 "항시 공유" 또는 "부분 공유" 가 있는데 이에 따라 충전기 운영 시간 설정 버튼을 숨기거나 보여짐
             if (tempAdminChargerModel.sharedType.equals("SHARING")) {
                 binding.includeChargerManageMenu.btnChargerTimeSetting.setVisibility(View.GONE);
             } else {
                 binding.includeChargerManageMenu.btnChargerTimeSetting.setVisibility(View.VISIBLE);
             }
 
+            //현재 보고있는 화면의 버튼만 보라색 처리
             int index = 0;
             for( int i = 0; i<  subMenuButtonList.size() ; i ++ ) {
 
@@ -161,6 +171,7 @@ public class AdminMainActivity extends BaseActivity {
 
             fragmentTransaction = fragmentManager.beginTransaction();
 
+            //화면이 바뀔 때 Object 데이터 전달
             Bundle bundle = new Bundle();
             bundle.putSerializable("object", (AdminChargerModel) object);
 
@@ -169,7 +180,7 @@ public class AdminMainActivity extends BaseActivity {
                     AdminChargerDetailInformationFragment adminChargerDetailInformationFragment = new AdminChargerDetailInformationFragment();
                     adminChargerDetailInformationFragment.setArguments(bundle);
                     fragmentTransaction.replace(R.id.fragment_container, adminChargerDetailInformationFragment);
-                    fragmentTransaction.addToBackStack("fragment");
+                    fragmentTransaction.addToBackStack("fragment"); // 충전기 관리 메인 화면에서 목록중 충전기를 클릭할 경우 충전기 상세 정보 프래그먼트로 진입
                     break;
                 case 1 : //충전기 단가정보
                     AdminChargerPriceSettingFragment adminChargerPriceSettingFragment = new AdminChargerPriceSettingFragment();
@@ -203,6 +214,7 @@ public class AdminMainActivity extends BaseActivity {
         setFragment("subMenu", binding.includeChargerManageMenu.btnChargerDetailInformation, receivedAdminChargerModel);
     }
 
+    //충전기 등록 화면에서 다음 단계로 갈 경우
     public void chargerRegisterNextStep(int step, Bundle bundle){
         fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -217,6 +229,8 @@ public class AdminMainActivity extends BaseActivity {
                 adminChargerRegisterStep3Fragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_container, adminChargerRegisterStep3Fragment);
                 break;
+
+            //충전기 등록 완료시 충전기 관리 화면으로 돌아옴
             case 3 :
                 fragmentManager.popBackStack("fragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 adminChargerManageFragment = new AdminChargerManageFragment();
@@ -230,6 +244,7 @@ public class AdminMainActivity extends BaseActivity {
         if(step != 3) fragmentTransaction.commit();
     }
 
+    //충전기 등록 화면에서 전단계로 갈 경우
     public void chargerRegisterPreviousStep(int step, Bundle bundle){
         fragmentTransaction = fragmentManager.beginTransaction();
 

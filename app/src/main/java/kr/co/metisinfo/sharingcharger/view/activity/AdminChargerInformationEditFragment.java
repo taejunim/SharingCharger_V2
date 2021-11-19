@@ -35,6 +35,7 @@ import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import static kr.co.metisinfo.sharingcharger.base.Constants.CHANGE_INFORMATION;
 import static kr.co.metisinfo.sharingcharger.base.Constants.CHANGE_TIME;
 
+//소유주 충전기 정보 수정
 public class AdminChargerInformationEditFragment extends Fragment {
 
     FragmentAdminChargerInformationEditBinding binding;
@@ -49,6 +50,7 @@ public class AdminChargerInformationEditFragment extends Fragment {
 
             hideLoading(binding.loading);
 
+            //충전기 수정 결과
             switch (msg.what) {
                 case CHANGE_INFORMATION :
 
@@ -70,6 +72,7 @@ public class AdminChargerInformationEditFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //검색 조건 결과
         switch (requestCode) {
             //키워드 검색, 즐겨찾기
             case Constants.PAGE_SEARCH_KEYWORD:
@@ -89,6 +92,7 @@ public class AdminChargerInformationEditFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_information_edit, container, false);
         View view = binding.getRoot();
 
+        //충전기 관리 화면으로 부터 받은 데이터
         Bundle bundle = getArguments();
         adminChargerModel = (AdminChargerModel) bundle.getSerializable("object");
 
@@ -96,18 +100,21 @@ public class AdminChargerInformationEditFragment extends Fragment {
         binding.editAddress.setText(adminChargerModel.getAddress());
         binding.editDetailAddress.setText(adminChargerModel.getDetailAddress());
 
+        //주차 요금 유무에 따라 체크 상태 변경
         if (adminChargerModel.parkingFeeFlag) {
             binding.parkingFeeTrue.setChecked(true);
         } else {
             binding.parkingFeeFalse.setChecked(true);
         }
 
+        //케이블 요금 유무에 따라 체크 상태 변경
         if (adminChargerModel.cableFlag) {
             binding.cableExistTrue.setChecked(true);
         } else {
             binding.cableExistFalse.setChecked(true);
         }
 
+        //주소 칸을 클릭시 주소 검색 팝업
         binding.editAddress.setOnClickListener(v ->  {
             Intent intent = new Intent(getActivity(), SearchKeywordActivity.class);
             startActivityForResult(intent, Constants.PAGE_SEARCH_KEYWORD);
@@ -125,6 +132,8 @@ public class AdminChargerInformationEditFragment extends Fragment {
                 adminChargerModel.setName(binding.editChargerName.getText().toString());
                 adminChargerModel.setAddress(binding.editAddress.getText().toString());
                 adminChargerModel.setDetailAddress(binding.editDetailAddress.getText().toString());
+
+                //좌표는 서버에서 주소에따라 넣기 때문에 0으로 보내야 함
                 adminChargerModel.setGpsX(0);
                 adminChargerModel.setGpsY(0);
 
@@ -140,8 +149,10 @@ public class AdminChargerInformationEditFragment extends Fragment {
 
                 adminChargerModel.setParkingFeeDescription(binding.editParkingFeeDescription.getText().toString());
 
+                //충전기 정보 수정 API 요청
                 adminChargerModel = apiUtils.changeChargerInformation(adminChargerModel.getId(), adminChargerModel);
 
+                //결과값 handler 에 전달
                 Message msg = new Message();
                 msg.what = CHANGE_INFORMATION;
                 msg.arg1 = adminChargerModel.getResponseCode();

@@ -65,6 +65,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
         switch (requestCode) {
 
+            //위치 설정 결과
             case Constants.PAGE_SETTING_GPS:
 
                 Constants.gpsService = new GpsService(this);
@@ -80,6 +81,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
     @Override
     public void initLayout() {
 
+        //네트워크 상태 체크
         networkStatus = new NetworkStatus(this, this);
 
         networkStatus.registerNetworkCallback();
@@ -91,7 +93,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
             Log.e("metis", "GPS 가져올 수 없음");
         }
 
-        Log.d(TAG, "Hash key : " + getKeyHash(getApplicationContext()));
+        Log.d(TAG, "Hash key : " + getKeyHash(getApplicationContext())); // 해쉬키를 카카오맵에 등록해야 메인의 지도 나타남
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_intro);
 
@@ -114,11 +116,13 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
     @Override
     public void init() {
 
+        //충전기 BLE 객체 생성
         mEvzBluetooth = new EvzBluetooth(IntroActivity.this);
 
         checkPermission();
     }
 
+    //위치, 네트워크 퍼미션 체크
     private void checkPermission() {
 
         TedPermission.with(this)
@@ -138,6 +142,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
             Constants.gpsService = new GpsService(IntroActivity.this);
 
+            //위치 기능 켜져 있는지 체크
             if (!Constants.gpsService.isGpsStatus()) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this);
@@ -183,12 +188,6 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
         isNetworkStatus = true;
         if (isNetworkStatus) {
-//        if (isAvailable) {
-/*
-            if(!isFirstOpen) {
-                getLogin(userModel);
-            }*/
-
             Log.e("metis", "네트워크를 사용할 준비가 되었을 때11111111111111");
         } else {
             Log.e("metis", "네트워크가 끊켰을 때22222222222222222");
@@ -245,21 +244,6 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
         startActivity(intent);
         finish();
     };
-
-    //로그인이 되어 있는지 체크
-    private void checkLogin() {
-
-        //로그인 값 가져오기
-        PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
-
-        Boolean isLogin = preferenceUtil.getBoolean("isLogin");
-
-        if (isLogin) {
-            handler.postDelayed(startMainActivity, 2000);
-        } else {
-            handler.postDelayed(startSignInActivity, 2000);
-        }
-    }
 
     public boolean checkLocationServiceStatus() {
 
@@ -324,6 +308,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
         }
     }
 
+    //로그인 API 요청
     private void getLogin(UserModel userModel) {
 
         try {
@@ -345,10 +330,7 @@ public class IntroActivity extends BaseActivity implements NetworkStatusInterfac
 
                 Log.e("metis", "response UserModel : " + user);
 
-                //새로운 유저정보를 로컬디비에 저장함
-                //userViewModel.updateUserPoint(user);
-
-                //로그인 값 가져오기
+                //로그인 값 메모리에 저장
 
                 preferenceUtil.putBoolean("isLogin", true);
                 preferenceUtil.putInt("userId", user.getId());

@@ -72,6 +72,7 @@ public class FindIdActivity extends BaseActivity {
 
                 try {
 
+                    //입력받은 휴대폰번호로 문자 인증 요청
                     tempCertificateNo = apiUtils.getSms(phone);
 
                     if (tempCertificateNo != null) {
@@ -80,9 +81,9 @@ public class FindIdActivity extends BaseActivity {
                             tempCertificateNo = tempCertificateNo.substring(0, tempCertificateNo.indexOf("."));
                         }
 
-                        isCertificationBtn = true;
+                        isCertificationBtn = true; // 인증요청 플래그
                         binding.remainingTimeLayout.setVisibility(View.VISIBLE);
-                        countDown("0300");
+                        countDown("0300"); //인증 유효 시간 3분
                     } else {
                         Toast.makeText(FindIdActivity.this, "인증요청에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.", Toast.LENGTH_LONG).show();
                         binding.userPhoneInput.requestFocus();
@@ -153,6 +154,7 @@ public class FindIdActivity extends BaseActivity {
         if (validationCheck()) {
 
             try {
+                //입력한 이름, 휴대폰번호로 아이디 찾기 API 요청
                 Map<String, Object> map = apiUtils.findId(binding.userNameInput.getText().toString().trim(), binding.userPhoneInput.getText().toString());
 
                 boolean result = (boolean) map.get("result");
@@ -160,7 +162,7 @@ public class FindIdActivity extends BaseActivity {
                 if(result){
                     List<UserModel> idList = (ArrayList<UserModel>) map.get("list");
 
-                    showIdDialog(idList);
+                    showIdDialog(idList); //찾은 아이디 목록을 팝업에 표출함
                 }else{
                     Toast.makeText(getApplicationContext(), "아이디 목록을 가져오는데 실패하였습니다.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_SHORT).show();
                 }

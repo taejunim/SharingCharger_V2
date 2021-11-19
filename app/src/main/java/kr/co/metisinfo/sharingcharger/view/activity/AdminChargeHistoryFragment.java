@@ -32,6 +32,7 @@ import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 
+//소유주 충전 이력 프래그먼트
 public class AdminChargeHistoryFragment extends Fragment implements ItemAdminChargerManageRecyclerViewAdapter.OnListItemSelected {
 
     private ItemAdminChargeHistoryRecyclerViewAdapter itemAdminChargeHistoryRecyclerViewAdapter;
@@ -58,6 +59,7 @@ public class AdminChargeHistoryFragment extends Fragment implements ItemAdminCha
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //검색 조건 세팅 후
         if (resultCode == RESULT_OK) {
 
             adminChargeHistoryModelList = new ArrayList<>();
@@ -99,25 +101,26 @@ public class AdminChargeHistoryFragment extends Fragment implements ItemAdminCha
         View root = binding.getRoot();
 
         Bundle bundle = getArguments();
-        adminChargerModel = (AdminChargerModel) bundle.getSerializable("object");
+        adminChargerModel = (AdminChargerModel) bundle.getSerializable("object"); //프래그먼트로 부터 받은 데이터
 
         binding.searchCondition.setOnClickListener(v -> {
             showSearchCondition();
         });
 
         recyclerView = binding.chargeHistoryRecyclerView;
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true); //리사이클러뷰 크기 고정
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.scrollToPosition(0);
+        recyclerView.scrollToPosition(0); //최상단으로 스크롤
         itemAdminChargeHistoryRecyclerViewAdapter = new ItemAdminChargeHistoryRecyclerViewAdapter(this);
         recyclerView.setAdapter(itemAdminChargeHistoryRecyclerViewAdapter);
 
         getStartDate = commonUtils.setDate(1);
         getEndDate = commonUtils.setDate(0);
 
-        getAdminChargeHistoryList(getStartDate, getEndDate, getArray, page);
+        getAdminChargeHistoryList(getStartDate, getEndDate, getArray, page); //충전 이력 데이터 조회
 
+        //리사이클러뷰 스크롤 리스너
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -126,6 +129,7 @@ public class AdminChargeHistoryFragment extends Fragment implements ItemAdminCha
                 super.onScrollStateChanged(recyclerView, newState);
             }
 
+            //스크롤 될 때 마지막 항목이면 10개 더 조회하여 목록에 이어 붙임
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 Log.e("metis", "onScrolled");
@@ -148,7 +152,7 @@ public class AdminChargeHistoryFragment extends Fragment implements ItemAdminCha
                                         public void run() {
                                             // 해당 작업을 처리함.
                                             page++;
-                                            getAdminChargeHistoryList(getStartDate, getEndDate, getArray, page);
+                                            getAdminChargeHistoryList(getStartDate, getEndDate, getArray, page); //충전 이력 API 요청
                                         }
                                     });
                                 }
@@ -171,7 +175,7 @@ public class AdminChargeHistoryFragment extends Fragment implements ItemAdminCha
 
             Map<String, Object> map = apiUtils.getAdminChargeHistory(adminChargerModel.id, startDate, endDate, getType,  page, adminChargeHistoryModelList);
 
-            chkList = (boolean) map.get("chkList");
+            chkList = (boolean) map.get("chkList"); //조회된 목록이 있는지 체크
 
             adminChargeHistoryModelList = (List) map.get("list");
 
@@ -185,6 +189,7 @@ public class AdminChargeHistoryFragment extends Fragment implements ItemAdminCha
         }
     }
 
+    //검색 조건 팝업
     private void showSearchCondition() {
 
         Intent intent = new Intent(getActivity(), HistorySearchConditionActivity.class);

@@ -47,10 +47,11 @@ public class SettingActivity extends BaseActivity {
             hideLoading(binding.loading);
 
             switch (msg.what) {
-                case CHANGE_USER_TYPE :
+                case CHANGE_USER_TYPE : //소유주 전환 응답 받았을 때
 
                     final int resultCode = msg.arg1;
 
+                    //소유주 전환 성공
                     if (resultCode == 201) {
                         UserModel userModel = new UserModel();
 
@@ -58,6 +59,7 @@ public class SettingActivity extends BaseActivity {
                         userModel.password = preferenceUtil.getString("password");
 
                         try{
+                            //변경된 로그인 정보로 재로그인
                             Response<UserModel> response = apiUtils.login(userModel);
 
                             //로그인 성공
@@ -76,7 +78,7 @@ public class SettingActivity extends BaseActivity {
                                 user.setPassword(userModel.password);
                                 user.autoLogin = true;
 
-                                //로그인 값 가져오기
+                                //로그인 값 가져와서 메모리에 저장
                                 preferenceUtil.putBoolean("isLogin", true);
                                 preferenceUtil.putInt("userId", user.getId());
                                 preferenceUtil.putString("name", user.getName());
@@ -201,6 +203,7 @@ public class SettingActivity extends BaseActivity {
 
         if (!ThisApplication.staticUserModel.getUserType().equals("Personal")) {
 
+            //소유주 전환 팝업
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this);
             dialogBuilder.setMessage("소유주로 전환하시겠습니까?\n다시 일반사용자로 전환하시려면 고객센터를 통해 전환 가능합니다.");
             dialogBuilder.setPositiveButton("전환", (dialog, which) ->{
@@ -210,8 +213,10 @@ public class SettingActivity extends BaseActivity {
 
                 showLoading(binding.loading);
 
+                //소유주 전환 API 요청
                 int resultCode = apiUtils.changeUserType(userId);
 
+                //소유주 전환 결과 handler 로 send
                 Message msg = new Message();
                 msg.what = CHANGE_USER_TYPE;
                 msg.arg1 = resultCode;
@@ -231,6 +236,7 @@ public class SettingActivity extends BaseActivity {
 
     private void goLogout() {
 
+        //로그아웃 처리
         BackgroundTask task = new BackgroundTask(ThisApplication.staticUserModel);
         task.execute();
 
@@ -253,7 +259,7 @@ public class SettingActivity extends BaseActivity {
 
         protected Boolean doInBackground(Integer... values) {
 
-            //로그인 값 가져오기
+            //로그인 값 초기화
             PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
 
             preferenceUtil.putBoolean("isLogin", false);
@@ -275,6 +281,7 @@ public class SettingActivity extends BaseActivity {
 
                 Log.e("metis", "로그아웃 성공");
 
+                //쌓여있는 액티비티가 있는지 체크
                 if(activityList.size() > 0) {
 
                     for (int i = 0; i < activityList.size(); i++) {
@@ -283,6 +290,7 @@ public class SettingActivity extends BaseActivity {
 
                         if (activityList.get(i).getClass().equals(MainActivity.class)) {
 
+                            //로구아웃시 액티비티 종료 시킴
                             if(!activityList.get(i).isFinishing()){
 
                                 activityList.get(i).finish();
@@ -292,6 +300,8 @@ public class SettingActivity extends BaseActivity {
 
                         }
                     }
+
+                    //로그아웃 후 로그인 화면으로 이동
                     Intent intent = new Intent(SettingActivity.this, SignInActivity.class);
 
                     startActivity(intent);

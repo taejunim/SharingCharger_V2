@@ -15,8 +15,8 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerDetailInformationBinding;
 import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 
+//소유주 충전기 상
 public class AdminChargerDetailInformationFragment extends Fragment {
-
 
     FragmentAdminChargerDetailInformationBinding binding;
 
@@ -27,6 +27,7 @@ public class AdminChargerDetailInformationFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_detail_information, container, false);
         View view = binding.getRoot();
 
+        //충전기 관리 화면으로 부터 받은 데이터
         Bundle bundle = getArguments();
         AdminChargerModel adminChargerModel = (AdminChargerModel) bundle.getSerializable("object");
 

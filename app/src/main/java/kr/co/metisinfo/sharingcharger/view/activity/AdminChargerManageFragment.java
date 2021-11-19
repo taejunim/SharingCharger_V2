@@ -144,6 +144,7 @@ public class AdminChargerManageFragment extends Fragment implements ItemAdminCha
 
     @Override
     public void sendViewDataToFragment(int position) {
+        //클릭한 충전기 데이터를 프래그먼트로 전달
         ((AdminMainActivity) getActivity()).selectChargerManageMenu(adminChargerModelList.get(position));
     }
 

@@ -1,6 +1,5 @@
 package kr.co.metisinfo.sharingcharger.view.activity;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
@@ -12,9 +11,8 @@ import kr.co.metisinfo.sharingcharger.model.UserModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
 
+//회원증명서
 public class UserIdentificationActivity extends BaseActivity {
-
-    private static final String TAG = UserIdentificationActivity.class.getSimpleName();
 
     ActivityUserIdentificationBinding binding;
 
@@ -28,6 +26,7 @@ public class UserIdentificationActivity extends BaseActivity {
         changeStatusBarColor(false);
 
         try {
+            //로그인된 정보로 회원증명서 내용 가져오기
             UserModel userModel = apiUtils.getUserIdentification();
 
             if (userModel.getResponseCode() == 200) {
