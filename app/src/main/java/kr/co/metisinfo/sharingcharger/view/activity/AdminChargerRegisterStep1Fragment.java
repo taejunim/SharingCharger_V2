@@ -38,7 +38,6 @@ import kr.co.metisinfo.sharingcharger.model.AdminChargerModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;;
 
-
 public class AdminChargerRegisterStep1Fragment extends Fragment {
 
     private FragmentAdminChargerRegisterStep1Binding binding;
@@ -64,6 +63,7 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_register_step1, container, false);
         View root = binding.getRoot();
 
+        //충전기 등록시 BLE 검색후 BLE 넘버를 받아 와야함
         mScanner = new EVZScanManager();
         mEvzBluetooth = new EvzBluetooth(getActivity());
         mEvzBluetooth.setBluetooth(true);
@@ -113,11 +113,11 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
     private void nextButton(){
 
-        //다음 화면으로 넘어갈때 보내는 값
+        //충전기 등록 2단계 화면으로 보내는 데이터
         Bundle bundle = new Bundle();
-        bundle.putString("bleNumber", (String)adminChargerModel.getBleNumber());
-        bundle.putInt("id", adminChargerModel.getId());
-        bundle.putInt("providerCompanyId", adminChargerModel.getProviderCompanyId());
+        bundle.putString("bleNumber", (String)adminChargerModel.getBleNumber()); //BLE Number
+        bundle.putInt("id", adminChargerModel.getId()); //충전기 ID
+        bundle.putInt("providerCompanyId", adminChargerModel.getProviderCompanyId()); //사업자 ID
 
         ((AdminMainActivity) getActivity()).chargerRegisterNextStep(1, bundle);
     }
@@ -126,6 +126,7 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
         String bleNumber = chargerBleText.getText().toString().replaceAll(":","");
 
+        //충전기 등록시 bleNumber로 차지인에 등록된 충전기인지 조회
         adminChargerModel = apiUtils.getChargerInformationFromBleNumber(bleNumber);
 
         if (bleNumber.equals("")) {
@@ -146,8 +147,10 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
 
         ((AdminMainActivity)getActivity()).showLoading(binding.loading);
 
+        //충전기 검색 시작
         mScanner.startScan(new EVZScanCallbacks() {
 
+            //충전기 검색 완료
             @Override
             public void onScanFinished(@NonNull List<EVZScanResult> results) {
                 mScData = results;
@@ -159,12 +162,14 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
                         bleArray[i] = mScData.get(i).getDevice().getAddress();
                     }
 
+                    //검색된 BLE 목록을 팝업
                     showAlertDialogTopic(bleArray);
                 } else {
                     scanFailed();
                 }
             }
 
+            //충전기 검색 실패
             @Override
             public void onScanFailed(int errorCode) {
                 scanFailed();
@@ -172,6 +177,7 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
         });
     }
 
+    //검색된 BLE 목록 팝업
     private void showAlertDialogTopic(String[] bleArray) {
 
         dialog = new Dialog(getActivity());
@@ -208,11 +214,12 @@ public class AdminChargerRegisterStep1Fragment extends Fragment {
         ChargerDialogAdapter adapter = new ChargerDialogAdapter(arrayList);
         dialogRecyclerView.setAdapter(adapter);
 
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.alert_dialog_border);
-        dialog.getWindow().setLayout(commonUtils.getPercentWidth(getActivity(), 60), WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.alert_dialog_border); // 팝업 다이얼로그 둥근 모서리 백그라운드 적용
+        dialog.getWindow().setLayout(commonUtils.getPercentWidth(getActivity(), 60), WindowManager.LayoutParams.WRAP_CONTENT); //너비를 기기의 60% 적용, 높이는 내용 크기에 맞게
         dialog.show(); // Dialog 출력
     }
 
+    //BLE 검색 실패시 재검색할지, 취소할지 팝업
     private void scanFailed() {
         //hideLoading(binding.loading);
         ((AdminMainActivity)getActivity()).hideLoading(binding.loading);

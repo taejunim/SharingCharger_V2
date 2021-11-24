@@ -27,6 +27,7 @@ import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.CommonUtils;
 import kr.co.metisinfo.sharingcharger.utils.DateUtils;
 
+//소유주의 월별 수익 포인트
 public class AdminMonthlyProfitPointActivity extends BaseActivity {
 
     private static final String TAG = AdminMonthlyProfitPointActivity.class.getSimpleName();
@@ -63,14 +64,17 @@ public class AdminMonthlyProfitPointActivity extends BaseActivity {
 
             initializeDate(0);
 
+            //현재 년도에서 10년 전까지 계산
             for(int i = 0; i < duration ; i ++){
                 years[i] = (Integer.parseInt(searchYear) - i) + " 년";
             }
 
+            //현재년도 ~ 10년 전년도까지 데이터 팝업
             ArrayAdapter<String> year_items = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, years );
 
             binding.spinnerYear.setAdapter(year_items);
 
+            //년도 클릭
             binding.spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -130,6 +134,7 @@ public class AdminMonthlyProfitPointActivity extends BaseActivity {
     private void getAdminMonthlyProfitPoint() {
 
         try {
+            //선택한 년도의 월별 수익 포인트 API 요청
             Map<String, Object> map = apiUtils.getAdminMonthlyProfitPoint(searchYear);
             list = (List) map.get("list");
 
@@ -138,7 +143,7 @@ public class AdminMonthlyProfitPointActivity extends BaseActivity {
                 list.remove(list.size()-1);
             }
 
-            sortMonthlyProfitPointList();
+            sortMonthlyProfitPointList(); //조회된 데이터 월별로 정렬
             adminMonthlyProfitPointRecyclerViewAdapter.setList(list);
 
         } catch (Exception e) {
@@ -146,8 +151,10 @@ public class AdminMonthlyProfitPointActivity extends BaseActivity {
         }
     }
 
+    //날짜 초기화
     public void initializeDate(int getMonth) {
 
+        //현재 월에서 1월 까지 구하기
         String getStringDate = DateUtils.setOperationDate("minus", getMonth * 30, "yyyyMMdd");
 
         currentYear = getStringDate.substring(0, 4);

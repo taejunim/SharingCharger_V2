@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import java.text.DecimalFormat;
 
+//텍스트뷰 천단위 콤마설정
 public class CustomTextWatcher implements TextWatcher {
 
     private EditText editText;

@@ -21,8 +21,6 @@ import androidx.fragment.app.Fragment;
 import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.databinding.FragmentAdminChargerRegisterStep2Binding;
 
-
-
 public class AdminChargerRegisterStep2Fragment extends Fragment {
 
     private FragmentAdminChargerRegisterStep2Binding binding;
@@ -35,7 +33,6 @@ public class AdminChargerRegisterStep2Fragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Log.d("metis", "AdminChargerRegisterStep2Fragment");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_register_step2, container, false);
         View root = binding.getRoot();
 
@@ -44,19 +41,19 @@ public class AdminChargerRegisterStep2Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("metis", "AdminChargerRegisterStep2Fragment - onViewCreated");
         super.onViewCreated(view, savedInstanceState);
 
-
+        //위치 라이브러리, 좌표를 받아와서 주소를 얻기 위함
         LocationManager locationManager = (LocationManager) getContext().getSystemService(AdminMainActivity.LOCATION_SERVICE);
 
         boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
         if (isGPSEnabled || isNetworkEnabled) {
-            int hasFineLocationPermission = ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-            int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+            int hasFineLocationPermission = ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION); //대략의 위치
+            int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION); //정확한 위치
 
+            //위치 권한 승인 체크
             if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED && hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED) {
                 Location location;
                 if (isGPSEnabled) {
@@ -132,9 +129,8 @@ public class AdminChargerRegisterStep2Fragment extends Fragment {
     }
 
     private void nextButton(){
-        String chargerName        = binding.editTextChargerName.getText().toString();
-        String chargerDescription = binding.editTextDescription.getText().toString();
-
+        String chargerName        = binding.editTextChargerName.getText().toString(); //입력받은 충전기명
+        String chargerDescription = binding.editTextDescription.getText().toString(); //입력받은 충전기 설명
 
         if(! hasGpsPermission) Toast.makeText(this.getContext(),"해당 서비스는 위치 권한이 필요한 서비스 입니다. 위치 권한을 허용해주세요.",Toast.LENGTH_SHORT).show();
         else if(checkBlank(chargerName)) {

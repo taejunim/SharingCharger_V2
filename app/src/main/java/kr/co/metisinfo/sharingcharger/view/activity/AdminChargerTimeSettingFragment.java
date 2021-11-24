@@ -58,6 +58,7 @@ public class AdminChargerTimeSettingFragment extends Fragment {
 
             hideLoading(binding.loading);
 
+            //시간 설정 결과
             switch (msg.what) {
                 case CHANGE_TIME :
 
@@ -82,9 +83,11 @@ public class AdminChargerTimeSettingFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_time_setting, container, false);
         View view = binding.getRoot();
 
+        //충전기 관리 화면으로 부터 받은 데이터
         Bundle bundle = getArguments();
         adminChargerModel = (AdminChargerModel) bundle.getSerializable("object");
 
+        //소유주 충전기 이용 가능 시간 정보 API 요청
         allowTimeOfDayModel = apiUtils.getAllowTime(adminChargerModel.getId());
 
         binding.oldOpenTime.setText(DateUtils.convertToHHMM(allowTimeOfDayModel.getOpenTime()));
@@ -125,11 +128,12 @@ public class AdminChargerTimeSettingFragment extends Fragment {
         return view;
     }
 
+    //서버로 부터 받은 이용 가능 시간 포맷
     private void setTime(TextView textView) {
 
         TimePickerDialog.OnTimeSetListener timeSetListener = (view, hourOfDay, minute) -> {
 
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance(); //Calendar 객체 생성
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
 
@@ -165,6 +169,7 @@ public class AdminChargerTimeSettingFragment extends Fragment {
             Date openTime = simpleDateFormat.parse(binding.newOpenTime.getText().toString());
             Date closeTime = simpleDateFormat.parse(closeTimeString);
 
+            //운영시간은 오픈/클로즈 시간 최소 30분 차이가 있어야 함
             if (closeTime.getTime() - openTime.getTime() <= 1800000) {
                 return false;
             }

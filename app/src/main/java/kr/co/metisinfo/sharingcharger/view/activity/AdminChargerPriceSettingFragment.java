@@ -46,6 +46,7 @@ public class AdminChargerPriceSettingFragment extends Fragment {
 
             hideLoading(binding.loading);
 
+            //가격 설정 결과
             switch (msg.what) {
                 case CHANGE_PRICE :
 
@@ -72,14 +73,17 @@ public class AdminChargerPriceSettingFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_price_setting, container, false);
         View view = binding.getRoot();
 
+        //충전기 관리 화면으로 부터 받은 데이터
         Bundle bundle = getArguments();
         adminChargerModel = (AdminChargerModel) bundle.getSerializable("object");
 
+        //입력한 가격 천단위 콤마 설정
         binding.editTextOldPrice.addTextChangedListener(new CustomTextWatcher(binding.editTextOldPrice));
         binding.editTextOldPrice.setText(adminChargerModel.getRangeOfFee().replaceAll("p",""));
 
         binding.newPriceInput.addTextChangedListener(new CustomTextWatcher(binding.newPriceInput));
 
+        //라디오버튼으로 가격 선택
         binding.priceToggle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -90,6 +94,8 @@ public class AdminChargerPriceSettingFragment extends Fragment {
                 if (price.getText().toString().equals("직접 입력")) {
                     binding.newPriceInput.setText("");
                     binding.newPriceInput.requestFocus();
+
+                    //키보드가 안 보이면 보이게 하고 보이면 사라지게 함
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
                 } else {
@@ -111,8 +117,10 @@ public class AdminChargerPriceSettingFragment extends Fragment {
                 priceModel.setPrice(price);
                 priceModel.setUserId(ThisApplication.staticUserModel.id);
 
+                //단가 변경 API 요청
                 int resultCode = apiUtils.changePrice(adminChargerModel.getId(), priceModel);
 
+                //단가 변경 API 결과 handler 에 전달
                 Message msg = new Message();
                 msg.what = CHANGE_PRICE;
                 msg.arg1 = resultCode;

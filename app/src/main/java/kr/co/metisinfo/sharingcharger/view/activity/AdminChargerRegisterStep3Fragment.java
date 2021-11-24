@@ -38,6 +38,7 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //주소 검색 결과
         switch (requestCode) {
             //키워드 검색, 즐겨찾기
             case Constants.PAGE_SEARCH_KEYWORD:
@@ -46,7 +47,6 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
                     SearchKeywordModel model = (SearchKeywordModel) data.getSerializableExtra("keyword");
                     binding.editTextAddress.setText(model.roadAddressName);
                 }
-
                 break;
         }
     }
@@ -55,7 +55,6 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Log.d("metis", "AdminChargerRegisterStep3Fragment");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_admin_charger_register_step3, container, false);
         View root = binding.getRoot();
 
@@ -64,7 +63,6 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("metis","AdminChargerRegisterStep3Fragment - onViewCreated");
         super.onViewCreated(view, savedInstanceState);
 
         setLayout(view);
@@ -109,9 +107,11 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
         binding.imageCableExistYn.setColorFilter(ContextCompat.getColor(getContext(), R.color.black));
         binding.imageChargeType.setColorFilter(ContextCompat.getColor(getContext(), R.color.black));
 
+        //상세 주소 입력시 포커싱주면서 스크롤 시키기
         binding.editTextDetailAddress.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //지우기 버튼외에 다음 버튼 클릭했을 때
                 if ((event.getAction() == KeyEvent.ACTION_UP) && keyCode != KeyEvent.KEYCODE_DEL && keyCode == KeyEvent.KEYCODE_ENTER) {
                     binding.scrollView.smoothScrollTo(0, binding.editParkingFeeDescription.getTop());
                     binding.editParkingFeeDescription.requestFocus();
@@ -121,6 +121,7 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
             }
         });
 
+        //주차 요금 설명 활성화시 스크롤 시킴
         binding.editParkingFeeDescription.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -133,7 +134,6 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
     }
 
     private void previousButton(){
-        Log.d("metis", "AdminChargerRegisterStep2Fragment - previousButton");
         Bundle bundle = new Bundle();
 
         bundle.putString("bleNumber", getArguments().getString("bleNumber"));
@@ -146,13 +146,12 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
     //등록 버튼
     private void nextButton(View view){
 
-        Log.d("metis", "AdminChargerRegisterStep3Fragment - nextButton");
-
         if (binding.editTextAddress.getText().toString().equals("")) {
             Toast.makeText(getContext(), "주소가 입력되지 않았습니다.\n주소 입력후 다시 시도해주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
 
+        //내부 메모리값
         PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
 
         String email = preferenceUtil.getString("email");
@@ -176,6 +175,7 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
         adminChargerModel.setProviderCompanyId(getArguments().getInt("providerCompanyId"));
         adminChargerModel.setChargerType("BLE");
 
+        //충전 타입 구분
         int chargeTypeId = binding.radioChargeType.getCheckedRadioButtonId();
         RadioButton chargeType = view.findViewById(chargeTypeId);
 
@@ -184,18 +184,24 @@ public class AdminChargerRegisterStep3Fragment extends Fragment {
         if(binding.sharing.isChecked()) adminChargerModel.setSharedType("SHARING");
         else adminChargerModel.setSharedType("PARTIAL_SHARING");
 
-        Log.d("metis", adminChargerModel.toString());
-
+        //입력한 값들로 소유주 충전기 등록 API 요청
         AdminChargerModel result = apiUtils.assignCharger(adminChargerModel);
         int resultCode = result.getResponseCode();
 
+        //등록 성공 -> 충전기 관리 화면으로 돌아감
         if(resultCode == 200) {
             Toast.makeText(getContext(),"충전기 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
             ((AdminMainActivity) getActivity()).chargerRegisterNextStep(3, null);
-        } else if(resultCode == 400){
+        }
+
+        //충전기 등록 실패 -> 중복
+        else if(resultCode == 400){
             Toast.makeText(getContext(),"이미 사용중인 충전기명 입니다. 충전기명을 다시 설정해주세요.\n문제 지속시 고객센터로 문의주세요.", Toast.LENGTH_SHORT).show();
-        }else {
+        }
+
+        //충전기 등록 실패 -> 기타 오류
+        else {
             Toast.makeText(getContext(),"충전기 등록에 실패하였습니다." + result.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
