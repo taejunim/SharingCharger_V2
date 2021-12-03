@@ -13,6 +13,7 @@ import kr.co.metisinfo.sharingcharger.R;
 import kr.co.metisinfo.sharingcharger.base.BaseActivity;
 import kr.co.metisinfo.sharingcharger.base.ThisApplication;
 import kr.co.metisinfo.sharingcharger.databinding.ActivityWalletBinding;
+import kr.co.metisinfo.sharingcharger.model.PointModel;
 import kr.co.metisinfo.sharingcharger.utils.ApiUtils;
 import kr.co.metisinfo.sharingcharger.utils.PreferenceUtil;
 import kr.co.metisinfo.sharingcharger.view.activity.PurchaseDialog;
@@ -48,13 +49,23 @@ public class WalletActivity extends BaseActivity {
 
         //실시간 포인트 가져오기
         int getPoint = 0;
+
+        //포인트 - 2차년도 수정버전
+        int point = 0;
+        int systemPoint = 0;
+        int cashPoint = 0;
+        PointModel pointModel = new PointModel();
         try {
             getPoint = apiUtils.getUserPoint();
+
+            pointModel = apiUtils.getPoint();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        binding.txtWalletPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(getPoint));
+        binding.txtWalletPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(pointModel.point));
+        binding.chargePoint.setText(NumberFormat.getInstance(Locale.KOREA).format(pointModel.cashPoint) + "p");
+        binding.receivedPoint.setText(NumberFormat.getInstance(Locale.KOREA).format(pointModel.systemPoint) + "p");
 
         binding.transferPoint.setOnClickListener(v -> {
             Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();

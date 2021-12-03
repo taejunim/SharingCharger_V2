@@ -1,5 +1,6 @@
 package kr.co.metisinfo.sharingcharger.utils;
 
+import android.graphics.Point;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -329,6 +330,23 @@ public class ApiUtils {
         }
 
         return 0;
+    }
+
+    /**
+     * 포인트, 시스템 포인트, 캐쉬 포인트 가져오기
+     **/
+    public PointModel getPoint() throws Exception {
+
+        PointModel model = null;
+
+        Response<PointModel> response = webServiceAPI.getPoint(ThisApplication.staticUserModel.id).execute();
+
+        if (response.code() == 200 && response.body() != null) {
+
+            model = response.body();
+        }
+
+        return model;
     }
 
     /**

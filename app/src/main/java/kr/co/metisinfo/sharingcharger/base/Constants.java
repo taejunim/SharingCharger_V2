@@ -10,8 +10,8 @@ public class Constants {
     public static final String KAKAO_SERCH_KEYWORD_KEY = "4332dce3f2f8d3ee87e31884c5c5523d";
 
     /* 테스트 서버 */
-    //public static final String DEV_HOST = "http://211.253.37.97:52340";
-    //public static final String REAL_HOST = "http://211.253.37.97:52340";
+    /*public static final String DEV_HOST = "http://211.253.37.97:52340";
+    public static final String REAL_HOST = "http://211.253.37.97:52340";*/
     public static final String DEV_HOST = "https://monttak.co.kr";
     public static final String REAL_HOST = "https://monttak.co.kr";
 

@@ -15,7 +15,6 @@ public class PointModel {
     public String username;
     public String created;
 
-
-
-
+    public int systemPoint;
+    public int cashPoint;
 }

@@ -99,6 +99,10 @@ public interface WebServiceAPI {
     @GET("/api/v1/point/users/{userId}")
     Call<Object> getUserPoint(@Path("userId") int userId);
 
+    // 포인트, 시스템 포인트, 캐쉬 포인트 가져오기
+    @GET("/api/v1/point/users/electronicWallet/{userId}")
+    Call<PointModel> getPoint(@Path("userId") int userId);
+
     // 예상 포인트 계산을 가져오기 위한 API
     @GET("/api/v1/point/chargers/{chargerId}/calculate")
     Call<Object> getExpectPoint(@Path("chargerId") String chargerId, @Query("startDate") String startDate, @Query("endDate") String endDate);
