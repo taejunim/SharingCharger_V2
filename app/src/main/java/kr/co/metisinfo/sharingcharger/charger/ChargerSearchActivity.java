@@ -212,17 +212,22 @@ public class ChargerSearchActivity extends BaseActivity {
         Date endDt = null;
         try {
             endDt = format.parse(reservationModel.getEndDate().replaceAll("T", " "));
+
+            long diff = endDt.getTime() - nowDt.getTime();
+            long min = diff / (60 * 1000);
+
+            Log.e("metis", "min : " + min);
+            Log.e("metis", "reservationTime : " + reservationTime);
+
+            reservationTime = String.valueOf(min);
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (NullPointerException nullPointerException) {
+            Log.e("metis", "ChargerSearchActivity --> ");
+            Log.e("metis", "reservationModel : " + reservationModel);
         }
 
-        long diff = endDt.getTime() - nowDt.getTime();
-        long min = diff / (60 * 1000);
 
-        Log.e("metis", "min : " + min);
-        Log.e("metis", "reservationTime : " + reservationTime);
-
-        reservationTime = String.valueOf(min);
 
     }
 }

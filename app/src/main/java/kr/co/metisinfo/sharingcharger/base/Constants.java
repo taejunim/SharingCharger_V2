@@ -7,11 +7,11 @@ public class Constants {
     public static final boolean isReal = true;
 
     //검색 api 사용시 REST API 키 사용해야함
-    public static final String KAKAO_SERCH_KEYWORD_KEY = "4332dce3f2f8d3ee87e31884c5c5523d";
+    public static final String KAKAO_SERCH_KEYWORD_KEY = "1b969148553628f842f463d3291e9099";
 
     /* 테스트 서버 */
-    /*public static final String DEV_HOST = "http://211.253.37.97:52340";
-    public static final String REAL_HOST = "http://211.253.37.97:52340";*/
+    /*public static final String DEV_HOST = "http://14.39.99.148:5002";
+    public static final String REAL_HOST = "http://14.39.99.148:5002";*/
     public static final String DEV_HOST = "https://monttak.co.kr";
     public static final String REAL_HOST = "https://monttak.co.kr";
 
