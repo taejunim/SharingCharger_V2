@@ -12,8 +12,10 @@ public class Constants {
     /* 테스트 서버 */
     /*public static final String DEV_HOST = "http://14.39.99.148:5002";
     public static final String REAL_HOST = "http://14.39.99.148:5002";*/
-    public static final String DEV_HOST = "https://monttak.co.kr";
-    public static final String REAL_HOST = "https://monttak.co.kr";
+    /*public static final String DEV_HOST = "https://monttak.co.kr";
+    public static final String REAL_HOST = "https://monttak.co.kr";*/
+    public static final String DEV_HOST = "http://dev.jinwoosi.co.kr:8080";
+    public static final String REAL_HOST = "http://dev.jinwoosi.co.kr:8080";
 
     public static final String KAKAO_SEARCH_KEYWORD_HOST = "https://dapi.kakao.com";
 

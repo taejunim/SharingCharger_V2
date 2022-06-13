@@ -147,7 +147,7 @@ public class ChangePasswordActivity extends BaseActivity {
                 Toast.makeText(this, "비밀번호 변경에 성공하였습니다.", Toast.LENGTH_LONG).show();
 
                 PreferenceUtil preferenceUtil = new PreferenceUtil(ThisApplication.context);
-                preferenceUtil.putString("password", model.getPassword());
+                preferenceUtil.putString("password", model.password);
 
                 ThisApplication.staticUserModel.password = model.password;
 
@@ -170,7 +170,7 @@ public class ChangePasswordActivity extends BaseActivity {
 
     private boolean validationCheck() {
 
-        String oldPw = ThisApplication.staticUserModel.getPassword();
+        String oldPw = ThisApplication.staticUserModel.password;
 
         String oldPwCheck = binding.currentPwInput.getText().toString();
 
